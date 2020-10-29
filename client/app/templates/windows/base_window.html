@@ -1,0 +1,41 @@
+
+<style>
+img#icon {
+    display: inline;
+    margin-right: 5px;
+    margin-left: 3px;
+    vertical-align:middle;
+    height: 3%;
+    width: 3%;
+}
+</style>
+
+<div class="window" id="{{ data_type + '-' + window_type }}" style="background-color: grey;">
+
+    <div class="title-bar">
+    <div class="title-bar-text">
+        <img id="icon" src="{{ url_for('static', filename='img/an-skull.gif') }}" />
+        {% if window_type == 'index' %}
+          zombiegang-0.1~beta
+        {% elif window_type == 'login' %}
+          {{ zession.username }}@{{ zession.remote_hostname }}
+        {% elif window_type == 'filter' %}
+          {{ data_type + '-' + window_type + '.sql' }}
+        {% elif window_type == 'creator' %}
+          {{ data_type + '-' + window_type + '.exe' }}
+        {% endif %}
+    </div>
+
+      <div class="title-bar-controls">
+      <button aria-label="Minimize" onclick="toggleMinimize('{{ data_type + '-' + window_type + '-body' }}')"></button>
+      <button aria-label="Maximize"></button>
+      <button aria-label="Close" onclick="document.getElementById('{{ data_type + '-' + window_type }}').remove()"></button>
+    </div>
+  </div>
+
+    <div class="window-body" id="{{ data_type + '-' + window_type + '-body' }}">
+
+  {% block window %}{% endblock %}
+
+  </div>
+</div>

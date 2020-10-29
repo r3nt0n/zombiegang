@@ -1,0 +1,41 @@
+
+{% extends 'windows/base_window.html' %}
+
+{% block window %}
+
+<form name="{{ data_type + '-filter' }}" action="" method="POST">
+    <div class="field-row-stacked">
+      <label for="username">filter by username: </label>
+      <input id="username" name="username" type="text" value="{{ request.form.username }}" />
+    </div>
+
+    {% if filter_by_time %}
+    <hr>
+
+    <div style="text-align: right;">
+    <div>
+      <label for="date_bef_filter">filter by date (before): </label>
+        <input id="date_bef_filter" name="date_bef_filter" type="date" value="{{ request.form.date_bef_filter }}" />
+        <label for="time_bef_filter">hour (hh:mm): </label>
+        <input id="time_bef_filter" name="time_bef_filter" type="time" value="{{ request.form.time_bef_filter }}" />
+    </div>
+
+    <div>
+      <label for="date_aft_filter">filter by date (after): </label>
+        <input id="date_aft_filter" name="date_aft_filter" type="date" value="{{ request.form.date_aft_filter }}" />
+        <label for="time_aft_filter">hour (hh:mm): </label>
+        <input id="time_aft_filter" name="time_aft_filter" type="time" value="{{ request.form.time_aft_filter }}" />
+    </div>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <div class="field-row-stacked">
+    <button type="submit" id="filter" name="btn-filter">Filter</button>
+    </div>
+</form>
+
+{% endblock %}

