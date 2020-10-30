@@ -1,0 +1,41 @@
+
+{% extends 'windows/base_window.html' %}
+
+{% block window %}
+
+<table>
+    <tr>
+    <td style="width: 200px">
+      <form name="login" action="" method="POST">
+          <div class="field-row-stacked">
+            <label for="host">host: </label>
+            <input id="host" name="hostname" type="text" value="{{ request.form.hostname }}" />
+          </div>
+
+          <div class="field-row-stacked">
+            <label for="username">username: </label>
+            <input id="username" name="username" type="text" value="{{ request.form.username }}" />
+          </div>
+
+          <div class="field-row-stacked">
+            <label for="pswd">password: </label>
+            <input id="pswd" name="pswd" type="password" value="{{ request.form.pswd }}"/>
+          </div>
+
+          {% if error %}
+          <p  class="error">{{ error }}</p>
+          {% endif %}
+
+          <div class="field-row-stacked">
+          <button type="submit" id="begin" name="begin" style="width: 60%; margin: 6px auto;">Login</button>
+          </div>
+      </form>
+    </td>
+
+    <td style="vertical-align: top">
+      <img style="margin: 0 5px; padding-top:15px;" width="100%" src="{{ url_for('static', filename='img/skull.png') }}" />
+    </td>
+    </tr>
+</table>
+
+{% endblock %}

@@ -109,7 +109,7 @@ def masters():
     data = {}
     error = None
 
-    if (request.method) == 'POST' and ('btn-edit-profile' in request.form):
+    if (request.method) == 'POST' and ('btn-launcher' in request.form):
         return redirect(url_for('edit_profile'))
 
     by_username = ''

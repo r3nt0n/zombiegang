@@ -4,6 +4,16 @@
 
 {% block edit_profile %}
 
+<style>
+  .header4 {
+  text-align: center;
+}
+
+img.flames {
+  display: inline; width: 1.1rem;
+}
+</style>
+
 {% if update_error and 'updated' in update_error %}
 <style>
 .error {
@@ -12,44 +22,12 @@
 </style>
 {% endif %}
 
-<div class="edit-profile" style="margin: 0 auto;">
-<div class="window" id="masters-edit" style="background-color: grey;">
-  <div class="title-bar">
-    <div class="title-bar-text"><img style="display: inline; margin-right: 5px; margin-left: 3px; vertical-align:middle;" height="3%" width="3%" src="{{ url_for('static', filename='img/an-skull.gif') }}" />masters.SAM</div>
-    <div class="title-bar-controls">
-      <button aria-label="Minimize" onclick="toggleMinimize('masters-edit-body')"></button>
-      <button aria-label="Maximize"></button>
-      <button aria-label="Close" onclick="document.getElementById('masters-edit').remove()"></button>
-    </div>
-  </div>
-  <div class="window-body" id="masters-edit-body">
-    <div id="masters-data">
-        <form id="edit-profile-form" action="" method="POST">
-          <h4>Edit profile</h4>
-          <table style="width: 20rem; background-color: gray;">
-            <tr>
-              <td style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-                <input id="pswd" name="pswd" type="password" value="{{ request.form.pswd }}" style="width: 48%; text-align: right;" />
-                <button type="submit" id="pswd-btn" name="pswd-btn" style="width: 48%; margin: 0;">Update password</button>
-                {% if update_error and 'password' in update_error %}
-                <div style="width: 100%; margin 0 auto;"><p class="error">{{ update_error }}</p></div>
-                {% endif %}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <textarea id="public_key" name="public_key" rows="4" cols="50" form="edit-profile-form" style="display: block;">{{ request.form.public_key }}</textarea>
-                <button type="submit" id="public-key-btn" name="public-key-btn" style="display: block;">Update public key</button>
-                {% if update_error and 'public_key' in update_error %}
-                <p class="error">{{ update_error }}</p>
-                {% endif %}
-              </td>
-            </tr>
-          </table>
-        </form>
-    </div>
-  </div>
-</div>
+<div class="edit-profile" style="margin: 0 auto; max-width: 25.5rem;">
+
+{% with window_type = 'editor', data_type = 'master-profile' %}
+    {% include 'windows/profile-editor-window.html' %}
+{% endwith %}
+
 </div>
 
 

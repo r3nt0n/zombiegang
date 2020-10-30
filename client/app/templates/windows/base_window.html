@@ -1,6 +1,6 @@
 
 <style>
-img#icon {
+img.img-icon {
     display: inline;
     margin-right: 5px;
     margin-left: 3px;
@@ -14,15 +14,21 @@ img#icon {
 
     <div class="title-bar">
     <div class="title-bar-text">
-        <img id="icon" src="{{ url_for('static', filename='img/an-skull.gif') }}" />
         {% if window_type == 'index' %}
           zombiegang-0.1~beta
-        {% elif window_type == 'login' %}
+        {% else %}
+        <img class="img-icon" src="{{ url_for('static', filename='img/an-skull.gif') }}" />
+        {% endif %}
+        {% if window_type == 'login' %}
           {{ zession.username }}@{{ zession.remote_hostname }}
         {% elif window_type == 'filter' %}
           {{ data_type + '-' + window_type + '.sql' }}
-        {% elif window_type == 'creator' %}
+        {% elif window_type == 'launcher' %}
           {{ data_type + '-' + window_type + '.exe' }}
+        {% elif window_type == 'editor' %}
+          {{ data_type + '-' + window_type + '.txt' }}
+        {% elif window_type == 'table-results' %}
+          {{ data_type + '-' + window_type + '.xlsx' }}
         {% endif %}
     </div>
 

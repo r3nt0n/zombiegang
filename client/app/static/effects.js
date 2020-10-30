@@ -18,3 +18,11 @@ function toggleMinimize(elementid) {
     x.style.display = "none";
   }
 }
+
+
+function toggle_checkall(source, checkboxes_name) {
+  checkboxes = document.getElementsByName(checkboxes_name);
+  for(var i=0, n=checkboxes.length;i<n;i++) {
+    checkboxes[i].checked = source.checked;
+  }
+}

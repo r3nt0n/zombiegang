@@ -9,23 +9,9 @@
     {% include 'windows/filter-window.html' %}
 {% endwith %}
 
-
-<div class="window" id="edit-master-window" style="background-color: grey;">
-  <div class="title-bar">
-    <div class="title-bar-text"><img style="display: inline; margin-right: 5px; margin-left: 3px; vertical-align:middle;" height="3%" width="3%" src="{{ url_for('static', filename='img/an-skull.gif') }}" />master-editor.txt</div>
-    <div class="title-bar-controls">
-      <button aria-label="Minimize" onclick="toggleMinimize('edit-master-body')"></button>
-      <button aria-label="Maximize"></button>
-      <button aria-label="Close" onclick="document.getElementById('edit-master-window').remove()"></button>
-    </div>
-  </div>
-  <div class="window-body" id="edit-master-body">
-    <img src="{{ url_for('static', filename='img/driver2-.jpg') }}" width="500rem" />
-    <form id="edit-master-form" name="edit-master" action="" method="POST" style="text-align: center;">
-        <button type="submit" id="btn-edit-profile" name="btn-edit-profile" style="margin-top: 5px; margin-bottom: 0;">Edit my profile</button>
-    </form>
-  </div>
-</div>
+{% with window_type = 'launcher', data_type = 'master-profile-editor', banner = 'img/driver2-.jpg', btn_msg = 'Edit my profile' %}
+    {% include 'windows/launcher-window.html' %}
+{% endwith %}
 
 <!--close panel div-->
 </div>
@@ -33,35 +19,10 @@
 </div>
 
 {% if data %}
-<div class="panel-info">
-<div class="window" id="masters-results" style="background-color: grey;">
-  <div class="title-bar">
-    <div class="title-bar-text"><img style="display: inline; margin-right: 5px; margin-left: 3px; vertical-align:middle;" height="3%" width="3%" src="{{ url_for('static', filename='img/an-skull.gif') }}" />masters.xlsx</div>
-    <div class="title-bar-controls">
-      <button aria-label="Minimize" onclick="toggleMinimize('masters-results-body')"></button>
-      <button aria-label="Maximize"></button>
-      <button aria-label="Close" onclick="document.getElementById('masters-results').remove()"></button>
-    </div>
-  </div>
-  <div class="window-body" id="masters-results-body">
-    <div id="masters-data">
-        <table class="darkTable">
-            <thead>
-            <tr>
-                <th>username</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for master in data %}
-            <tr>
-                <td>{{ master['username'] }}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-  </div>
-</div>
+<div style="margin: 0 auto; min-width: 20rem;">
+{% with window_type = 'table-results', data_type = 'masters' %}
+    {% include 'windows/table-results-window.html' %}
+{% endwith %}
 </div>
 {% endif %}
 

@@ -4,6 +4,14 @@
 {% block window %}
 
 <form name="{{ data_type + '-filter' }}" action="" method="POST">
+    {% if filter_by_target %}
+    <div class="field-row-stacked">
+      <label for="target">filter by target: </label>
+      <input id="target" name="target" type="text" value="{{ request.form.target }}" />
+    </div>s
+    <hr>
+    {% endif %}
+
     <div class="field-row-stacked">
       <label for="username">filter by username: </label>
       <input id="username" name="username" type="text" value="{{ request.form.username }}" />

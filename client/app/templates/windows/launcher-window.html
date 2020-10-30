@@ -1,0 +1,40 @@
+
+{% extends 'windows/base_window.html' %}
+
+{% block window %}
+
+  {% if 'attacks' in data_type %}
+  <h4>Order new attacK</h4>
+  {% endif %}
+
+  <img src="{{ url_for('static', filename=banner) }}" width="500rem" />
+
+  <form id="launcher-form" name="launcher-form" action="" method="POST" style="display: flex; justify-content: space-between; align-items: center;">
+
+    {% if data_type == 'ddos-attacks' %}
+    <div style="width: 50%; display: inline;">
+      <label for="ddos_type">DDoS attack type</label>
+      <select id="ddos_type" name="ddos_type">
+        <option value="slowloris">slowloris</option>
+        <option value="rudy">RUDY</option>
+        <option value="syn">SYN flood</option>
+      </select>
+    </div>
+    {% endif %}
+
+    {% if data_type == 'brute-attacks' %}
+    <div style="width: 50%; display: inline;">
+      <label for="brute_type">service to attack</label>
+      <select id="brute_type" name="brute_type">
+        <option value="http">http(s)</option>
+        <option value="ssh">ssh</option>
+        <option value="ftp">ftp</option>
+      </select>
+    </div>
+    {% endif %}
+
+    <button type="submit" id="btn-launcher" name="btn-launcher" style="margin-top: 5px; margin-bottom: 0;">{{ btn_msg }}</button>
+
+  </form>
+
+{% endblock %}

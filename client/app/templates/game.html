@@ -3,8 +3,12 @@
 {% extends "index.html" %}
 {% block login %}
 
-<style>body{background-image: url({{ url_for('static',filename='img/wxp.webp') }}) !important;}</style>
+<!--{% with window_type = 'login', data_type = '' %}-->
+<!--    {% include 'windows/game-window.html' %}-->
+<!--{% endwith %}-->
 
+
+<style>body{background-image: url({{ url_for('static',filename='img/wxp.webp') }}) !important;}</style>
 <div class="window" id='window' style="max-width: 310px; background-color: grey;">
   <div class="title-bar">
     <div class="title-bar-text">{{ zession.username}}@{{ zession.remote_hostname }}</div>

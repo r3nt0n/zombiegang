@@ -8,6 +8,14 @@
 {% include 'win98css.html' %}
 
 <style>
+
+@font-face {
+  font-family: "Gothic Pixels";
+  src: url({{ url_for('static', filename='fonts/GothicPixels.ttf') }}) format("ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
 html,body {
   height:100%;
   width:100%;
@@ -33,4 +41,5 @@ h4 {
 
 {% include 'footer.html' %}
 
+</body>
 </html>

@@ -4,34 +4,13 @@
 
 {% block panel_window %}
 
-{% with window_type = 'filter', data_type = 'brute-attacks', filter_by_time = True %}
+{% with window_type = 'filter', data_type = 'brute-attacks', filter_by_time = True, filter_by_target = True %}
     {% include 'windows/filter-window.html' %}
 {% endwith %}
 
-<div class="window" id="brute-attacks-creator-window" style="background-color: grey;">
-  <div class="title-bar">
-    <div class="title-bar-text"><img style="display: inline; margin-right: 5px; margin-left: 3px; vertical-align:middle;" height="3%" width="3%" src="{{ url_for('static', filename='img/an-skull.gif') }}" />brute-attacks-creator.exe</div>
-    <div class="title-bar-controls">
-      <button aria-label="Minimize" onclick="toggleMinimize('brute-attacks-creator-body')"></button>
-      <button aria-label="Maximize"></button>
-      <button aria-label="Close" onclick="document.getElementById('brute-attacks-creator-window').remove()"></button>
-    </div>
-  </div>
-  <div class="window-body" id="brute-attacks-creator-body">
-    <h4>Order new attack</h4>
-
-    <img src="{{ url_for('static', filename='img/wolfenstein.png') }}" width="500rem" />
-    <form id="brute-attacks-creator-form" name="brute-attacks-creator" action="" method="POST">
-        <label for="brute_type">service to attack</label>
-        <select id="brute_type" name="brute_type">
-          <option value="http">http(s)</option>
-          <option value="ssh">ssh</option>
-          <option value="ftp">ftp</option>
-        </select>
-        <button type="submit" id="creator" name="creator">Wizard</button>
-    </form>
-  </div>
-</div>
+{% with window_type = 'launcher', data_type = 'brute-attacks', banner = 'img/wolfenstein.png', btn_msg = 'Wizard' %}
+    {% include 'windows/launcher-window.html' %}
+{% endwith %}
 
 <!--close panel div-->
 </div>

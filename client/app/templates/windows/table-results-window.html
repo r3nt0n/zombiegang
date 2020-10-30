@@ -1,0 +1,75 @@
+
+{% extends 'windows/base_window.html' %}
+
+{% block window %}
+<form id="table-results-form" name="table-results-form" action="" method="POST">
+<table class="darkTable" id="tableResizable">
+  <thead>
+  <tr>
+  <th><input type="checkbox" onClick="toggle_checkall(this, 'is_checked')"></th>
+  {% if data_type == 'access-logs' %}
+    <!--<td>id</td>-->
+    <th>datetime</th>
+    <th>username</th>
+    <th>successful</th>
+    <th>public IP</th>
+    <th>hostname</th>
+    <th>MAC address</th>
+  {% elif data_type == 'masters' %}
+    <th>username</th>
+  {% elif data_type == 'zombies' %}
+    <th>username</th>
+    <th>registered_at</th>
+    <th>public IP</th>
+    <th>hostname</th>
+    <th>MAC address</th>
+  {% endif %}
+  </tr>
+  </thead>
+
+  <tbody>
+
+  {% for row in data %}
+  <tr>
+    <td><input type="checkbox" id="{{ row['id'] }}" name="is_checked" ></td>
+    {% if data_type == 'access-logs' %}
+      <td>
+        <span class="img-icon">🗒️  </span>
+        <span class="text">{{ row['date_time'] }}</span>
+      </td>
+      <td>{{ row['username'] }}</td>
+      {% if row['successful'] == '0' %}
+      <td style="color: red">error</td>
+      {% else %}
+      <td style="color: green">login</td>
+      {% endif %}
+      <td>{{ row['public_ip'] }}</td>
+      <td>{{ row['hostname'] }}</td>
+      <td>{{ row['mac_addr'] }}</td>
+
+    {% elif data_type == 'masters' %}
+    <td>
+      <span class="img-icon"><img src="{{ url_for('static', filename='img/aoe2icon.png') }}" width="15rem" /></span>
+      <span class="text">{{ row['username'] }}</span>
+    </td>
+
+    {% elif data_type == 'zombies' %}
+      <td>
+        <span class="img-icon"><img src="{{ url_for('static', filename='img/aoe2green-icon.png') }}" width="15rem" /></span>
+        <span class="text">{{ row['username'] }}</span>
+      </td>
+      <td>{{ row['registered_at'] }}</td>
+      <td>{{ row['current_public_ip'] }}</td>
+      <td>{{ row['current_hostname'] }}</td>
+      <td>{{ row['current_mac_addr'] }}</td>
+    {% endif %}
+
+  </tr>
+  {% endfor %}
+
+  </tbody>
+</table>
+</form>
+
+<script src="{{ url_for('static', filename='table-resizable.js') }}"></script>
+{% endblock %}
