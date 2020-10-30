@@ -7,11 +7,16 @@
 <!--    {% include 'windows/game-window.html' %}-->
 <!--{% endwith %}-->
 
+<!-- CUSTOM WINDOW -->
+
 
 <style>body{background-image: url({{ url_for('static',filename='img/wxp.webp') }}) !important;}</style>
 <div class="window" id='window' style="max-width: 310px; background-color: grey;">
   <div class="title-bar">
-    <div class="title-bar-text">{{ zession.username}}@{{ zession.remote_hostname }}</div>
+    <div class="title-bar-text">
+        <img class="img-icon" style="display: inline; margin-right: 5px; margin-left: 3px; vertical-align:middle; height: 3%; width: 3%;" src="{{ url_for('static', filename='img/an-skull.gif') }}" />
+        {{ zession.username}}@{{ zession.remote_hostname }}
+    </div>
     <div class="title-bar-controls">
       <button aria-label="Minimize"  onclick="toggleMinimize('index-body')"></button>
       <button aria-label="Maximize"></button>

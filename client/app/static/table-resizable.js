@@ -40,7 +40,7 @@ function resizableGrid(table) {
 
   div.addEventListener('mouseover', function (e) {
    //e.target.style.borderRight = '2px solid #0000ff';
-   e.target.style.borderRight = '2px solid purple';
+   e.target.style.borderRight = '1px dashed aqua';
   })
 
   div.addEventListener('mouseout', function (e) {

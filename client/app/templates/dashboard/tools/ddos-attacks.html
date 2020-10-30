@@ -8,14 +8,15 @@
     {% include 'windows/filter-window.html' %}
 {% endwith %}
 
-{% with window_type = 'launcher', data_type = 'ddos-attacks', banner = 'img/gta2busted.jpg', btn_msg = 'Wizard' %}
-    {% include 'windows/launcher-window.html' %}
-{% endwith %}
-
 <!--close panel div-->
 </div>
 <!--close navbar div-->
 </div>
 
+<div style="margin: 0 auto;">
+{% with window_type = 'launcher', data_type = 'ddos-attacks', banner = 'img/gta2busted.jpg', btn_msg = 'Wizard' %}
+    {% include 'windows/launcher-window.html' %}
+{% endwith %}
+</div>
 
 {% endblock %}

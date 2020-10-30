@@ -9,17 +9,17 @@
     {% include 'windows/filter-window.html' %}
 {% endwith %}
 
-{% with window_type = 'launcher', data_type = 'master-profile-editor', banner = 'img/driver2-.jpg', btn_msg = 'Edit my profile' %}
-    {% include 'windows/launcher-window.html' %}
-{% endwith %}
-
 <!--close panel div-->
 </div>
 <!--close navbar div-->
 </div>
 
+{% with window_type = 'launcher', data_type = 'master-profile-editor', banner = 'img/driver2-.jpg', btn_msg = 'Edit my profile' %}
+    {% include 'windows/launcher-window.html' %}
+{% endwith %}
+
 {% if data %}
-<div style="margin: 0 auto; min-width: 20rem;">
+<div style="margin: 0 auto; min-width: 25rem;">
 {% with window_type = 'table-results', data_type = 'masters' %}
     {% include 'windows/table-results-window.html' %}
 {% endwith %}

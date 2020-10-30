@@ -41,11 +41,11 @@ div#navbar_wrapper {
 }
 
 .nav {
-    min-width: 300px;
+    min-width: 20rem;
     max-width: 100%;
 }
 .panel {
-    min-width: 300px;
+    min-width: 20rem;
     max-width: 100%;
 }
 
@@ -97,6 +97,14 @@ table.darkTable thead th:first-child {
   border-left: none;
 }
 
+/*table.darkTable thead th, table.darkTable tbody td {
+  color: white;
+}*/
+
+table.darkTable th:hover, table.darkTable td:hover {
+  color: orangered;
+}
+
 hr {
     border: 1px dotted #3e3636;
     width: 100%;
@@ -117,10 +125,15 @@ form#ddos-attacks-creator-form {
    text-align: center;
 }
 
-h4 {
+h4, th {
   font-family: "GothicPixels", Arial;
   -webkit-font-smoothing: none;
   text-align: center;
+}
+
+
+span.margin-right-icon {
+  margin-right: 5px;
 }
 
 
@@ -128,6 +141,7 @@ h4 {
 
 <body>
 
+{% include 'header.html' %}
 
 <div id="dashboard_wrapper">
 
