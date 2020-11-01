@@ -2,21 +2,20 @@
 
 {% extends "dashboard/base_dashboard.html" %}
 
-{% block panel_window %}
+{% block lateral_panel %}
 
-{% with window_type = 'filter', data_type = 'brute-attacks', filter_by_time = True, filter_by_target = True %}
+{% with data_type = 'brute-attacks', window_type = 'filter', filter_by_time = True, filter_by_target = True %}
     {% include 'windows/filter-window.html' %}
 {% endwith %}
 
-<!--close panel div-->
-</div>
-<!--close navbar div-->
-</div>
+{% endblock %}
 
-<div style="margin: 0 auto;">
-{% with window_type = 'launcher', data_type = 'brute-attacks', banner = 'img/wolfenstein.png', btn_msg = 'Wizard' %}
-    {% include 'windows/launcher-window.html' %}
+
+
+{% block central_panel %}
+
+{% with data_type = 'brute-attacks', banner = 'img/wolfenstein.png',  icon = '🎰', title = 'brute force attacK' %}
+  {% include 'dashboard/tools/base-attack.html' %}
 {% endwith %}
-</div>
 
 {% endblock %}

@@ -2,21 +2,20 @@
 
 {% extends "dashboard/base_dashboard.html" %}
 
-{% block panel_window %}
+{% block lateral_panel %}
 
-{% with window_type = 'filter', data_type = 'ddos-attacks', filter_by_time = True, filter_by_target = True %}
+{% with data_type = 'ddos-attacks', window_type = 'filter', filter_by_time = True, filter_by_target = True %}
     {% include 'windows/filter-window.html' %}
 {% endwith %}
 
-<!--close panel div-->
-</div>
-<!--close navbar div-->
-</div>
+{% endblock %}
 
-<div style="margin: 0 auto;">
-{% with window_type = 'launcher', data_type = 'ddos-attacks', banner = 'img/gta2busted.jpg', btn_msg = 'Wizard' %}
-    {% include 'windows/launcher-window.html' %}
+
+
+{% block central_panel %}
+
+{% with data_type = 'ddos-attacks', banner = 'img/genkidama.webp', icon = '🚦', title = 'ddos attacK' %}
+  {% include 'dashboard/tools/base-attack.html' %}
 {% endwith %}
-</div>
 
 {% endblock %}

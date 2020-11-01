@@ -50,11 +50,12 @@ if($jwt){
 
         // set filters
         $by_username =  (isset($data->username)) ? $data->username : "";
+        $by_os =  (isset($data->os)) ? $data->os : "";
         $by_datetime_bef =  (isset($data->datetime_bef)) ? $data->datetime_bef : "";
         $by_datetime_aft =  (isset($data->datetime_aft)) ? $data->datetime_aft : "";
         
         // retrieve records
-        $zombies_data = $zombie->read($by_username, $by_datetime_bef, $by_datetime_aft);
+        $zombies_data = $zombie->read($by_username, $by_datetime_bef, $by_datetime_aft, $by_os);
         if($zombies_data){
             
             // set response code

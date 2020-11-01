@@ -16,7 +16,7 @@ body{
     box-sizing: border-box;
 }
 
-div#dashboard_wrapper {
+div#dashboard-wrapper {
     max-width: 85%;
     margin: 0 auto;
     display: flex;
@@ -27,32 +27,29 @@ div#dashboard_wrapper {
     align-content: space-around;
 }
 
-div#navbar_wrapper {
+div#navbar-wrapper {
+    width: 25rem;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    /*justify-content: flex-start;
     align-items: stretch;
-    align-content: space-around;
+    align-content: flex-start;*/
+}
+
+div#central-panel-wrapper {
+    width: 70rem;
+    /*margin: 0 auto;*/
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    align-content: space-evenly;
 }
 
 .window {
     margin: 10px 10px 0;
-}
-
-.nav {
-    min-width: 20rem;
-    max-width: 100%;
-}
-.panel {
-    min-width: 20rem;
-    max-width: 100%;
-}
-
-.panel-info {
-    flex-grow: 3;
-    /* max-width: 65%; */
-    margin: 0 auto;
 }
 
 table {
@@ -97,12 +94,22 @@ table.darkTable thead th:first-child {
   border-left: none;
 }
 
-/*table.darkTable thead th, table.darkTable tbody td {
+table.darkTable thead th, table.darkTable tbody td {
   color: white;
-}*/
+}
 
 table.darkTable th:hover, table.darkTable td:hover {
   color: orangered;
+}
+
+
+table.darkTable td.with-icon {
+ display: flex;
+ flex-direction: row;
+ justify-content: flex-start;
+ align-items: center;
+ border: 0;
+ /*font-family: "VerilySerifMono";*/
 }
 
 hr {
@@ -121,19 +128,34 @@ button#creator {
     margin-left: 3rem;
 }
 
-form#ddos-attacks-creator-form {
-   text-align: center;
-}
-
 h4, th {
   font-family: "GothicPixels", Arial;
   -webkit-font-smoothing: none;
   text-align: center;
+  vertical-align: middle;
 }
 
+span.title-icon {
+  font-size: 1rem;
+}
 
 span.margin-right-icon {
-  margin-right: 5px;
+  margin-right: 6px;
+}
+
+span.margin-left-icon {
+  margin-left: 6px;
+}
+
+img.flames {
+  display: inline;
+  width: 1.1rem;
+  vertical-align: bottom;
+}
+
+#img-launcher {
+  display: inherit;
+  margin: 0 auto;
 }
 
 
@@ -143,18 +165,21 @@ span.margin-right-icon {
 
 {% include 'header.html' %}
 
-<div id="dashboard_wrapper">
+<div id="dashboard-wrapper">
 
-    <div id="navbar_wrapper">
-
+  <div id="navbar-wrapper">
     <div class="nav">
       {% include 'navbar.html' %}
     </div>
+    <div class="lateral-panel">
+      {% block lateral_panel %}{% endblock %}
+    </div>
 
-    <div class="panel">
-      {% block panel_window %}{% endblock %}
+  </div>
 
-
+  <div id="central-panel-wrapper">
+    {% block central_panel %}{% endblock %}
+  </div>
 
 </div>
 

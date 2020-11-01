@@ -1,0 +1,27 @@
+
+{% block form %}
+
+<form id="edit-profile-form" action="" method="POST">
+  <table style="background-color: gray; margin: 0 auto;">
+    <tr>
+      <td style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+        <input id="pswd" name="pswd" type="password" value="{{ request.form.pswd }}" style="width: 48%; text-align: right;" />
+        <button type="submit" id="pswd-btn" name="pswd-btn" style="width: 48%; margin: 0;">Update password</button>
+        {% if update_error and 'password' in update_error %}
+        <div style="width: 100%; margin 0 auto;"><p class="error">{{ update_error }}</p></div>
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <textarea id="public_key" name="public_key" rows="4" cols="35" form="edit-profile-form" style="display: block;">{{ request.form.public_key }}</textarea>
+        <button type="submit" id="public-key-btn" name="public-key-btn" style="display: block;">Update public key</button>
+        {% if update_error and 'public_key' in update_error %}
+        <p class="error">{{ update_error }}</p>
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+</form>
+
+{% endblock %}

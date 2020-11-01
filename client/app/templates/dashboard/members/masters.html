@@ -3,30 +3,45 @@
 {% extends "dashboard/base_dashboard.html" %}
 
 
-{% block panel_window %}
 
-{% with window_type = 'filter', data_type = 'masters', filter_by_time = False %}
-    {% include 'windows/filter-window.html' %}
-{% endwith %}
+{% block lateral_panel %}
 
-<!--close panel div-->
-</div>
-<!--close navbar div-->
-</div>
+  {% with window_type = 'filter', data_type = 'masters', filter_by_time = False %}
+      {% include 'windows/filter-window.html' %}
+  {% endwith %}
 
-{% with window_type = 'launcher', data_type = 'master-profile-editor', banner = 'img/driver2-.jpg', btn_msg = 'Edit my profile' %}
-    {% include 'windows/launcher-window.html' %}
-{% endwith %}
+{% endblock %}
 
-{% if data %}
-<div style="margin: 0 auto; min-width: 25rem;">
-{% with window_type = 'table-results', data_type = 'masters' %}
-    {% include 'windows/table-results-window.html' %}
-{% endwith %}
-</div>
-{% endif %}
 
-{% block edit_profile %}{% endblock %}
+
+{% block central_panel %}
+
+  {% if update_error and 'updated' in update_error %}
+    <style>
+      .error {color: purple;}
+    </style>
+  {% endif %}
+
+  {% if edit_profile %}
+  <div id="profile-editor" style="width: 20rem;">
+    {% with window_type = 'editor', data_type = 'master-profile' %}
+      {% include 'windows/profile-editor-window.html' %}
+    {% endwith %}
+  </div>
+
+  {% elif data %}
+  <div id="filter-results" style="width: 20rem;">
+  {% with window_type = 'table-results', data_type = 'masters' %}
+      {% include 'windows/table-results-window.html' %}
+  {% endwith %}
+  </div>
+  {% endif %}
+
+  <div id="edit-profile-launcher" style="max-width: 30rem;">
+  {% with window_type = 'launcher', data_type = 'master-profile-editor', banner = 'img/driver2-.jpg', width_img = '25rem', btn_msg = 'Edit my profile' %}
+      {% include 'windows/launcher-window.html' %}
+  {% endwith %}
+  </div>
 
 {% endblock %}
 

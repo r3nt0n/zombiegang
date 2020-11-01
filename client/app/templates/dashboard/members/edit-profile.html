@@ -4,15 +4,6 @@
 
 {% block edit_profile %}
 
-<style>
-  .header4 {
-  text-align: center;
-}
-
-img.flames {
-  display: inline; width: 1.1rem;
-}
-</style>
 
 {% if update_error and 'updated' in update_error %}
 <style>
@@ -22,13 +13,10 @@ img.flames {
 </style>
 {% endif %}
 
-<div class="edit-profile" style="margin: 0 auto; max-width: 25rem;">
-
+<div id="profile-editor" style="max-width: 20rem;">
 {% with window_type = 'editor', data_type = 'master-profile' %}
-    {% include 'windows/profile-editor-window.html' %}
+    {% include 'windows/panels/profile-editor-window.html' %}
 {% endwith %}
-
 </div>
-
 
 {% endblock %}

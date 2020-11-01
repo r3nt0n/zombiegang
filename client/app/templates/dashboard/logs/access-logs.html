@@ -2,19 +2,20 @@
 
 {% extends "dashboard/base_dashboard.html" %}
 
-{% block panel_window %}
+{% block lateral_panel %}
 
 {% with window_type = 'filter', data_type = 'access-logs', filter_by_time = True %}
     {% include 'windows/filter-window.html' %}
 {% endwith %}
 
-<!--close panel div-->
-</div>
-<!--close navbar div-->
-</div>
+{% endblock %}
+
+
+
+{% block central_panel %}
 
 {% if data %}
-<div style="margin: 0 auto; min-width: 60rem;">
+<div style="margin: 0 auto; min-width: 50rem;">
 {% with window_type = 'table-results', data_type = 'access-logs' %}
     {% include 'windows/table-results-window.html' %}
 {% endwith %}

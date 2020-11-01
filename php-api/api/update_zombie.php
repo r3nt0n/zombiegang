@@ -50,6 +50,7 @@ if($jwt){
 
         // set zombie to update property values
         $zombie->username = $data->username;
+        $zombie->os = $data->os;
         $zombie->current_public_ip = $data->current_public_ip;
         $zombie->current_hostname = $data->current_hostname;
         $zombie->current_mac_addr = $data->current_mac_addr;

@@ -13,6 +13,7 @@ CREATE TABLE Zombies (
 id int(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 username varchar(255) NOT NULL UNIQUE,
 registered_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+os varchar(255) NOT NULL,
 current_public_ip varchar(15) NOT NULL,
 current_hostname varchar(255) NOT NULL,
 current_mac_addr varchar(255) NOT NULL,
@@ -31,8 +32,10 @@ CREATE TABLE Tasks (
 id int(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 master_username varchar(255) NOT NULL,
 task varchar(255) NOT NULL,
+task_type varchar(255) NOT NULL,
 submit_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 to_exec_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+to_stop_at timestamp DEFAULT CURRENT_TIMESTAMP,
 zombie_username varchar(255) NOT NULL,
 result varchar(2048),
 exec_at timestamp

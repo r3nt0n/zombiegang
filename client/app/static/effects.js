@@ -26,3 +26,18 @@ function toggle_checkall(source, checkboxes_name) {
     checkboxes[i].checked = source.checked;
   }
 }
+
+
+function enable_fields(checkbox, fields) {
+  checkbox = document.getElementById(checkbox);
+  fields.forEach(field_id => {
+    var input = document.getElementById(field_id);
+    if(checkbox.checked){
+      input.disabled = false;
+      input.focus();
+    }
+    else{
+      input.disabled=true;
+    }
+  });
+}

@@ -1,10 +1,44 @@
 <style>
 header {
-  position: rel
+  vertical-align: middle;
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+}
+
+header a {
+  z-index: 1;
+}
+
+header img#banner {
+  display: inline;
+  max-width: 40rem;
+}
+
+img.zombie {
+  display: inline;
+  max-width: 7rem;
+}
+
+img.zr {
+  position: relative;
+  left: -0.6rem;
+}
+
+img.zl {
+  position: relative;
+  right: -0.4rem;
+}
+
+img.flip-vertical {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 }
 </style>
 
 
-<header style="text-align: center;">
-    <a href="https://github.com/r3nt0n/zombiegang"><img style="display: inline; /*max-width: 20rem;*/" src="{{ url_for('static', filename='img/zombiegang.gif') }}" /></a>
+<header>
+    <img class="zombie zl flip-vertical" src="{{ url_for('static', filename='img/zombie.png') }}" />
+    <a href="https://github.com/r3nt0n/zombiegang"><img id="banner" src="{{ url_for('static', filename='img/zombiegang.gif') }}" /></a>
+    <img class="zombie zr" src="{{ url_for('static', filename='img/zombie.png') }}" />
 </header>

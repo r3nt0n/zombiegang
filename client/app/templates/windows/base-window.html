@@ -3,6 +3,7 @@
 .window {
   background-color: grey;
   margin-left: auto;
+  margin-right: auto;
 }
 
 img.img-icon {
@@ -10,8 +11,7 @@ img.img-icon {
     margin-right: 5px;
     margin-left: 3px;
     vertical-align:middle;
-    height: 3%;
-    width: 3%;
+    width: 0.7rem;
 }
 </style>
 
@@ -34,6 +34,8 @@ img.img-icon {
           {{ data_type + '-' + window_type + '.txt' }}
         {% elif window_type == 'table-results' %}
           {{ data_type + '-' + window_type + '.xlsx' }}
+        {% elif window_type == 'creator' %}
+          {{ data_type + '-' + window_type + '.ps1' }}
         {% endif %}
     </div>
 
