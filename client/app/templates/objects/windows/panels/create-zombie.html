@@ -1,0 +1,22 @@
+{% extends "objects/windows/panels/base_panel.html" %}
+
+{% block window %}
+
+<form id="create-{{ data_type }}-form" name="create-{{ data_type }}-form" action="" method="POST">
+{% include 'objects/tables/data-results.html' %}
+
+  <div style="width: 50%; margin: 0 auto; text-align: center;">
+  <span class="title-icon"><img class="flames" src="{{ url_for('static', filename='img/purple-flame.gif') }}" /></span>
+    <fieldset name="edit-data-buttons-{{ data_type }}" id="edit-data-buttons-{{ data_type }}" class="styless" disabled>
+    <button type="submit" id="btn-create-{{ data_type }}" name="btn-create-{{ data_type }}" style="margin: auto;">
+      <span class="emoji">🔯  </span>
+      <span class="button-text"> Accept</span>
+    </button>
+    </fieldset>
+  <span class="title-icon"><img class="flames" src="{{ url_for('static', filename='img/purple-flame.gif') }}" /></span>
+  </div>
+
+
+</form>
+
+{% endblock %}

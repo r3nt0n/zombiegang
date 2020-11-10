@@ -1,0 +1,237 @@
+{% block desktop_shortcuts %}
+
+
+<!-- javascript template to create popup -->
+{% with data_type='proxy', window_type='js-popup' %}
+  {% include 'js/create_popups.js' %}
+{% endwith %}
+
+
+
+<div id="proxy-launcher"></div>
+
+<div class="desktop">
+
+  <ul class="tree-view styless">
+    <!-- FAKE cmd.exe shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/xp-cmd.png') }}" title="cmd.exe" />
+          <span class="shortcut-text">cmd.exe</span>
+        </a>
+    </li>
+    <!-- FAKE virtua tennis shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon cmd-icon" src="{{ url_for('static', filename='img/desktop-icons/virtuatennis.png') }}" title="Virtua Tennis" />
+          <span class="shortcut-text">Virtua Tennis</span>
+        </a>
+    </li>
+    <!-- FAKE commandos shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/commandos.png') }}" title="Commandos 2" />
+          <span class="shortcut-text">Commandos 2</span>
+        </a>
+    </li>
+    <!-- FAKE visual boy advance shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/visualboyadvance.png') }}" title="Visual Boy Advance" />
+          <span class="shortcut-text">Visual Boy Advance.exe</span>
+        </a>
+    </li>
+    <!-- FAKE dino island shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/dinoisland.png') }}" title="Dino Island" />
+          <span class="shortcut-text">Dino Island.exe</span>
+        </a>
+    </li>
+    <!-- FAKE imperium shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/imperium.png') }}" title="Imperium: Emperor Expansion" />
+          <span class="shortcut-text">Imperium</span>
+        </a>
+    </li>
+    <!-- FAKE counter strike 1.6 shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/cs16.png') }}" title="Counter Strike 1.6" />
+          <span class="shortcut-text">Counter Strike.exe</span>
+        </a>
+    </li>
+    <!-- FAKE winamp shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="https://winamp.com/" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/winamp.png') }}" title="Winamp" />
+          <span class="shortcut-text">Winamp</span>
+        </a>
+    </li>
+    <!-- FAKE regedit shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/regedit.webp') }}" title="Register Editor" />
+          <span class="shortcut-text">regedit.exe</span>
+        </a>
+    </li>
+  </ul>
+
+  <!-- center column -->
+  <ul class="tree-view styless">
+    <!-- FAKE kazaa shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/kazaa.png') }}" title="Kazaa" />
+          <span class="shortcut-text">Kazaa</span>
+        </a>
+    </li>
+    <!-- FAKE age-of-empires-ii-conquerors shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="https://www.ageofempires.com/" target="_blank">
+          <img class="shortcut-icon aoe-icon" src="{{ url_for('static', filename='img/aoe2icon-blue.png') }}" title="Age of Empires II: The Conquerors" />
+          <span class="shortcut-text">Age of Empires II: The Conquerors</span>
+        </a>
+    </li>
+    <!-- FAKE microsoft flight simulator shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/flightsim.png') }}" title="Microsoft Flight Simulator" />
+          <span class="shortcut-text">Microsoft Flight Simulator</span>
+        </a>
+    </li>
+    <!-- FAKE roller-coaster-tycoon-2 shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="http://www.rollercoastertycoon.com/" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/rct2.png') }}" title="Roller Coaster Tycoon 2" />
+          <span class="shortcut-text">Roller Coaster Tycoon 2</span>
+        </a>
+    </li>
+    <!-- FAKE virtual dj shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon vdj-icon" src="{{ url_for('static', filename='img/desktop-icons/virtualdj.png') }}" title="Virtual DJ" />
+          <span class="shortcut-text">Virtual DJ.exe</span>
+        </a>
+    </li>
+    <!-- FAKE wolfenstein-3d shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="https://archive.org/details/msdos_Wolfenstein_3D_1992" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/wolfenstein-icon.png') }}" title="Wolfenstein 3D" />
+          <span class="shortcut-text">Wolfenstein 3D.exe</span>
+        </a>
+    </li>
+    <!-- FAKE messenger shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/msn-classic.png') }}" title="Windows Messenger" />
+          <span class="shortcut-text">Windows Messenger</span>
+        </a>
+    </li>
+    <!-- FAKE immunity shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="https://www.immunityinc.com/" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/immunity.gif') }}" title="Immunity Debugger" />
+          <span class="shortcut-text">immunity.exe</span>
+        </a>
+    </li>
+    <!-- FAKE netscape shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/netscape.png') }}" title="Netscape" />
+          <span class="shortcut-text">Netscape</span>
+        </a>
+    </li>
+    <!-- zombiegang client.exe shortcut -->
+    <li class="shortcut">
+      <a class="desktop-shortcut" href="{{ url_for('login') }}">
+        <img class="shortcut-icon skull-shortcut-icon" src="{{ url_for('static', filename='img/skull.png') }}" title="zombiegang client" />
+        <span class="shortcut-text">client.exe</span>
+      </a>
+    </li>
+  </ul>
+
+  <!-- right column -->
+  <ul class="tree-view styless">
+    <!-- FAKE zoo-tycoon-2 shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="http://www.zootycoon.com/" target="_blank">
+          <img class="shortcut-icon zoo-icon" src="{{ url_for('static', filename='img/desktop-icons/zoo-tycoon-2.png') }}" title="Zoo Tycoon 2" />
+          <span class="shortcut-text">Zoo Tycoon 2</span>
+        </a>
+    </li>
+    <!-- FAKE paint shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/paint.png') }}" title="Paint" />
+          <span class="shortcut-text">Paint</span>
+        </a>
+    </li>
+    <!-- FAKE doom shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon doom-icon" src="{{ url_for('static', filename='img/desktop-icons/Doom_1-1993.webp') }}" title="Doom" />
+          <span class="shortcut-text">Doom.exe</span>
+        </a>
+    </li>
+    <!-- FAKE my computer shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/mycomputer-w2000.webp') }}" title="My Computer" />
+          <span class="shortcut-text">My Computer</span>
+        </a>
+    </li>
+    <!-- FAKE age-of-empires-ii shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="https://www.ageofempires.com/" target="_blank">
+          <img class="shortcut-icon aoe-icon" src="{{ url_for('static', filename='img/aoe2icon-red.png') }}" title="Age of Empires II" />
+          <span class="shortcut-text">Age of Empires II</span>
+        </a>
+    </li>
+    <!-- FAKE emule shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="https://www.emule-project.net/" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/emule.png') }}" title="Emule" />
+          <span class="shortcut-text">Emule</span>
+        </a>
+    </li>
+    <!-- FAKE doom-64 shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/Doom_64-1997.webp') }}" title="Doom 64" />
+          <span class="shortcut-text">Doom 64.exe</span>
+        </a>
+    </li>
+    <!-- FAKE simcity 4 shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="https://www.ea.com/es-es/games/simcity/simcity-4" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/simcity4.webp') }}" title="SimCity 4" />
+          <span class="shortcut-text">SimCity 4</span>
+        </a>
+    </li>
+    <!-- FAKE mIRC shortcut -->
+    <li class="shortcut">
+        <a class="desktop-shortcut" href="#" target="_blank">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/mirc.svg') }}" title="mIRC" />
+          <span class="shortcut-text">mIRC.exe</span>
+        </a>
+    </li>
+    <!-- zombiegang proxy.exe shortcut -->
+    <li class="shortcut">
+        <a ondblclick="javascript:create_proxy_popup('proxy-launcher');" href="#" class="desktop-shortcut">
+          <img class="shortcut-icon" src="{{ url_for('static', filename='img/desktop-icons/socks5.png') }}" title="socks5 proxy tool" />
+          <span class="shortcut-text">proxy.exe</span>
+        </a>
+    </li>
+
+  </ul>
+</div>
+
+
+
+
+
+
+
+{% endblock %}

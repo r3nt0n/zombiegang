@@ -1,0 +1,35 @@
+
+
+{% extends "base_template.html" %}
+
+{% block title %}zombiegang dashboard{% endblock %}
+
+{% block container %}
+
+{% include 'objects/header.html' %}
+
+<style>
+  body{
+    background-image: url({{ url_for('static',filename='img/wxp-negative.webp') }}) !important;
+}
+</style>
+
+<div id="dashboard-wrapper" class="dashboard-wrapper">
+
+  <div id="navbar-wrapper">
+    <div class="nav">
+      {% include 'pages/dashboard/navbar.html' %}
+    </div>
+    <div class="lateral-panel">
+      {% block lateral_panel %}{% endblock %}
+    </div>
+
+  </div>
+
+  <div id="central-panel-wrapper">
+    {% block central_panel %}{% endblock %}
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,1 @@
+mariadb -u zgang -p < data/testdata.sql

@@ -19,7 +19,7 @@ include_once 'config/database.php';
 include_once 'objects/master.php';
 
 // auxilar functions
-include_once 'aux/check_permission.php';
+include_once 'aux_functions/check_permission.php';
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -39,7 +39,7 @@ if($jwt){
         $requested_by = $decoded->data->username;
         //$to_update = $data->username;
         // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
-        check_permission($requested_by);
+        check_master_permissions($requested_by);
 
         // get database connection
         $database = new Database();

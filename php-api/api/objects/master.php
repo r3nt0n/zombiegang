@@ -15,35 +15,7 @@ class Master{
             $this->conn = $db;
         }
 
-    // create new user record
-    function create(){
-    
-        // insert query
-        $query = "INSERT INTO " . $this->table_name . "
-                SET
-                    username = :username,
-                    public_key = :public_key";
-    
-        // prepare the query
-        $stmt = $this->conn->prepare($query);
-    
-        // sanitize
-        $this->username=htmlspecialchars(strip_tags($this->username));
-        $this->public_key=htmlspecialchars(strip_tags($this->public_key));
-    
-        // bind the values
-        $stmt->bindParam(':username', $this->username);
-        $stmt->bindParam(':public_key', $this->public_key);
-    
-        // execute the query, also check if query was successful
-        if(!$this->usernameExists() && $stmt->execute()){
-            return true;
-        }
-    
-        return false;
-    }
-
-        // check if given username exist in the database
+    // check if given username exist in the database
     function usernameExists(){
     
         // query to check if username exists
@@ -89,14 +61,52 @@ class Master{
         // return false if username does not exist in the database
         return false;
     }
+
+    // create new user record
+    function create(){
+        if(!$this->usernameExists()) {
+            // insert query
+            $query = "INSERT INTO " . $this->table_name . "
+                    SET
+                        username = :username,
+                        public_key = :public_key";
+        
+            // prepare the query
+            $stmt = $this->conn->prepare($query);
+        
+            // sanitize
+            $this->username=htmlspecialchars(strip_tags($this->username));
+            $this->public_key=htmlspecialchars(strip_tags($this->public_key));
+        
+            // bind the values
+            $stmt->bindParam(':username', $this->username);
+            $stmt->bindParam(':public_key', $this->public_key);
+        
+            // execute the query, also check if query was successful
+            if(!$this->usernameExists() && $stmt->execute()){
+                return true;
+            }
+        
+            return false;
+        }
+    }
+
+    
  
     // update a user record
     public function update(){
         if($this->usernameExists()) {
+
+            $public_key_set = !empty($this->public_key) ? "SET public_key = :public_key" : "";
+
+            if (!$public_key_set) {
+                return True;
+            }
+
             // if no posted password, do not update the password
             $query = "UPDATE " . $this->table_name . "
                     SET
-                        public_key = :public_key
+                        {$public_key_set}
                     WHERE id = :id";
         
             // prepare the query
@@ -120,6 +130,32 @@ class Master{
         
             return false;
             }
+    }
+
+    public function delete(){
+        if($this->usernameExists()) {
+            // query
+            $query = "DELETE FROM " . $this->table_name . "
+            WHERE id = ?";
+        
+            // prepare the query
+            $stmt = $this->conn->prepare($query);
+        
+            // sanitize
+            //$this->username=htmlspecialchars(strip_tags($this->username));
+        
+            // bind the values from the form
+            //$stmt->bindParam(':username', $this->username);   
+            // unique ID of record to be deleted
+            $stmt->bindParam(1, $this->id);
+        
+            // execute the query
+            if($stmt->execute()){
+                return true;
+            }
+        
+            return false;
+        }
     }
 
     function read($filter_by_username=False, $order_by='id'){

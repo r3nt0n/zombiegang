@@ -1,0 +1,9 @@
+{% block button %}
+
+<button type="submit" id="btn-delete-{{ data_type }}" name="btn-delete-{{ data_type }}">
+  <span class="emoji">⛔  </span>
+<!--  <span class="button-text">Delete</span>-->
+  <span class="button-text">{% if data_type == 'users' or data_type == 'zombies' %}Kick out{% else %}Delete{% endif %}</span>
+</button>
+
+{% endblock %}

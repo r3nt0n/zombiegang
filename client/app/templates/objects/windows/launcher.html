@@ -1,0 +1,16 @@
+
+{% extends 'objects/windows/base_window.html' %}
+
+{% block window %}
+
+  {% if 'attacks' in data_type %}
+  <h4>order new attacK</h4>
+  {% endif %}
+
+  <img id="img-launcher" src="{{ url_for('static', filename=banner) }}" class="{{ img_class }}" />
+
+  <form id="launcher-form" name="launcher-form" action="" method="POST" style="display: flex; justify-content: space-between; align-items: center;">
+    <button type="submit" class="standard" id="btn-launcher" name="btn-launcher">{{ btn_msg }}</button>
+  </form>
+
+{% endblock %}

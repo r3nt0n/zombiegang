@@ -1,0 +1,14 @@
+
+{% extends "pages/index.html" %}
+
+
+{% block login %}
+
+<div id="login-wrapper" class="float-center-window logged-out-wrapper">
+{% with window_type = 'index', data_type = '' %}
+    {% include 'objects/windows/login.html' %}
+{% endwith %}
+</div>
+
+{% endblock %}
+

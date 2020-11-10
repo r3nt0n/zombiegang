@@ -1,0 +1,41 @@
+
+
+{% extends "pages/dashboard/base_dashboard.html" %}
+
+
+
+{% block lateral_panel %}
+
+  {% with window_type = 'filter', data_type = 'masters', filter_by_time = False %}
+      {% include 'objects/windows/filter.html' %}
+  {% endwith %}
+
+{% endblock %}
+
+
+
+{% block central_panel %}
+
+  {% if edit_profile or update_error %}
+  <div id="edit-profile" style="width: 21.5rem;">
+    {% with window_type = 'editor', data_type = 'master-profile' %}
+      {% include 'objects/windows/panels/edit-profile.html' %}
+    {% endwith %}
+  </div>
+
+  {% elif data %}
+  <div id="filter-results" style="width: 21.5rem;">
+  {% with window_type = 'table-results', data_type = 'masters' %}
+      {% include 'objects/windows/data-results.html' %}
+  {% endwith %}
+  </div>
+  {% endif %}
+
+  <div id="edit-profile-launcher" style="max-width: 30rem;">
+  {% with window_type = 'launcher', data_type = 'master-edit-profile', banner = 'img/driver2-.jpg', img_class = 'launcher-img-m', btn_msg = 'Edit my profile' %}
+      {% include 'objects/windows/launcher.html' %}
+  {% endwith %}
+  </div>
+
+{% endblock %}
+

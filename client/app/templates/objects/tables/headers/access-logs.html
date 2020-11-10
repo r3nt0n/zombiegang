@@ -1,0 +1,15 @@
+
+{% block thead %}
+
+  {% with legend='datetime' %}
+    {% include 'objects/tables/headers/datetime.html' %}
+  {% endwith %}
+  {% with data_type='users' %}
+    {% include 'objects/tables/headers/username.html' %}
+  {% endwith %}
+  {% include 'objects/tables/headers/successful.html' %}
+  {% include 'objects/tables/headers/public-ip.html' %}
+  {% include 'objects/tables/headers/country-code.html' %}
+  {% include 'objects/tables/headers/hostname.html' %}
+
+{% endblock %}

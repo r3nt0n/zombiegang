@@ -1,0 +1,33 @@
+
+{% block attack %}
+
+{% if create_error and 'created' in create_error %}
+  <style>
+    .error {color: purple;}
+  </style>
+{% endif %}
+
+
+{% if create_attack %}
+  <div id="{{ data_type + '-creator' }}" class="attack-creator">
+  {% with window_type = 'creator' %}
+    {% include 'objects/windows/panels/create-attack.html' %}
+  {% endwith %}
+  </div>
+
+  <div id="{{ data_type + '-launcher' }}" class="launcher-m">
+    {% with window_type = 'launcher', data_type = 'ddos-attacks', img_class = 'launcher-img-m', btn_msg = 'Wizard' %}
+      {% include 'objects/windows/launcher.html' %}
+    {% endwith %}
+  </div>
+{% else %}
+
+  <div id="{{ data_type + '-launcher' }}" class="launcher-l">
+    {% with window_type = 'launcher', data_type = 'ddos-attacks', img_class = 'launcher-img-l', btn_msg = 'Wizard' %}
+      {% include 'objects/windows/launcher.html' %}
+    {% endwith %}
+  </div>
+
+{% endif %}
+
+{% endblock %}

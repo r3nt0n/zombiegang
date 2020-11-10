@@ -1,0 +1,62 @@
+{% block form %}
+
+<form name="proxy" action="" method="POST" style="text-align: center;">
+
+
+<img src="{{ url_for('static',filename='img/crashbandicoot2.jpg') }}" width="177rem;" />
+
+<div class="field-row-stacked" style="margin-left: 0.3rem;">
+  <input type="checkbox" id="proxy-enabled"
+         onClick="toggle_proxy('proxy-enabled', 'proxy_host', 'proxy_port'); get_actual_ip('#actual-ip', '#proxy-country', '#proxy-flag');" />
+    <label for="proxy-enabled"> <span>proxy enabled</span></label>
+</div>
+
+
+<!--<div class="field-row-stacked">-->
+<div class="field-row-stacked" style="display: inline;">
+      <input id="proxy_host" name="proxy_host" type="text" style="width: 7rem; height: 1.5rem;" value="{{ request.form.proxy_host }}"
+             onkeyup="enable_checkbox_by(['proxy_host', 'proxy_port'], 'proxy-enabled');" />
+      <span class="text-bold" style="margin-left: 0.2rem;margin-right: 0.1rem;"> : </span>
+      <input id="proxy_port" name="proxy_port" type="text" style="width: 3rem; height: 1.5rem;" value="{{ request.form.proxy_port }}"
+             onkeyup="enable_checkbox_by(['proxy_host', 'proxy_port'], 'proxy-enabled');" />
+<!--  <table>-->
+<!--  <tr>-->
+<!--    <td style="text-align: right;"><label for="proxy_host"><span> host:</span> </label></td>-->
+<!--    <td style="text-align: left;">-->
+<!--      <input id="proxy_host" name="proxy_host" type="text" value="{{ request.form.proxy_host }}"-->
+<!--             onkeyup="enable_checkbox_by(['proxy_host', 'proxy_port'], 'proxy-enabled');" />-->
+<!--    </td>-->
+<!--  </tr>-->
+
+<!--  <tr>-->
+<!--    <td style="text-align: right;"><label for="proxy_port"><span> port:</span> </label>-->
+<!--    <td style="text-align: left;">-->
+<!--      <input id="proxy_port" name="proxy_port" type="text" style="width: 3rem;" value="{{ request.form.proxy_port }}"-->
+<!--             onkeyup="enable_checkbox_by(['proxy_host', 'proxy_port'], 'proxy-enabled');" />-->
+<!--    </td>-->
+<!--  </tr>-->
+<!--  </table>-->
+</div>
+
+<dl id="proxy-info" class="tree-view styless">
+<!--    <ul class="tree-view">-->
+    <dt>
+      <span class="text-bold">actual ip: </span>
+    </dt>
+    <dd>
+      <span id="actual-ip"></span>
+      <a href="javascript:get_actual_ip('#actual-ip', '#proxy-country', '#proxy-flag');"> 🔄</a>
+    </dd>
+    <dt>
+      <span class="text-bold">country: </span>
+    </dt>
+    <dd>
+      <span id="proxy-flag">  </span> <span id="proxy-country"></span>
+    </dd>
+  </dl>
+
+</form>
+
+
+
+{% endblock %}

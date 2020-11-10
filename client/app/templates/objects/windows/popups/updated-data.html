@@ -1,0 +1,20 @@
+{% extends "objects/windows/base_window.html" %}
+
+{% block window %}
+
+<img id="img-launcher" src="{{ url_for('static', filename=img) }}" style="max-width: 25rem;"/>
+
+<ul class="tree-view">
+  <li>
+    <details>
+    <summary>{{ data_type }} {{ operation }}: {{ data|length }}</summary>
+      <ul>
+        {% for row in data %}
+          <li>{{ row }} was {{ operation }}</li>
+        {% endfor %}
+      </ul>
+    </details>
+  </li>
+</ul>
+
+{% endblock %}

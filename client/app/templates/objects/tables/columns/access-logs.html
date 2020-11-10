@@ -1,0 +1,34 @@
+
+{% block column %}
+
+
+<td>{{ row['date_time'] }}</td>
+
+
+<td>{{ row['username'] }}</td>
+
+
+{% if row['successful'] == '0' %}
+  <td style="color: red">error</td>
+{% else %}
+  <td style="color: green">login</td>
+{% endif %}
+
+
+<td>{{ row['public_ip'] }}</td>
+
+
+<td>
+  <span class="flag-icon">
+  {% with country_code=row['country'].upper() %}
+    {% include 'objects/dynamic/cc_flag.html' %}
+  {% endwith %}
+  </span>
+  {{ row['country'] }}
+</td>
+
+
+<td>{{ row['hostname'] }}</td>
+
+
+{% endblock %}

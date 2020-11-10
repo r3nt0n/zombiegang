@@ -1,6 +1,6 @@
 <?php
 // required headers
-//header("Access-Control-Allow-Origin: http://localhost/");
+//header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
@@ -10,7 +10,9 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // files needed to connect to database
 include_once 'config/database.php';
 include_once 'objects/user.php';
-include_once 'aux/create_access_log.php';
+include_once 'aux_functions/check_permission.php';
+include_once 'create_access_log.php';
+include_once 'aux_functions/post_request.php';
  
 // get database connection
 $database = new Database();
@@ -21,6 +23,8 @@ $user = new User($db);
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
+
+//print_r(file_get_contents("php://input"));
  
 // set product property values
 $user->username = $data->username;
@@ -75,6 +79,8 @@ else{
 //$public_ip = ($_SERVER['REMOTE_ADDR'] == ': : 1') ? '127.0.0.1' : $_SERVER['REMOTE_ADDR'] ;
 $public_ip = $_SERVER['REMOTE_ADDR'];
 $public_ip = strval($public_ip);
+$country = post_request('http://ip-api.com/json/'.$public_ip.'?fields=countryCode', False, $content_type='json');
+$country = ($country) ? $country : 'XX';
 //$public_ip = '127.0.0.1';
 
 // create access log
@@ -84,8 +90,11 @@ $public_ip = strval($public_ip);
 $log_data = array("successful" => $successful,
                   "username" => $data->username,
                   "public_ip" => $public_ip,
-                  "hostname" => $data->hostname,
-                  "mac_addr" => $data->mac_addr);
+                  "country" => $country,
+                  "hostname" => $data->hostname);
 
-create_access_log($log_data);
+if ($store_masters_acess_logs or !(is_master($db, $user->username))) {
+    create_access_log($log_data);
+}
+
 ?>

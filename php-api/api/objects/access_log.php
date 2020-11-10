@@ -11,8 +11,8 @@ class AccessLog{
         public $successful;
         public $username;
         public $public_ip;
+        public $country;
         public $hostname;
-        public $mac_addr;
     
         // constructor
         public function __construct($db){
@@ -28,8 +28,8 @@ class AccessLog{
                     successful = :successful,
                     username = :username,
                     public_ip = :public_ip,
-                    hostname = :hostname,
-                    mac_addr = :mac_addr";
+                    country = :country,
+                    hostname = :hostname";
     
         // prepare the query
         $stmt = $this->conn->prepare($query);
@@ -37,8 +37,8 @@ class AccessLog{
         // sanitize
         $this->username=htmlspecialchars(strip_tags($this->username));
         $this->public_ip=htmlspecialchars(strip_tags($this->public_ip));
+        $this->country=htmlspecialchars(strip_tags($this->country));
         $this->hostname=htmlspecialchars(strip_tags($this->hostname));
-        $this->mac_addr=htmlspecialchars(strip_tags($this->mac_addr));
         
         //echo $this->public_ip;
 
@@ -46,8 +46,8 @@ class AccessLog{
         $stmt->bindParam(':successful', $this->successful);
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':public_ip', $this->public_ip);
+        $stmt->bindParam(':country', $this->country);
         $stmt->bindParam(':hostname', $this->hostname);
-        $stmt->bindParam(':mac_addr', $this->mac_addr);
     
         // execute the query, also check if query was successful
         if($stmt->execute()){
@@ -89,7 +89,7 @@ class AccessLog{
         $order_by = ($order_by) ? " ORDER BY " . $order_by : 'id' ;
 
         // query
-        $query = "SELECT id, date_time, successful, username, public_ip, hostname, mac_addr
+        $query = "SELECT id, date_time, successful, username, public_ip, country, hostname
                 FROM " . $this->table_name . "
                 {$filter}
                 {$order_by} DESC";

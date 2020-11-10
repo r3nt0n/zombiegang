@@ -3,50 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <title>{% block title %}{% endblock %}</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
-{% include 'win98css.html' %}
+<!-- win98 css styles -->
+{% include 'css/win98.css' %}
+<!-- custom css styles -->
+{% include 'css/base_styles.css' %}
 
-<style>
+<!-- custom responsive css styles -->
+<link rel="stylesheet" media="screen and (max-width: 500px)" href="{{ url_for('static', filename='css/mobile.css') }}">
+<link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1366px)" href="{{ url_for('static', filename='css/tablet.css') }}">
+<!--<link rel="stylesheet" media="screen and (min-width: 1367px)" href="{{ url_for('static', filename='css/pc.css') }}">-->
 
-@font-face {
-  font-family: "Gothic Pixels";
-  src: url({{ url_for('static', filename='fonts/GothicPixels.ttf') }}) format("ttf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Verily Serif Mono";
-  src: url({{ url_for('static', filename='fonts/VerilySerifMono.otf') }}) format("otf");
-  font-weight: normal;
-  font-style: normal;
-}
-
-html,body {
-  height:100%;
-  width:100%;
-  margin:0;
-}
-
-.error {
- color:red;
- font-weight: bold;
- text-align:center;
-}
-
-h4 {
- margin: 0 auto 0.2rem;
-}
-</style>
-
-<script src="{{ url_for('static', filename='effects.js') }}"></script>
-
+<!-- jquery (requirement for ajax) -->
+<script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+<!-- custom javascripts -->
+<script src="{{ url_for('static', filename='js/effects.js') }}"></script>
 </head>
 
-{% block content %}{% endblock %}
 
-{% include 'footer.html' %}
+<body>
+<!-- ajax requests -->
+{% include 'js/ajax.js' %}
 
+<!-- main content -->
+{% block container %}{% endblock %}
+
+<!-- desktop shortcuts -->
+{% include 'objects/desktop-shortcuts.html' %}
+
+<!-- footer -->
+{% include 'objects/footer.html' %}
 </body>
 </html>

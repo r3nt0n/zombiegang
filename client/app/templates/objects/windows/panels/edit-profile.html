@@ -1,0 +1,13 @@
+{% extends "objects/windows/base_window.html" %}
+
+{% block window %}
+
+<h4>
+  <span class="title-icon"><img class="flames" src="{{ url_for('static', filename='img/purple-candle.gif') }}" /></span>
+  <span>Edit profile</span>
+  <span class="title-icon"><img class="flames" src="{{ url_for('static', filename='img/purple-candle.gif') }}" /></span>
+</h4>
+
+{% include 'objects/forms/edit-profile.html' %}
+
+{% endblock %}

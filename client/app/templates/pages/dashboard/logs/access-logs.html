@@ -1,0 +1,23 @@
+
+
+{% extends "pages/dashboard/base_dashboard.html" %}
+
+{% block lateral_panel %}
+
+{% with window_type = 'filter', data_type = 'access-logs', filter_by_time = True %}
+    {% include 'objects/windows/filter.html' %}
+{% endwith %}
+
+{% endblock %}
+
+
+
+{% block central_panel %}
+
+{% if data %}
+  {% with window_type = 'table-results', data_type = 'access-logs', edit_buttons=True, scrollable_table=True, min_width='50rem', max_height='38rem' %}
+    {% include 'objects/windows/data-results.html' %}
+  {% endwith %}
+{% endif %}
+
+{% endblock %}

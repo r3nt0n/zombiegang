@@ -1,0 +1,16 @@
+
+{% block thead %}
+
+  {% include 'objects/tables/headers/username.html' %}
+  {% include 'objects/tables/headers/public-ip.html' %}
+  {% with brief=True %}
+    {% include 'objects/tables/headers/country-code.html' %}
+  {% endwith %}
+
+  {% if not brief %}
+    {% with legend='register' %}
+      {% include 'objects/tables/headers/datetime.html' %}
+    {% endwith %}
+  {% endif %}
+
+{% endblock %}

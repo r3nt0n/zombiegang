@@ -1,6 +1,6 @@
 <?php
 // required headers
-header("Access-Control-Allow-Origin: http://localhost/");
+header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
@@ -19,7 +19,7 @@ include_once 'config/database.php';
 include_once 'objects/master.php';
 
 // auxilar functions
-include_once 'aux/check_permission.php';
+include_once 'aux_functions/check_permission.php';
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -39,7 +39,7 @@ if($jwt){
         $requested_by = $decoded->data->username;
         $to_create = $data->username;
         // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
-        check_permission($requested_by, $to_update);
+        check_master_permissions($requested_by, $to_update);
 
         // get database connection
         $database = new Database();

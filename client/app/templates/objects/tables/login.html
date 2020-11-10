@@ -1,0 +1,15 @@
+{% block table %}
+
+<table class="grey-table">
+    <tr>
+    <td style="width: 20rem; height: 11rem;">
+      {% include 'objects/forms/login.html' %}
+    </td>
+
+    <td>
+      <img class="login-skull" src="{{ url_for('static', filename='img/skull.png') }}" />
+    </td>
+    </tr>
+</table>
+
+{% endblock %}

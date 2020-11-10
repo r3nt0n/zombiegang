@@ -1,0 +1,21 @@
+
+
+{% extends "pages/dashboard/base_dashboard.html" %}
+
+{% block lateral_panel %}
+
+{% with data_type = 'brute-attacks', window_type = 'filter', filter_by_time = True, filter_by_target = True %}
+    {% include 'objects/windows/filter.html' %}
+{% endwith %}
+
+{% endblock %}
+
+
+
+{% block central_panel %}
+
+{% with data_type = 'brute-attacks', banner = 'img/wolfenstein.png',  icon = '🎰', panel_title = 'brute force attacK' %}
+  {% include 'pages/dashboard/tools/base-attack.html' %}
+{% endwith %}
+
+{% endblock %}

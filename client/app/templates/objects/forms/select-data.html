@@ -1,0 +1,19 @@
+{% block form %}
+
+<form id="select-{{ data_type }}-form" action="" method="POST">
+
+{% with scrollable_table = True, min_width='40rem' %}
+  {% include 'objects/tables/data-results.html' %}
+{% endwith %}
+
+<div style="text-align: center;">
+
+  <fieldset class="buttons-row styless" name="data-buttons-{{ data_type }}" id="data-buttons-{{ data_type }}" disabled style="margin-top: 0.8rem;">
+    {% include 'objects/forms/inputs/select-button.html' %}
+  </fieldset>
+
+</div>
+
+</form>
+
+{% endblock %}

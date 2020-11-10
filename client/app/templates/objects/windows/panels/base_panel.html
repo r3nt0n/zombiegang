@@ -1,0 +1,27 @@
+
+{% extends 'objects/windows/base_window.html' %}
+
+{% block window %}
+
+
+{% if panel_title %}
+<h4>
+  {% if icon %}
+    <span class="title-icon">{{ icon }}</span>
+  <span>
+  {% endif %}
+
+    {{ panel_title }}
+
+  {% if icon %}
+  </span>
+    <span class="title-icon">{{ icon }}</span>
+  {% endif %}
+</h4>
+{% endif %}
+
+
+{% block panel %} {% endblock %}
+
+
+{% endblock %}
