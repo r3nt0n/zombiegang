@@ -1,7 +1,7 @@
 {% block button %}
 
 
-<button type="submit" id="btn-export-json-{{ data_type }}" name="btn-export-json-{{ data_type }}" formaction="{{ url_for('export_json', data_type=data_type) }}" formmethod="post">
+<button type="submit" id="btn-export-json-{{ data_type }}" name="btn-export-json-{{ data_type }}" formaction="{{ url_for('dashboard_bp.export_json', data_type=data_type) }}" formmethod="post">
   <span class="emoji">💾  </span>
   <span class="button-text">Export</span>
 </button>

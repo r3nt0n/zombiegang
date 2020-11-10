@@ -14,6 +14,12 @@
 
 {% block central_panel %}
 
+{% if data %}
+  {% with window_type = 'table-results', data_type = 'tasks', task_type = 'brute', edit_buttons=True, scrollable_table=True, table_class='table-xl' %}
+    {% include 'objects/windows/data-results.html' %}
+  {% endwith %}
+{% endif %}
+
 {% with data_type = 'ddos-attacks', banner = 'img/genkidama.webp', icon = '🚦', panel_title = 'ddos attacK' %}
   {% include 'pages/dashboard/tools/base-attack.html' %}
 {% endwith %}

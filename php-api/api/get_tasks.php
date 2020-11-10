@@ -35,10 +35,14 @@ if($jwt){
  
         // decode jwt
         $decoded = JWT::decode($jwt, $key, array('HS256'));
+
+        // get database connection
+        $database = new Database();
+        $db = $database->getConnection();
         
         // check who request and permissions
         $requested_by = $decoded->data->username;
-        if (is_zombie($requested_by)){
+        if (is_zombie($db, $requested_by)){
             $by_zombie_username =  $requested_by;
             $by_submit_at_bef =  "";
             $by_submit_at_aft = "";
@@ -49,20 +53,17 @@ if($jwt){
             // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
             check_master_permissions($requested_by);
             // set filters by request (only if requested by master)
-            $by_zombie_username =  (isset($data->username)) ? $data->username : "";
+            $by_zombie_username =  (isset($data->zombie_username)) ? $data->zombie_username : "";
             $by_submit_at_bef =  (isset($data->submit_at_bef)) ? $data->submit_at_bef : "";
             $by_submit_at_aft =  (isset($data->submit_at_aft)) ? $data->submit_at_aft : "";
+            $by_task_type =  (isset($data->task_type)) ? $data->task_type : "";
         }
-
-        // get database connection
-        $database = new Database();
-        $db = $database->getConnection();
         
         // instantiate user object
         $task = new Task($db);
         
         // retrieve records
-        $tasks_data = $task->read($by_username, $by_submit_at, $by_submit_at, $zombie_view=$zombie_view);
+        $tasks_data = $task->read($by_zombie_username, $by_submit_at_bef, $by_submit_at_aft, $by_task_type, $zombie_view=$zombie_view);
         if($tasks_data){
             
             // set response code

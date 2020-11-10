@@ -48,7 +48,7 @@
   {% endif %}
 
 
-  {% with data_type = 'zombies', brief=True, scrollable_table=True, max_height="12.7rem" %}
+  {% with data=zombies_data, data_type = 'zombies', brief=True, scrollable_table=True, max_height="30rem" %}
     {% include 'objects/tables/data-results.html' %}
   {% endwith %}
 

@@ -33,7 +33,7 @@ hostname varchar(255)
 );
 CREATE TABLE Tasks (
 id int(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-task_type varchar(255) DEFAULT 'CMD',
+task_type varchar(255) DEFAULT 'cmd',
 task_content varchar(255) NOT NULL,
 master_username varchar(255),
 submit_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

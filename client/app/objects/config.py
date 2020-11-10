@@ -12,3 +12,5 @@ class Config:
     DATA_DIR = os.path.join(APP_DIR, 'data/')
     TEMP_DIR = os.path.join(DATA_DIR, 'tmp/')
 
+    # future use to local authentication operations required (enable/disable proxy)
+    SECRET_KEY_NAME_EXAMPLE = os.environ.get('SECRET_KEY_NAME_EXAMPLE')

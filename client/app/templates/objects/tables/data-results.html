@@ -33,6 +33,9 @@
 
     {% elif data_type == 'zombies' %}
       {% include 'objects/tables/headers/zombies.html' %}
+
+    {% elif data_type == 'tasks' %}
+      {% include 'objects/tables/headers/tasks.html' %}
     {% endif %}
 
   </tr>
@@ -92,6 +95,18 @@
         </td>
         <td>{{ row['registered_at'] }}</td>
       {% endif %}
+
+    {% elif data_type == 'tasks' %}
+    <td>{{ row['task_type'] }}</td>
+    <td>{{ row['task_content'] }}</td>
+    <td>{{ row['master_username'] }}</td>
+    <td>{{ row['submit_at'] }}</td>
+    <td>{{ row['to_exec_at'] }}</td>
+    <td>{{ row['to_stop_at'] }}</td>
+    <td>{{ row['zombie_username'] }}</td>
+    <td>{{ row['readed'] }}</td>
+    <td>{{ row['result'] }}</td>
+    <td>{{ row['exec_at'] }}</td>
     {% endif %}
 
   </tr>

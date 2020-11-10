@@ -23,6 +23,8 @@ def read_data(data_type, filters=None):
         data['os'] = filters['by_os']
     if 'not_in' in filters:
         data['not_in'] = filters['not_in']
+    if 'by_task_type' in filters:
+        data['task_type'] = filters['by_task_type']
     data = json.dumps(data)
     # print(data)
     return http_client.json_post(url, data=data)

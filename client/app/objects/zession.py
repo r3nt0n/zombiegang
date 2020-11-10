@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-import requests, json, datetime
+import json, datetime
+
+import requests
 
 class Token:
     def __init__(self):

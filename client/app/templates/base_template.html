@@ -8,9 +8,9 @@
 
 <!-- win98 css styles -->
 {% include 'css/win98.css' %}
-<!-- custom css styles -->
+<!-- custom base css styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dark-table.css') }}">
 {% include 'css/base_styles.css' %}
-
 <!-- custom responsive css styles -->
 <link rel="stylesheet" media="screen and (max-width: 500px)" href="{{ url_for('static', filename='css/mobile.css') }}">
 <link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1366px)" href="{{ url_for('static', filename='css/tablet.css') }}">
@@ -30,8 +30,8 @@
 <!-- main content -->
 {% block container %}{% endblock %}
 
-<!-- desktop shortcuts -->
-{% include 'objects/desktop-shortcuts.html' %}
+<!-- desktop and shortcuts -->
+{% include 'objects/desktop.html' %}
 
 <!-- footer -->
 {% include 'objects/footer.html' %}

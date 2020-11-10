@@ -6,7 +6,7 @@
 
 
 <div id="login-wrapper" class="float-center-window logged-in-wrapper">
-{% with window_type = 'login', data_type = '', close_button_action = 'link', close_link = url_for('dashboard') %}
+{% with window_type = 'login', data_type = '', close_button_action = 'link', close_link = url_for('dashboard_bp.dashboard') %}
     {% include 'objects/windows/game.html' %}
 {% endwith %}
 </div>

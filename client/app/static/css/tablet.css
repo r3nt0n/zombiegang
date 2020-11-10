@@ -1,6 +1,5 @@
-{% block styles %}
-
-<style>
+/*{% block styles %}
+<style>*/
 
 
 /* HEADER styles */
@@ -11,6 +10,9 @@ header {
 /* DASHBOARD styles */
 div#dashboard-wrapper {
     max-width: 95%;
+    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
     flex-direction: row;
     justify-content: center;
     align-content: space-around;
@@ -56,6 +58,10 @@ div.attack-creator {
 .launcher-img-l {
   width: 22.5rem;
 }
+/*.table-xl {
+  min-width: 50%;
+  max-height: 38rem;
+}*/
 
 
 /* TABLES styles */
@@ -78,6 +84,5 @@ div.attack-creator {
 }
 
 
-</style>
-
-{% endblock %}
+/*</style>
+{% endblock %}*/

@@ -16,20 +16,20 @@
 
 
 {% if zombies_created %}
-  {% with window_type = 'popup', data_type='zombies', operation='created', data=zombies_created, close_button_action = 'link', close_link = url_for('zombies'), img='img/digimon-world1.png' %}
+  {% with window_type = 'popup', data_type='zombies', operation='created', data=zombies_created, close_button_action = 'link', close_link = url_for('dashboard_bp.zombies'), img='img/digimon-world1.png' %}
     {% include 'objects/windows/popups/updated-data.html' %}
   {% endwith %}
 {% endif %}
 
 {% if users_deleted %}
-  {% with window_type = 'popup', data_type='users', operation='deleted', data=users_deleted, close_button_action = 'link', close_link = url_for('zombies'), img='img/gta2busted.jpg' %}
+  {% with window_type = 'popup', data_type='users', operation='deleted', data=users_deleted, close_button_action = 'link', close_link = url_for('dashboard_bp.zombies'), img='img/gta2busted.jpg' %}
     {% include 'objects/windows/popups/updated-data.html' %}
   {% endwith %}
 {% endif %}
 
 
 {% if zombies_deleted %}
-  {% with window_type = 'popup', data_type='zombies', operation='deleted', data=zombies_deleted, close_button_action = 'link', close_link = url_for('zombies'), img='img/medievil.jpg' %}
+  {% with window_type = 'popup', data_type='zombies', operation='deleted', data=zombies_deleted, close_button_action = 'link', close_link = url_for('dashboard_bp.zombies'), img='img/medievil.jpg' %}
     {% include 'objects/windows/popups/updated-data.html' %}
   {% endwith %}
 {% endif %}

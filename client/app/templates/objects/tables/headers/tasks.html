@@ -1,0 +1,37 @@
+
+{% block thead %}
+
+  {% include 'objects/tables/headers/task_type.html' %}
+
+  {% include 'objects/tables/headers/task_content.html' %}
+
+  {% with data_type='masters' %}
+    {% include 'objects/tables/headers/username.html' %}
+  {% endwith %}
+
+  {% with legend='submit' %}
+    {% include 'objects/tables/headers/datetime.html' %}
+  {% endwith %}
+
+  {% with legend='start' %}
+    {% include 'objects/tables/headers/datetime.html' %}
+  {% endwith %}
+
+  {% with legend='stop' %}
+    {% include 'objects/tables/headers/datetime.html' %}
+  {% endwith %}
+
+  {% with data_type='zombies' %}
+    {% include 'objects/tables/headers/username.html' %}
+  {% endwith %}
+
+  {% include 'objects/tables/headers/readed.html' %}
+
+  {% include 'objects/tables/headers/result.html' %}
+
+  {% with legend='exec' %}
+    {% include 'objects/tables/headers/datetime.html' %}
+  {% endwith %}
+
+
+{% endblock %}

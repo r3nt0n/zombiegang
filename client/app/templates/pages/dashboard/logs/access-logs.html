@@ -15,7 +15,7 @@
 {% block central_panel %}
 
 {% if data %}
-  {% with window_type = 'table-results', data_type = 'access-logs', edit_buttons=True, scrollable_table=True, min_width='50rem', max_height='38rem' %}
+  {% with window_type = 'table-results', data_type = 'access-logs', edit_buttons=True, scrollable_table=True, table_class='table-xl' %}
     {% include 'objects/windows/data-results.html' %}
   {% endwith %}
 {% endif %}

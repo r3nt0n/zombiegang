@@ -6,19 +6,23 @@
     <input id="host" name="hostname" type="text" value="{{ request.form.hostname }}" />
   </div>
 
+  {% if error and 'hostname' in error %}
+  <p  class="error">{{ error }}</p>
+  {% endif %}
+
   <div class="field-row-stacked">
     <label for="username">username: </label>
     <input id="username" name="username" type="text" value="{{ request.form.username }}" />
   </div>
 
+  {% if error and 'credentials' in error %}
+  <p  class="error">{{ error }}</p>
+  {% endif %}
+
   <div class="field-row-stacked">
     <label for="pswd">password: </label>
     <input id="pswd" name="pswd" type="password" value="{{ request.form.pswd }}"/>
   </div>
-
-  {% if error %}
-  <p  class="error">{{ error }}</p>
-  {% endif %}
 
 <!--  <div class="field-row-stacked">-->
   <button class="standard" type="submit" id="begin" name="begin" style="display: block; width: 50%;">

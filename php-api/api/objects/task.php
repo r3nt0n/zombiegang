@@ -350,7 +350,7 @@ class Task{
     }
 
 
-    function read($filter_by_username=False, $filter_by_submit_at_bef=False,$filter_by_submit_at_aft=False, $order_by='id', $zombie_view=False){
+    function read($filter_by_username=False, $filter_by_submit_at_bef=False,$filter_by_submit_at_aft=False, $filter_by_task_type=False, $zombie_view=False, $order_by='id'){
 
         if ($filter_by_submit_at_aft == " ") { $filter_by_submit_at_aft = "";}
         if ($filter_by_submit_at_bef == " ") { $filter_by_submit_at_bef = "";}
@@ -368,13 +368,19 @@ class Task{
             // add AND if needed
             // if ($filter_by_username) {$filter = $filter . " AND ";}
             if (strlen($filter) > 7) {$filter = $filter . " AND ";}
-            $filter = $filter . "date_time >= :submit_at_aft";
+            $filter = $filter . "submit_at >= :submit_at_aft";
             }
         if ($filter_by_submit_at_bef) {
             // add AND if needed
             // if ($filter_by_username or $filter_by_submit_at_aft) {$filter = $filter . " AND ";}
             if (strlen($filter) > 7) {$filter = $filter . " AND ";}
-            $filter = $filter . "date_time <= :submit_at_bef";
+            $filter = $filter . "submit_at <= :submit_at_bef";
+        }
+        if ($filter_by_task_type) {
+            // add AND if needed
+            // if ($filter_by_username or $filter_by_submit_at_aft) {$filter = $filter . " AND ";}
+            if (strlen($filter) > 7) {$filter = $filter . " AND ";}
+            $filter = $filter . "task_type = :task_type";
         }
 
         // set empty if filter or order_by not provided
@@ -411,9 +417,14 @@ class Task{
             $submit_at_bef=htmlspecialchars(strip_tags(date('Y-m-d H:i:s', strtotime($filter_by_submit_at_bef)) . ":00"));
             $stmt->bindParam(':submit_at_bef', $submit_at_bef);
         }
+        if($filter_by_task_type){
+            $task_type=htmlspecialchars(strip_tags($filter_by_task_type));
+            $stmt->bindParam(':task_type', $task_type);
+        }
     
         // execute the query
         $stmt->execute();
+        //print_r($stmt->errorInfo());
     
         // get number of rows
         $num = $stmt->rowCount();

@@ -1,11 +1,9 @@
-{% block styles %}
-
-<style>
+/*{% block styles %}
+<style>*/
 
 /* HEADER styles */
 img.zombie {
   display: inline;
-
 }
 
 img.zr {
@@ -19,7 +17,6 @@ img.zl {
   position: relative;
   right: -0.4rem;
 }
-
 
 
 /* LAUNCHER styles */
@@ -41,25 +38,13 @@ div.attack-creator {
   width: 22.5rem;
 }
 
-.table-m {
- min-width: 22rem;
- width: 22rem;
- max-height: 11.2rem;
-}
-.table-l {
- min-width: 22rem;
- width: 22rem;
- max-height: 29.3rem;
-}
-
-
 
 /* BASE WINDOW styles */
-img.window-icon {
+/*img.window-icon {
     display: inline;
     margin-right: 5px;
     margin-left: 3px;
-    /*vertical-align: middle; */
+    vertical-align: middle;
     width: 0.5rem;
 }
 
@@ -72,7 +57,7 @@ form button.standard {
     margin-right: auto;
     margin-left: auto;
     margin-top: 1rem;
-}
+}*/
 
 
 /* POPUPS styles */
@@ -86,20 +71,32 @@ form button.standard {
   margin-left:-200px !important;
   margin-top:-200px !important;
 }
-
 .js-popup {
   z-index: 15;
   position: fixed;
   bottom: 6rem;
   right: 4rem;
 }
-
 div#proxy-js-popup {
   width: 12.5rem;
 }
 
 
 /* TABLES styles */
+.table-m {
+ min-width: 22rem;
+ width: 22rem;
+ max-height: 11.2rem;
+}
+.table-l {
+ min-width: 22rem;
+ width: 22rem;
+ max-height: 29.3rem;
+}
+.table-xl {
+  min-width: 50%;
+  max-height: 38rem;
+}
 .users-panel {
   flex-direction: column;
   justify-content: center;
@@ -108,20 +105,22 @@ div#proxy-js-popup {
   height: 13rem;
   align-self: center;
 }
-.users-table-panel {
-
-}
-
+/*.users-table-panel {
+}*/
 .scroll-table {
   overflow-y: auto;
   max-height: 30rem;
 }
 
 
-
 /* DASHBOARD styles */
 div#dashboard-wrapper {
     max-width: 22rem;
+    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 0.3rem; /* because header removed */
+    margin-bottom: 3rem; /* left space for proxy icon */
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -156,7 +155,7 @@ div.attack-creator {
 
 
 /* FORMS styles */
-input.date-field {
+/*input.date-field {
   width: 6.8rem;
 }
 
@@ -167,9 +166,8 @@ input.time-field {
 button#creator {
     margin-top: 0.5rem;
     margin-left: 3rem;
-}
+}*/
 
 
-</style>
-
-{% endblock %}
+/*</style>
+{% endblock %}*/
