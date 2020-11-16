@@ -1,0 +1,97 @@
+
+{% block form %}
+
+<form id="{{ data_type + '-form' }}" action="" method="POST">
+
+  <!-- CSRF protection -->
+  {{ create_attack.form.hidden_tag() }}
+  
+  <div class="field-row-stacked">
+    <!-- validation error -->
+      {% for error in create_attack.form.task_name.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+      <div class="label"><span class="margin-right-icon">🏷️ </span>
+        {{ create_attack.form.task_name.label }}
+      </div>
+      {{ create_attack.form.task_name }}
+  </div>
+
+  <div class="field-row-stacked">
+    <!-- validation error -->
+      {% for error in create_attack.form.target.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+      <div class="label"><span class="margin-right-icon">🎯 </span>
+        {{ create_attack.form.target.label }}
+      </div>
+      {{ create_attack.form.target }}
+  </div>
+
+  {% if 'dos' in data_type %}
+    <div class="field-row-stacked">
+      <!-- validation error -->
+      {% for error in create_attack.form.attack_type.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+      <div class="label"><span class="margin-right-icon">💣 </span>
+        {{ create_attack.form.attack_type.label }}
+      </div>
+      {{ create_attack.form.attack_type }}
+    </div>
+
+  {% elif 'brt' in data_type %}
+    <div class="field-row-stacked">
+      <!-- validation error -->
+      {% for error in create_attack.form.attack_type.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+      <div class="label"><span class="margin-right-icon">🚪 </span>
+        {{ create_attack.form.attack_type.label }}
+      </div>
+      {{ create_attack.form.attack_type }}
+    </div>
+  {% endif %}
+
+  <br>
+
+
+  <div class="label">
+    {{ create_attack.form.enable_start_dt(id="enable_start_dt", onclick="enable_fields_by(['start_dt'], 'enable_start_dt');") }}
+    {{ create_attack.form.enable_start_dt.label }}
+  </div>
+  <fieldset class="start_dt" id="start_dt" name="start_dt" disabled>
+    {% with column='to_exec_at', comparator='after', date_field=create_attack.form.to_exec_at_date, time_field=create_attack.form.to_exec_at_time %}
+      {% include 'objects/forms/inputs/datetime.html' %}
+    {% endwith %}
+  </fieldset>
+
+
+  <div class="label">
+    {{ create_attack.form.enable_stop_dt(id="enable_stop_dt", onclick="enable_fields_by(['stop_dt'], 'enable_stop_dt');") }}
+    {{ create_attack.form.enable_stop_dt.label }}
+  </div>
+  <fieldset class="stop_dt" id="stop_dt" name="start_dt" disabled>
+    {% with column='to_stop_at', comparator='after', date_field=create_attack.form.to_stop_at_date, time_field=create_attack.form.to_stop_at_time %}
+      {% include 'objects/forms/inputs/datetime.html' %}
+    {% endwith %}
+  </fieldset>
+  <br>
+
+  {% if (create_attack.error) %}
+  <div style="width: 100%; margin 0 auto;"><p class="error">{{ create_attack.error }}</p></div>
+  {% endif %}
+
+  {% with data=create_attack.zombies_data, data_type = 'zombies', brief=True, scrollable_table=True, max_height="30rem" %}
+    {% include 'objects/tables/data/zombies.html' %}
+  {% endwith %}
+
+
+  <div class="field-row-stacked">
+    {{ create_attack.form.create_btn(class="standard emoji-btn") }}
+  </div>
+
+
+</form>
+
+{% endblock %}

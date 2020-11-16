@@ -1,4 +1,7 @@
 <?php
+// auxilar functions
+include_once 'util/prepare_queries.php';
+
 // 'user' object
 class User{
  
@@ -7,9 +10,12 @@ class User{
         private $table_name = "Users";
     
         // object properties
+        public $id;
+        public $created_at;
+        public $updated_at;
+        
         public $username;
         public $pswd;
-        public $registered_at;
         public $public_ip;
         public $country;
     
@@ -22,7 +28,7 @@ class User{
     function usernameExists(){
     
         // query to check if username exists
-        $query = "SELECT id, username, pswd, registered_at, public_ip, country
+        $query = "SELECT id, username, pswd, created_at, updated_at, public_ip, country
                 FROM " . $this->table_name . "
                 WHERE username = ?
                 LIMIT 0,1";
@@ -50,14 +56,13 @@ class User{
     
             // assign values to object properties
             $this->id = $row['id'];
+            $this->created_at = $row['created_at'];
+            $this->updated_at = $row['updated_at'];
             if (empty($this->username)) {
                 $this->username = $row['username'];
             }
             if (empty($this->pswd)) {
                 $this->pswd = $row['pswd'];
-            }
-            if (empty($this->registered_at)) {
-                $this->registered_at = $row['registered_at'];
             }
             if (empty($this->public_ip)) {
                 $this->public_ip = $row['public_ip'];
@@ -201,13 +206,13 @@ class User{
             // add AND if needed
             //if ($filter_by_username) {$filter = $filter . " AND ";}
             if (strlen($filter) > 7) {$filter = $filter . " AND ";}
-            $filter = $filter . "date_time >= :datetime_aft";
+            $filter = $filter . "created_at >= :datetime_aft";
             }
         if ($filter_by_datetime_bef) {
             // add AND if needed
             //if ($filter_by_username or $filter_by_datetime_aft) {$filter = $filter . " AND ";}
             if (strlen($filter) > 7) {$filter = $filter . " AND ";}
-            $filter = $filter . "date_time <= :datetime_bef";
+            $filter = $filter . "created_at <= :datetime_bef";
         }
 
         //if (count($not_in_tables) > 0) {
@@ -256,7 +261,7 @@ class User{
         $order_by = ($order_by) ? " ORDER BY " . $order_by : 'id' ;
 
         // query
-        $query = "SELECT id, username, registered_at, public_ip, country
+        $query = "SELECT id, username, created_at, public_ip, country
                 FROM " . $this->table_name . "
                 {$filter}
                 {$order_by} DESC";

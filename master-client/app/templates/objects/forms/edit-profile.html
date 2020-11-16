@@ -1,0 +1,39 @@
+
+{% block form %}
+
+<form id="edit-profile-form" action="" method="POST" xmlns="http://www.w3.org/1999/html">
+  <table style="background-color: gray; margin: 0 auto;">
+    <tr>
+      <td style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+        <!-- validation error -->
+        {% for error in edit_profile_form.password.errors %}
+          <span class="error">{{ error }}</span>
+        {% endfor %}
+        {{ edit_profile_form.password(id="update_pswd_field") }}
+        {{ edit_profile_form.pswd_btn(id="pswd_btn", class="emoji-btn") }}
+        {% if update_error and 'password' in update_error %}
+          <p class="{% if 'updated' in update_error %}success{% else %}error{% endif %}">{{ update_error }}</p>
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <!-- validation error -->
+        {% for error in edit_profile_form.public_key.errors %}
+          <span class="error">{{ error }}</span>
+        {% endfor %}
+        {{ edit_profile_form.public_key(id="update_public_key_field", rows="4", cols="40", form="edit-profile-form", style="display: block;") }}
+        {{ edit_profile_form.public_key_btn(id="public_key_btn", class="emoji-btn") }}
+        
+<!--        <textarea id="public_key" name="public_key" rows="4" cols="40" form="edit-profile-form" style="display: block;">{{ request.form.public_key }}</textarea>-->
+<!--        <button type="submit" id="public-key-btn" name="public-key-btn" style="display: block; margin: 0.5rem auto 0;width: 100%;"><span class="emoji"> </span><span class="button-text">Update public key</span></button>-->
+        
+        {% if update_error and 'public_key' in update_error %}
+          <p class="{% if 'updated' in update_error %}success{% else %}error{% endif %}">{{ update_error }}</p>
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+</form>
+
+{% endblock %}

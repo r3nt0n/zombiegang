@@ -1,0 +1,53 @@
+{% block form %}
+
+{% if data_buttons %}
+<form id="{{ data_type }}-form" action="" method="POST">
+{% endif %}
+
+  {% if data_type == 'users' %}
+  <div id="users-panel">
+
+    <div id="mewtwo-panel">
+        <!-- mewtwoo img -->
+        <img src="{{ url_for('static', filename='img/mewtwo.png') }}" style="max-height: 11rem;" />
+        <!-- accept button -->
+        <fieldset class="buttons-row data-buttons-{{ data_type }}" name="accept-user-{{ data_type }}" id="accept-user-{{ data_type }}" disabled style="height: 2.1rem;">
+          {% include 'objects/forms/inputs/accept-button.html' %}
+        </fieldset>
+    </div>
+  {% endif %}
+
+
+    <div id="{{ data_type }}-table-panel">
+
+      <!-- data table -->
+      {% with brief=False %}
+        {% include 'objects/tables/data/' + data_type + '.html' %}
+      {% endwith %}
+
+      {% if data_buttons %}
+        <fieldset class="buttons-row data-buttons-{{ data_type }}" name="data-buttons-{{ data_type }}" id="data-buttons-{{ data_type }}" disabled>
+          <div class="buttons-row">
+            <!-- export button -->
+            {% include 'objects/forms/inputs/export-button.html' %}
+            <!-- delete button -->
+            {% if data_type == 'users' or data_type == 'zombies' or data_type == 'tasks' %}
+              {% include 'objects/forms/inputs/delete-button.html' %}
+            {% endif %}
+          </div>
+        </fieldset>
+      {% endif %}
+
+    </div>
+
+
+  {% if data_type == 'users' %}
+  </div>
+  {% endif %}
+
+{% if data_buttons %}
+</form>
+{% endif %}
+
+
+{% endblock %}

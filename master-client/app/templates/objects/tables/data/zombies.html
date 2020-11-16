@@ -1,0 +1,94 @@
+
+{% extends 'objects/tables/base_data.html' %}
+
+
+
+{% block table_headers %}
+
+{% if data %}
+
+  <th>{% include 'objects/forms/inputs/data-all-checkbox.html' %}</th>
+  {% include 'objects/tables/headers/username.html' %}
+  {% if not brief %}
+    {% include 'objects/tables/headers/hostname.html' %}
+  {% endif %}
+  {% include 'objects/tables/headers/os.html' %}
+  {% include 'objects/tables/headers/public-ip.html' %}
+  {% include 'objects/tables/headers/country-code.html' %}
+
+  {% if not brief %}
+    {% with legend='register' %}
+      {% include 'objects/tables/headers/datetime.html' %}
+    {% endwith %}
+  {% endif %}
+
+  {% with legend='last seen' %}
+    {% include 'objects/tables/headers/datetime.html' %}
+  {% endwith %}
+  <th><span class="emoji">  </span><span class="text">on</span></th>
+
+
+{% endif %}
+
+{% endblock %}
+
+{% block table_columns %}
+
+{% if data %}
+
+{% for row in data %}
+  <tr>
+
+    <td>{% include 'objects/forms/inputs/data-checkbox.html' %}</td>
+
+<!--    <td>{{ row['username'] }}</td>-->
+    <td>zombie{{ row['id'] }}</td>
+
+    {% if not brief %}
+      <td>{{ row['current_hostname'] }}</td>
+    {% endif %}
+
+    <td>
+      {% with os=row['os'].lower() %}
+        {% include 'objects/dynamic/os_icon.html' %}
+      {% endwith %}
+    </td>
+
+    <td>{{ row['current_public_ip'] }}</td>
+
+    <td>
+      <a class="tooltip" href="javascript:;">
+        <span class="flag-icon">
+          {% with country_code=row['current_country'].upper() %}
+            {% include 'objects/dynamic/cc_flag.html' %}
+          {% endwith %}
+        </span>
+        <span class="tooltip">
+          {{ row['current_country'] }}
+        </span>
+      </a>
+    </td>
+
+    {% if not brief %}
+      <td>{{ row['created_at'] }}</td>
+    {% endif %}
+
+    <td>{{ row['last_seen'] }}</td>
+
+    {% if (row['on'] == 'true') %}
+      <td><span class="emoji">🟢  </span></td>
+    {% else %}
+      <td><span class="emoji">🔴  </span></td>
+    {% endif %}
+
+
+
+  </tr>
+{% endfor %}
+
+
+
+{% endif %}
+
+
+{% endblock %}

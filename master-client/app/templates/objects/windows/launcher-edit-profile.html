@@ -1,0 +1,12 @@
+
+{% extends 'objects/windows/base_window.html' %}
+
+{% block window %}
+
+  <img id="img-launcher-{{ task_type }}" src="{{ url_for('static', filename=banner) }}" class="img-launcher {{ img_class }}" />
+
+  <form id="launcher-form" name="launcher-form" action="" method="POST" style="display: flex; justify-content: space-between; align-items: center;">
+    <button type="submit" class="standard" id="btn-launcher" name="btn-launcher">{{ btn_msg }}</button>
+  </form>
+
+{% endblock %}

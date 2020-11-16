@@ -1,0 +1,9 @@
+{% extends 'objects/tables/base_login.html' %}
+
+{% block column %}
+  {% include 'objects/forms/login.html' %}
+{% endblock %}
+
+{% block skull_img %}
+  <img class="login-skull" src="{{ url_for('static', filename='img/skull.png') }}" />
+{% endblock %}

@@ -1,0 +1,23 @@
+
+
+{% extends "pages/dashboard/base_dashboard.html" %}
+
+{% block lateral_panel %}
+
+{% with window_type = 'filter', data_type = 'access-logs', filters=('username', 'datetime') %}
+  {% include 'objects/windows/filter.html' %}
+{% endwith %}
+
+{% endblock %}
+
+
+
+{% block central_panel %}
+
+{% if data_filter.data %}
+  {% with data=data_filter.data, window_type = 'table-results', data_type = 'access-logs',  data_buttons=True, scrollable_table=True, table_class='table-xl' %}
+    {% include 'objects/windows/data-results.html' %}
+  {% endwith %}
+{% endif %}
+
+{% endblock %}

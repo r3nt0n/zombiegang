@@ -1,0 +1,728 @@
+{% block styles %}
+<style>
+
+/* BASE styles */
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-size: cover;
+  background-color: black;
+}
+
+html,body {
+  height:100%;
+  width:100%;
+  margin:0;
+}
+
+h4 {
+ margin: 0 auto 0.2rem;
+}
+
+h4, th {
+  font-family: "GothicPixels", Arial;
+  -webkit-font-smoothing: none;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.error {
+ pointer-events:none;  /* to allow click underneath elements */
+ color:red;
+ position: absolute;
+ /*border-radius: 5px;*/
+ border: 1px dotted black;
+ padding: 4px;
+ text-align:center;
+ /*margin-left: -110px;*/
+ margin-left: 4rem;
+ /*margin-top: -25px;*/
+ background: rgba(204, 120, 116, 0.45);
+}
+.filter-error {
+ margin-top: 15px;
+ margin-left: 8px;
+}
+span#toggle-proxy-error {
+  margin-left: auto;
+  right: 0;
+}
+
+.success {
+  color: purple;
+ position: absolute;
+ border-radius: 3px;
+ border: 1px dotted black;
+ padding: 4px;
+ text-align:center;
+ margin-left: -1.5rem;
+ /*margin-top: 35px;*/
+ background: rgba(204, 120, 116, 0.3);
+}
+
+
+hr {
+ border: 1px dotted #3e3636;
+ width: 100%;
+ margin: 15px 0;
+}
+
+/* CURSOR styles */
+span, div, h4, p, td, th, li  {
+  cursor: default;
+}
+
+a:not(.tooltip) *, button, button *, input[type="submit"], input[type="submit"] * {
+  cursor: pointer;
+}
+
+input[type="text"], input[type="textarea"] {
+  cursor: text;
+}
+
+
+
+/* HEADER styles */
+header {
+  position: sticky;
+  z-index: 1;
+  vertical-align: middle;
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+}
+
+header img#banner {
+  display: inline;
+  max-width: 40rem;
+  width: 100%;
+}
+
+img.zombie {
+  display: inline;
+  max-width: 7rem;
+}
+
+img.zr {
+  position: relative;
+  left: -0.6rem;
+}
+
+img.zl {
+  position: relative;
+  right: -0.4rem;
+}
+
+img.flip-vertical {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+
+
+/* BASE WINDOW styles */
+.window {
+  background-color: grey;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: auto;
+  z-index: 10;
+}
+
+div.window:not(#-login) {
+  resize: both;
+}
+
+
+img.window-icon {
+    display: inline;
+    margin-right: 5px;
+    margin-left: 3px;
+    vertical-align:middle;
+    width: 0.5rem;
+}
+
+
+div.float-center-window {
+  height:100%;
+  width:100%;
+  margin:0;
+  display: flex;
+}
+div#login-wrapper > div.window {
+  width: 20rem;
+  margin: auto;
+}
+
+form#login-form {
+  width: 10rem;
+  margin-left: 0.7rem;
+}
+
+img.login-skull {
+  /*margin-left: 0.8rem;*/
+  margin-right: -0.2rem;
+  width: 5.5rem;
+}
+
+
+
+/* DASHBOARD base styles */
+div#dashboard-wrapper {
+  pointer-events:none;  /* to allow click underneath elements */
+  padding-top: 3rem; /* because header removed */
+  position: sticky;
+  z-index: 5;
+  max-width: 90%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: space-around;
+  margin-left: 5%;
+  padding-bottom: 3rem; /* left space for proxy icon */
+}
+
+div#dashboard-wrapper * {
+  pointer-events:initial;  /* to allow click inside elements */
+}
+
+div#navbar-wrapper {
+    /*width: 26rem;*/
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    /*justify-content: flex-start;
+    align-items: stretch;
+    align-content: flex-start;*/
+}
+
+div#central-panel-wrapper {
+    /* width: 69rem; */
+    width: 75%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    align-content: space-evenly;
+}
+
+div#dashboard-wrapper .window {
+    margin: 10px 10px 0;
+}
+
+
+
+/* LAUNCHER styles */
+div#launchers-wrapper {
+  width: 87%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+  align-content: flex-start;
+}
+
+div#tasks-launcher {
+  width: 18rem;
+  height: 14.5rem;
+}
+
+div.launcher {
+  text-align: center;
+  padding: 0.5rem;
+  padding-top: 0;
+}
+
+div#master-edit-profile-launcher-body {
+  text-align: center;
+}
+
+div.launcher a, div.launcher a:active {
+  color: transparent;
+  border: 0;
+  text-decoration: none;
+  --link-blue: transparent;
+}
+div.launcher img {
+  box-shadow: 2px 2px 5px black;
+}
+div.launcher a:active img {
+  /*box-shadow: 0px 0px 5px black;*/
+  padding-left: 2px;
+  padding-top: 2px;
+}
+
+div.launcher h4{
+  font-size: 17px;
+}
+
+div.attack-creator {
+  width: 40rem;
+}
+
+/*.launcher-m {
+  width: 23rem;
+}
+.launcher-l {
+  width: 28rem;
+}*/
+
+.launcher-img-m {
+  width: 15.5rem;
+}
+.launcher-img-l {
+  width: 20.5rem;
+}
+
+
+div.filter-section {
+  margin-bottom: 1rem;
+}
+
+
+
+input.emoji-btn {
+  white-space: pre;
+}
+
+input#pswd_btn {
+  width: 45%;
+  margin: 0;
+}
+
+input#update_pswd_field {
+  width: 45%;
+  text-align: right;
+}
+
+input#public_key_btn {
+  display: block;
+  margin: 0.5rem auto 0;
+  width: 100%;
+}
+
+
+/* TABLES styles */
+.scroll-table {
+overflow-x: unset;
+  overflow-y: auto;
+  max-height: 30rem;
+  resize: both;
+}
+
+.table-m {
+ min-width: 45rem;
+ max-height: 11.2rem;
+}
+.table-l {
+ min-width: 45rem;
+ max-height: 29.3rem;
+}
+.table-xl {
+  min-width: 55rem;
+  max-height: 40rem;
+}
+
+table {
+    background-color: white;
+}
+
+table.grey-table {
+  background-color: grey;
+}
+
+#users-panel {
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
+}
+#mewtwo-panel {
+  height: 11rem;
+  flex-grow: 0;
+}
+#users-table-panel {
+  flex-grow: 4;
+}
+
+span.img-icon { /* used in table headers */
+    font-size: 0.8rem;
+    vertical-align: bottom;
+}
+
+span.flag-icon {
+  font-size: 0.84rem;
+}
+
+/* DARK TABLE custom styles */
+table.darkTable thead th, table.darkTable tbody td {
+  /*color: white;*/
+  color: #E6E6E6;
+}
+table.darkTable th:hover, table.darkTable td:hover {
+  color: orangered;
+}
+table.darkTable thead th {
+  font-size: 14.5px;
+  font-weight: bold;
+  /*color: white;*/
+  text-align: center;
+}
+table.darkTable tbody td {
+  font-size: 11px;
+  white-space: nowrap;
+  /*overflow-x: hidden;*/
+  /*color: #E6E6E6;*/
+}
+table.darkTable td.with-icon {
+ text-align: left;
+}
+
+
+
+/* FORMS styles */
+/*div#dashboard-wrapper input:not([type="submit"]),div#dashboard-wrapper select, div#navbar-body ul.tree-view  {
+  background-color: wheat;
+}*/
+
+input.date-field {
+  width: 6.8rem;
+}
+
+input.time-field {
+  width: 5.7rem;
+}
+
+fieldset.start_dt:enabled {
+  background-color: palegreen;
+}
+fieldset.stop_dt:enabled {
+  background-color: #d77474;
+}
+
+select:focus {
+  background-color: indigo;
+}
+
+button#creator, input[type="submit"]#creator {
+    margin-top: 0.5rem;
+    margin-left: 3rem;
+}
+
+button.standard, input[type="submit"].standard {
+    width: 50%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 1rem;
+}
+
+
+/* POPUPS styles */
+.popup {
+  z-index: 20;
+  position:absolute;
+  top:50%;
+  left:50%;
+  /*min-width:400px !important;
+  min-height:400px !important;*/
+  margin-left:-200px !important;
+  margin-top:-200px !important;
+}
+
+
+
+/* BUTTON-PANELS styles */
+div.buttons-row {
+ /*width: 50%; margin: 0 auto; text-align: center;*/
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: stretch;
+  align-content: stretch;
+}
+
+div.buttons-row button:not(#btn-create-users), div.buttons-row input[type="submit"]:not(#btn-create-users) {
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+
+fieldset.buttons-row {
+  padding: 0;
+}
+
+span.button-text {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+fieldset.styless {
+  display: inline;
+ border: 0;
+ margin: 0;
+ padding: 0;
+}
+
+
+/* ICONS styles */
+span.margin-right-icon {
+  margin-right: 6px;
+}
+
+span.margin-left-icon {
+  margin-left: 6px;
+}
+
+span.title-icon {  /* used for flames and candles */
+  font-size: 1rem;
+}
+
+img.aoe-icon {
+  vertical-align: middle;
+}
+
+img.os-icon{
+  width: 1.1rem;
+}
+
+
+/* IMG styles */
+img.flames {
+  display: inline;
+  width: 0.97rem;
+  vertical-align: bottom;
+}
+
+#img-launcher {
+  display: inherit;
+  margin: 0 auto;
+}
+
+
+/* LISTS styles */
+ul.styless {
+   background: none;
+   border: none;
+   box-shadow: none;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+
+/* TOOLTIPS */
+a.tooltip span.tooltip {
+  display: none;
+  position: absolute;
+  color: #fff;
+  background: #000;
+  padding: 5px;
+}
+a.tooltip {
+  position: relative;
+  text-decoration: none;
+}
+a.tooltip:hover span.tooltip {
+  display: block;
+  text-align: center;
+}
+
+
+
+/* DESKTOP-SHORTCUTS styles */
+div.desktop {
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  /*bottom: 1rem;
+  left: 1rem;
+  justify-content: flex-end;
+  align-content: flex-end;
+  align-items: flex-end;*/
+}
+
+li.shortcut {
+  width: 4.03rem;
+  height: 4.03rem;
+  margin-top: 1rem !important;
+}
+
+a.desktop-shortcut {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.js-popup {
+  z-index: 15;
+  position: fixed;
+  bottom: 7rem;
+  left: 3rem;
+}
+
+img.shortcut-icon {
+  /*width: 2.6rem;*/
+  height: 2.2rem;
+  margin-bottom: 0.2rem;
+  align-self: center;
+}
+
+img.skull-shortcut-icon {
+  height: 2.25rem !important;
+}
+
+img.doom-icon {
+  width: 2.2rem;
+}
+
+img.flightsim-icon {
+  width: 2.2rem;
+}
+
+img.cmd-icon {
+  padding: 0.2rem;
+}
+
+img.aoe-desktop-icon {
+  margin-left: -0.38rem;
+  padding-bottom: 0.2rem !important;
+}
+
+.zoo-icon {
+  width: 2.4rem;
+  padding: 0.3rem;
+}
+
+img.vdj-icon {
+  padding: 0.06rem;
+}
+
+span.shortcut-text {
+  /*width: 3.92rem;
+  width: 4.02rem;*/
+  overflow-wrap: anywhere;
+}
+
+span.shortcut-text {
+  text-align: center;
+  color: white;
+  text-shadow: 1px 1px 1px black;
+}
+
+/* PROXY POPUP styles */
+div#proxy-js-popup {
+  width: 12.5rem;
+}
+
+dl.inline {
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+dl.inline dt, dl.inline dd {
+  float: left;
+  width: 50%;
+  padding: 0;
+  margin: 0;
+  margin-top: 0.1rem;
+}
+
+div#proxy-launcher dl.inline {
+  margin-top: 0.3rem;
+}
+div#proxy-launcher dl.inline dt, div#proxy-launcher dl.inline dd {
+  text-align: left;
+}
+
+.darkTable dl.inline dt, .darkTable dl.inline dd {
+  text-align: center !important;
+}
+.darkTable dl.inline dt {
+background-color: #3c2b35flaun;
+}
+.darkTable dl.inline dd {
+  background-color: #86757f;
+}
+
+
+
+/* FOOTER styles */
+footer {
+  position: fixed;
+  z-index: 50;
+  bottom: 0;
+  width: 100%;
+  border: 1px solid grey;
+}
+
+footer div {
+  height: 1.2rem !important;
+  background-repeat: round;
+}
+
+footer .blue {
+  background-repeat: round !important;
+}
+
+.foot-link {
+  float: right;
+  margin-bottom: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /*padding-right: 0.75rem;*/
+  /*padding-left: 0.75rem;*/
+  border-left: 1px solid grey;
+  background-repeat: repeat-x !important;
+  width: 10rem;
+}
+
+.taskbar a {
+  font-size: 11px;
+  font-family: "Pixelated MS Sans Serif";
+  text-decoration: none;
+}
+
+.taskbar a span {
+  margin-top: 0.2rem;
+}
+
+.taskbar.blue a {
+  color: white;
+}
+
+.taskbar.blue a:hover {
+  color: orangered;
+}
+
+.taskbar.silver a {
+  color: indigo;
+}
+
+.taskbar.silver a:hover {
+    color:orangered;
+}
+
+
+</style>
+
+{% endblock %}

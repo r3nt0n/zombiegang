@@ -1,0 +1,16 @@
+
+{% block th %}
+
+<th>
+
+  {% if data_type == 'access-logs' or data_type == 'users' %}
+    <span class="img-icon"><img class="aoe-icon" src="{{ url_for('static', filename='img/aoe2icon-blue.png') }}" width="15rem" /></span><span class="text">user</span>
+  {% elif data_type == 'masters' %}
+    <span class="img-icon"><img class="aoe-icon" src="{{ url_for('static', filename='img/aoe2icon-red.png') }}" width="15rem" /></span><span class="text">master</span>
+  {% elif data_type == 'zombies' %}
+    <span class="img-icon"><img class="aoe-icon" src="{{ url_for('static', filename='img/aoe2icon-green.png') }}" width="15rem" /></span><span class="text">zombie</span>
+  {% endif %}
+
+</th>
+
+{% endblock %}

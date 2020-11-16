@@ -1,4 +1,7 @@
 <?php
+// auxilar functions
+include_once 'util/prepare_queries.php';
+
 // 'user' object
 class Zombie{
  
@@ -7,8 +10,12 @@ class Zombie{
     private $table_name = "Zombies";
 
     // object properties
+    public $id;
+    public $created_at;
+    public $updated_at;
+    public $last_seen;
+
     public $username;
-    public $registered_at;
     public $os;
     public $current_public_ip;
     public $current_country;
@@ -25,7 +32,7 @@ class Zombie{
     function usernameExists(){
 
         // query to check if username exists
-        $query = "SELECT id, username, registered_at, os, current_public_ip, current_country, current_hostname, refresh_secs
+        $query = "SELECT id, username, created_at, updated_at, last_seen, os, current_public_ip, current_country, current_hostname, refresh_secs
                 FROM " . $this->table_name . "
                 WHERE username = ?
                 LIMIT 0,1";
@@ -53,8 +60,10 @@ class Zombie{
     
             // assign values to object properties
             $this->id = $row['id'];
+            $this->created_at = $row['created_at'];
+            $this->updated_at = $row['updated_at'];
+            $this->last_seen = $row['last_seen'];
             $this->username = $row['username'];
-            $this->registered_at = $row['registered_at'];
             $this->os = $row['os'];
             $this->current_public_ip = $row['current_public_ip'];
             $this->current_country = $row['current_country'];
@@ -223,13 +232,13 @@ class Zombie{
             //if ($filter_by_username) {$filter = $filter . " AND ";}
             if ($enable_AND) {$filter = $filter . " AND ";}
             else {$enable_AND = True;}
-            $filter = $filter . "registered_at >= :datetime_aft";
+            $filter = $filter . "created_at >= :datetime_aft";
             }
         if ($filter_by_datetime_bef) {
             //if ($filter_by_username or $filter_by_datetime_aft) {$filter = $filter . " AND ";}
             if ($enable_AND) {$filter = $filter . " AND ";}
             else {$enable_AND = True;}
-            $filter = $filter . "registered_at <= :datetime_bef";
+            $filter = $filter . "created_at <= :datetime_bef";
         }
 
         // filter by os
@@ -244,7 +253,7 @@ class Zombie{
         $order_by = ($order_by) ? " ORDER BY " . $order_by : 'id' ;
 
         // query
-        $query = "SELECT id, username, registered_at, os, current_public_ip, current_country, current_hostname, refresh_secs
+        $query = "SELECT id, username, created_at, updated_at, last_seen, os, current_public_ip, current_country, current_hostname, refresh_secs
                 FROM " . $this->table_name . "
                 {$filter}
                 {$order_by} DESC";

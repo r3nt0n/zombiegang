@@ -1,0 +1,27 @@
+
+
+{% extends "pages/dashboard/base_dashboard.html" %}
+
+{% block lateral_panel %}
+
+{% with data_type = 'brute_attacks', window_type = 'filter', filters=('zombie_username', 'datetime', 'target') %}
+    {% include 'objects/windows/filter.html' %}
+{% endwith %}
+
+{% endblock %}
+
+
+
+{% block central_panel %}
+
+{% if data_filter.data %}
+  {% with window_type = 'table-results', data_type = 'tasks', task_type = 'brt', data_buttons=True, scrollable_table=True, table_class='table-xl' %}
+    {% include 'objects/windows/data-results.html' %}
+  {% endwith %}
+{% endif %}
+
+{% with data_type = 'brute_attacks', banner = 'img/wolfenstein.png',  icon = '🎰', panel_title = 'brute force attacK' %}
+  {% include 'pages/dashboard/tools/base_attack.html' %}
+{% endwith %}
+
+{% endblock %}

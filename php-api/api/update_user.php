@@ -19,7 +19,7 @@ include_once 'config/database.php';
 include_once 'objects/user.php';
 
 // auxilar functions
-include_once 'aux_functions/check_permission.php';
+include_once 'util/check_permission.php';
  
 // get database connection
 $database = new Database();

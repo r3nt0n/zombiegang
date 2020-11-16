@@ -1,0 +1,29 @@
+
+
+/* DARK TABLE styles */
+table.darkTable {
+  border: 1px solid #000000;
+  background-color: #4A4A4A;
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+table.darkTable td, table.darkTable th {
+  border: 1px solid #4A4A4A;
+  padding: 3px 2px;
+}
+table.darkTable tr:nth-child(even) {
+  background: #888888;
+}
+table.darkTable thead {
+  background: #000000;
+  border-bottom: 3px solid #000000;
+}
+table.darkTable thead th {
+  color: #E6E6E6;
+  border-left: 1px solid #4A4A4A;
+}
+table.darkTable thead th:first-child {
+  border-left: none;
+}
+

@@ -1,4 +1,7 @@
 <?php
+// auxilar functions
+include_once 'util/prepare_queries.php';
+
 // 'master' object
 class Master{
  
@@ -7,6 +10,10 @@ class Master{
         private $table_name = "Masters";
     
         // object properties
+        public $id;
+        public $created_at;
+        public $updated_at;
+        
         public $username;
         public $public_key;
     
@@ -19,7 +26,7 @@ class Master{
     function usernameExists(){
     
         // query to check if username exists
-        $query = "SELECT id, username, public_key
+        $query = "SELECT id, created_at, updated_at, username, public_key
                 FROM " . $this->table_name . "
                 WHERE username = ?
                 LIMIT 0,1";
@@ -47,6 +54,8 @@ class Master{
     
             // assign values to object properties
             $this->id = $row['id'];
+            $this->created_at = $row['created_at'];
+            $this->updated_at = $row['updated_at'];
             if (empty($this->username)) {
                 $this->username = $row['username'];
             }
@@ -172,13 +181,13 @@ class Master{
         // if ($filter_by_datetime_aft) {
         //     // add AND if needed
         //     if ($filter_by_username) {$filter = $filter . " AND ";}
-        //     $filter = $filter . "registered_at >= :datetime_aft";
+        //     $filter = $filter . "created_at >= :datetime_aft";
         //     }
         // if ($filter_by_datetime_bef) {
         //     // add AND if needed
         //     if ($filter_by_username or $filter_by_datetime_aft) {$filter = $filter . " AND ";}
         //     //elseif ($filter_by_datetime_aft) {$filter = $filter . " OR ";}
-        //     $filter = $filter . "registered_at <= :datetime_bef";
+        //     $filter = $filter . "created_at <= :datetime_bef";
         // }
 
         // // set empty if filter or order_by not provided

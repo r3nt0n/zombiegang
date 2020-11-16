@@ -1,0 +1,54 @@
+{% block form %}
+
+<form id="login-form" name="login" action="" method="POST" novalidate>
+
+  <!-- CSRF protection -->
+  {{ login_form.hidden_tag() }}
+
+  <div class="field-row-stacked">
+    <!-- server error -->
+    {% if error and ('hostname' in error or 'connection' in error) %}
+      <p  class="error">{{ error }}</p>
+    {% endif %}
+    <!-- validation error -->
+    {% for error in login_form.remote_host.errors %}
+      <span class="error">{{ error }}</span>
+    {% endfor %}
+
+
+    {{ login_form.remote_host.label }}
+    {{ login_form.remote_host }}
+
+  </div>
+
+  <div class="field-row-stacked">
+    <!-- server error -->
+    {% if error and 'credentials' in error %}
+      <p  class="error">{{ error }}</p>
+    {% endif %}
+    <!-- validation error -->
+    {% for error in login_form.username.errors %}
+      <span class="error">{{ error }}</span>
+    {% endfor %}
+
+    {{ login_form.username.label }}
+    {{ login_form.username }}
+
+  </div>
+
+  <div class="field-row-stacked">
+    <!-- validation error -->
+    {% for error in login_form.password.errors %}
+      <span class="error">{{ error }}</span>
+    {% endfor %}
+    {{ login_form.password.label }}
+    {{ login_form.password }}
+  </div>
+
+  <div class="field-row-stacked">
+    {{ login_form.login_btn(type="submit", class="standard") }}
+  </div>
+
+</form>
+
+{% endblock %}

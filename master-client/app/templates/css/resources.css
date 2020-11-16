@@ -1,0 +1,43 @@
+{% block styles %}
+<style>
+
+/* BASE url resources */
+
+/* fonts */
+@font-face {
+  font-family: "Gothic Pixels";
+  src: url({{ url_for('static', filename='fonts/GothicPixels.ttf') }}) format("ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Verily Serif Mono";
+  src: url({{ url_for('static', filename='fonts/VerilySerifMono.otf') }}) format("otf");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/*  backgrounds */
+.logged-in-wrapper{
+  background-image: url({{ url_for('static', filename='img/wxp-negative.webp') }}) !important;
+  background-size: cover;
+}
+.logged-out-wrapper{
+  background-image: url({{ url_for('static', filename='img/wxp.webp') }}) !important;
+  background-size: cover;
+}
+
+
+/* FOOTER taskbar */
+.blue {
+  background-image: url({{ url_for('static', filename='img/desktop-icons/taskbar-aero-blue.png') }}) !important;
+}
+.silver {
+  background-image: url({{ url_for('static', filename='img/desktop-icons/taskbar-aero-silver.png') }}) !important;
+}
+
+
+</style>
+
+{% endblock %}

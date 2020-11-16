@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{% block title %}{% endblock %}</title>
+<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+<!-- import css url resources -->
+{% include 'css/resources.css' %}
+<!-- win98 css styles -->
+{% include 'css/win98.css' %}
+<!-- custom base css styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dark-table.css') }}">
+
+<!-- custom responsive css styles -->
+<link rel="stylesheet" media="screen and (max-width: 500px)" href="{{ url_for('static', filename='css/mobile.css') }}">
+<link rel="stylesheet" media="screen and (min-width: 501px) and (max-width: 1366px)" href="{{ url_for('static', filename='css/tablet.css') }}">
+<!--<link rel="stylesheet" media="screen and (min-width: 1367px)" href="{{ url_for('static', filename='css/pc.css') }}">-->
+
+<!-- jquery (requirement for ajax) -->
+<script src="{{ url_for('static', filename='js/jquery-3.5.1.min.js') }}"></script>
+<!-- custom javascripts -->
+<script src="{{ url_for('static', filename='js/effects.js') }}"></script>
+</head>
+
+
+<body>
+<!-- ajax requests -->
+{% include 'js/ajax.js' %}
+
+<!-- main content -->
+{% block container %}{% endblock %}
+
+<!-- desktop and shortcuts -->
+{% include 'objects/desktop.html' %}
+
+<!-- footer -->
+{% include 'objects/footer.html' %}
+</body>
+</html>

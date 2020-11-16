@@ -1,0 +1,34 @@
+
+{% if scrollable_table %}
+  {% if table_class or height or min_width or max_height %}
+    <div class="scroll-table {% if table_class %}{{ table_class }}{% endif %}"
+         style="{% if min_width %}min-width: {{ min_width }};{% endif %}
+                {% if max_height %}max-height: {{ max_height }};{% endif %}
+                {% if height %}height: {{ height }};{% endif %}">
+  {% else %}
+    <div class="scroll-table">
+  {% endif %}
+{% endif %}
+
+      <table class="darkTable" id="table-results-{{ data_type }}">
+        <thead>
+          <tr>
+
+            {% block table_headers %}{% endblock %}
+
+          </tr>
+        </thead>
+
+        <tbody>
+
+            {% block table_columns %}{% endblock %}
+
+        </tbody>
+      </table>
+
+
+{% if scrollable_table %}
+</div>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/table-resizable.js') }}"></script>

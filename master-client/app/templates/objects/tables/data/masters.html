@@ -1,0 +1,18 @@
+
+{% extends 'objects/tables/base_data.html' %}
+
+
+{% block table_headers %}
+
+{% include 'objects/tables/headers/username.html' %}
+
+{% endblock %}
+
+
+{% block table_columns %}
+{% for row in data %}
+  <tr>
+<td>{{ row['username'] }}</td>
+  </tr>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,12 @@
+
+{% if os.lower() == 'linux' %}
+  <img class="os-icon" title="{{ os }}" src="{{ url_for('static', filename='img/os-icons/lin.png') }}" />
+{% elif os.lower() == 'windows' %}
+  <img class="os-icon" title="{{ os }}" src="{{ url_for('static', filename='img/os-icons/win.png') }}" />
+{% elif os.lower() == 'mac' %}
+  <img class="os-icon" title="{{ os }}" src="{{ url_for('static', filename='img/os-icons/mac-grey.png') }}" />
+{% elif os.lower() == 'iphone' %}
+  <img class="os-icon" title="{{ os }}" src="{{ url_for('static', filename='img/os-icons/iph.png') }}" />
+{% elif os.lower() == 'android' %}
+  <img class="os-icon" title="{{ os }}" src="{{ url_for('static', filename='img/os-icons/and.png') }}" />
+{% endif %}

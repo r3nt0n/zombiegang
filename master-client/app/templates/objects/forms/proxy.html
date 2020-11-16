@@ -1,0 +1,48 @@
+{% block form %}
+
+<form name="proxy" action="" method="POST" style="text-align: center;">
+
+
+<img src="{{ url_for('static',filename='img/crashbandicoot2.jpg') }}" width="177rem;" />
+
+<div class="field-row-stacked" style="margin-left: 0.3rem;">
+  <input type="checkbox" id="proxy-enabled"
+         onClick="toggle_proxy('proxy-enabled', 'proxy_host', 'proxy_port', '#toggle-proxy-error'); get_actual_ip('#actual-ip', '#proxy-country', '#proxy-flag');"
+         onchange="uncheck_if_disabled('proxy-enabled');" />
+    <label for="proxy-enabled"> <span>proxy enabled</span></label>
+
+    <span id="toggle-proxy-error" class="error" style="display: none;"></span>
+</div>
+
+
+<div class="field-row-stacked" style="display: inline;">
+      <input id="proxy_host" name="proxy_host" type="text" style="width: 7rem; height: 1.5rem;" value="{{ request.form.proxy_host }}"
+             onkeyup="enable_checkbox_by(['proxy_host', 'proxy_port'], 'proxy-enabled');"
+             onchange="uncheck_if_disabled('proxy-enabled');" />
+      <span class="text-bold" style="margin-left: 0.2rem;margin-right: 0.1rem;"> : </span>
+      <input id="proxy_port" name="proxy_port" type="text" style="width: 3rem; height: 1.5rem;" value="{{ request.form.proxy_port }}"
+             onkeyup="enable_checkbox_by(['proxy_host', 'proxy_port'], 'proxy-enabled');"
+             onchange="uncheck_if_disabled('proxy-enabled');" />
+</div>
+
+  <dl id="proxy-info" class="tree-view styless inline">
+    <dt>
+      <span class="text-bold">actual ip: </span>
+    </dt>
+    <dd>
+      <span id="actual-ip"></span>
+      <a href="javascript:get_actual_ip('#actual-ip', '#proxy-country', '#proxy-flag');"> 🔄</a>
+    </dd>
+    <dt>
+      <span class="text-bold">country: </span>
+    </dt>
+    <dd>
+      <span id="proxy-flag">  </span> <span id="proxy-country"></span>
+    </dd>
+  </dl>
+
+</form>
+
+
+
+{% endblock %}

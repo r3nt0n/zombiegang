@@ -1,0 +1,63 @@
+
+{% extends 'objects/tables/base_data.html' %}
+
+
+{% block table_headers %}
+
+  <th>{% include 'objects/forms/inputs/data-all-checkbox.html' %}</th>
+
+  {% with legend='datetime' %}
+      {% include 'objects/tables/headers/datetime.html' %}
+    {% endwith %}
+
+  {% include 'objects/tables/headers/username.html' %}
+
+  {% include 'objects/tables/headers/successful.html' %}
+
+  {% include 'objects/tables/headers/public-ip.html' %}
+
+  {% include 'objects/tables/headers/country-code.html' %}
+
+  {% include 'objects/tables/headers/hostname.html' %}
+
+{% endblock %}
+
+
+{% block table_columns %}
+
+{% for row in data %}
+  <tr>
+
+    <td>{% include 'objects/forms/inputs/data-checkbox.html' %}</td>
+
+    <td><span>{{ row['created_at'] }}</span></td>
+
+    <td><span>{{ row['username'] }}</span></td>
+
+{% if row['successful'] == '0' %}
+  <td style="color: red"><div>error</div></td>
+{% else %}
+  <td style="color: green">login</td>
+{% endif %}
+
+<td>{{ row['public_ip'] }}</td>
+
+<td>
+  <a class="tooltip" href="javascript:;">
+    <span class="flag-icon">
+      {% with country_code=row['country'].upper() %}
+        {% include 'objects/dynamic/cc_flag.html' %}
+      {% endwith %}
+    </span>
+    <span class="tooltip">
+      {{ row['country'] }}
+    </span>
+  </a>
+</td>
+
+<td>{{ row['hostname'] }}</td>
+
+  </tr>
+{% endfor %}
+
+{% endblock %}

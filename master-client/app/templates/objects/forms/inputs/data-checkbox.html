@@ -1,0 +1,5 @@
+{% block checkbox %}
+
+<input type="checkbox" class="tab-checkbox check-{{ data_type }}" id="{{ row['id'] }}" name="{{ data_type }}_checked" value="{% if data_type == 'masters' or data_type == 'users' or data_type == 'zombies' %}{{ row['username'] }}{% else %}{{ row['id'] }}{% endif %}" onclick="toggle_enabled_by_any('data-buttons-{{ data_type }}', 'tab-checkbox check-{{ data_type }}')" />
+
+{% endblock %}

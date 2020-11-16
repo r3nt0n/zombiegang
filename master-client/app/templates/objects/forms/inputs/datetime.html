@@ -1,0 +1,25 @@
+{% block datetime_input %}
+
+<div style="text-align: right;">
+
+    <!-- date validation error -->
+    {% for error in date_field.errors %}
+      <span class="error">{{ error }}</span>
+    {% endfor %}
+
+    <!-- date input -->
+    {{ date_field.label }}
+    {{ date_field(type="date",class="date-field", id="date-"+comparator+"-"+column) }}
+
+    <!-- time validation error -->
+    {% for error in time_field.errors %}
+      <span class="error">{{ error }}</span>
+    {% endfor %}
+
+    <!-- time input -->
+    {{ time_field.label }}
+    {{ time_field(type="time", step="1", class="time-field", id="time-"+comparator+"-"+column) }}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+
+{% extends 'objects/tables/base_data.html' %}
+
+
+{% block table_headers %}
+
+  <th>{% include 'objects/forms/inputs/data-all-checkbox.html' %}</th>
+
+  {% include 'objects/tables/headers/username.html' %}
+  {% include 'objects/tables/headers/public-ip.html' %}
+
+  {% include 'objects/tables/headers/country-code.html' %}
+
+  {% if not brief %}
+    {% with legend='register' %}
+      {% include 'objects/tables/headers/datetime.html' %}
+    {% endwith %}
+  {% endif %}
+
+{% endblock %}
+
+
+{% block table_columns %}
+
+{% for row in data %}
+  <tr>
+
+    <td>{% include 'objects/forms/inputs/data-checkbox.html' %}</td>
+
+    <td>{{ row['username'] }}</td>
+
+    <td>{{ row['public_ip'] }}</td>
+
+    <td>
+      <a class="tooltip" href="javascript:;">
+        <span class="flag-icon">
+          {% with country_code=row['country'].upper() %}
+            {% include 'objects/dynamic/cc_flag.html' %}
+          {% endwith %}
+        </span>
+        <span class="tooltip">
+          {{ row['country'] }}
+        </span>
+      </a>
+    </td>
+
+    {% if not brief %}
+    <td>{{ row['created_at'] }}</td>
+    {% endif %}
+
+
+  </tr>
+{% endfor %}
+
+{% endblock %}

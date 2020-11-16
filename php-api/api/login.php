@@ -10,9 +10,9 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // files needed to connect to database
 include_once 'config/database.php';
 include_once 'objects/user.php';
-include_once 'aux_functions/check_permission.php';
+include_once 'util/check_permission.php';
 include_once 'create_access_log.php';
-include_once 'aux_functions/post_request.php';
+include_once 'util/post_request.php';
  
 // get database connection
 $database = new Database();

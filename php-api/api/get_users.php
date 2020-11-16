@@ -19,7 +19,7 @@ include_once 'config/database.php';
 include_once 'objects/user.php';
 
 // auxilar functions
-include_once 'aux_functions/check_permission.php';
+include_once 'util/check_permission.php';
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));

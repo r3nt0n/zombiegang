@@ -1,0 +1,74 @@
+
+{% extends 'objects/tables/base_data.html' %}
+
+
+{% block table_headers %}
+
+  <th>{% include 'objects/forms/inputs/data-all-checkbox.html' %}</th>
+
+  {% include 'objects/tables/headers/task_type.html' %}
+
+  {% include 'objects/tables/headers/task_content.html' %}
+
+  {% with data_type='masters' %}
+    {% include 'objects/tables/headers/username.html' %}
+  {% endwith %}
+
+  {% with legend='submit' %}
+    {% include 'objects/tables/headers/datetime.html' %}
+  {% endwith %}
+
+  {% with legend='start' %}
+    {% include 'objects/tables/headers/datetime.html' %}
+  {% endwith %}
+
+  {% with legend='stop' %}
+    {% include 'objects/tables/headers/datetime.html' %}
+  {% endwith %}
+
+  {% with data_type='zombies' %}
+    {% include 'objects/tables/headers/username.html' %}
+  {% endwith %}
+
+  {% include 'objects/tables/headers/read_confirm.html' %}
+
+  {% include 'objects/tables/headers/result.html' %}
+
+  {% with legend='exec' %}
+    {% include 'objects/tables/headers/datetime.html' %}
+  {% endwith %}
+
+{% endblock %}
+
+
+{% block table_columns %}
+
+{% for row in data %}
+  <tr>
+
+    <td>{% include 'objects/forms/inputs/data-checkbox.html' %}</td>
+
+    <td>{{ row['task_type'] }}</td>
+    <td>
+      {% if row['task_content'] %}
+        <dl class="inline">
+        {% for field in row['task_content'] %}
+          <dt>{{ field }}</dt>
+          <dd>{{ row['task_content'][field] }}</dd>
+        {% endfor %}
+        </dl>
+      {% endif %}
+    </td>
+    <td>{{ row['master_username'] }}</td>
+    <td>{{ row['created_at'] }}</td>
+    <td>{% if row['to_exec_at'] != "0000-00-00 00:00:00" %}{{ row['to_exec_at'] }}{% endif %}</td>
+    <td>{% if row['to_stop_at'] != "0000-00-00 00:00:00" %}{{ row['to_stop_at'] }}{% endif %}</td>
+    <td>{{ row['zombie_username'] }}</td>
+    <td>{{ row['read_confirm'] }}</td>
+    <td>{% if row['result'] %}{{ row['result'] }}{% endif %}</td>
+    <td>{% if row['exec_at'] != "0000-00-00 00:00:00" %}{{ row['exec_at'] }}{% endif %}</td>
+
+  </tr>
+{% endfor %}
+
+{% endblock %}

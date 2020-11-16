@@ -1,0 +1,11 @@
+{% block button %}
+
+<a href="javascript:json_export('{{ data_type }}', {{ data }});">
+<button type="button" id="btn-export-json-{{ data_type }}" name="btn-export-json-{{ data_type }}" >
+  <span class="emoji">💾  </span>
+  <span class="button-text">Export</span>
+</button>
+</a>
+
+
+{% endblock %}

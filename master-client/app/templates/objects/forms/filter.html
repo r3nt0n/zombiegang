@@ -1,0 +1,62 @@
+{% block form %}
+<form name="{{ data_type + '-filter' }}" action="" method="POST">
+
+    <!-- CSRF protection -->
+  {{ data_filter.form.hidden_tag() }}
+
+
+    {% if 'os' in filters %}
+    <div class="field-row-stacked filter-section">
+      <!-- validation error -->
+      {% for error in data_filter.form.by_os.errors %}
+        <span class="error">{{ error }}</span>
+      {% endfor %}
+      <div class="label"><span class="margin-right-icon">🔎 </span>
+        {{ data_filter.form.by_os.label }}
+      </div>
+      {{ data_filter.form.by_os }}
+    </div>
+    {% endif %}
+
+    {% if 'username' in filters %}
+      <div class="field-row-stacked filter-section">
+        <!-- validation error -->
+        {% for error in data_filter.form.by_username.errors %}
+          <span class="error">{{ error }}</span>
+        {% endfor %}
+        <div class="label"><span class="margin-right-icon">🔎 </span>
+          {{ data_filter.form.by_username.label }}
+        </div>
+        {{ data_filter.form.by_username }}
+      </div>
+    {% endif %}
+
+    {% if 'datetime' in filters %}
+    <div class="filter-section">
+        <div class="label"><span class="margin-right-icon">🔎 </span>
+          by datetime  <!-- another e.g. would be 'by exec at' -->
+        </div>
+      <fieldset name="by_datetime">
+        {% with column='datetime', comparator='before', date_field=data_filter.form.by_date_bef, time_field=data_filter.form.by_time_bef %}
+          {% include 'objects/forms/inputs/datetime.html' %}
+        {% endwith %}
+        {% with column='datetime', comparator='aft', date_field=data_filter.form.by_date_aft, time_field=data_filter.form.by_time_aft %}
+          {% include 'objects/forms/inputs/datetime.html' %}
+        {% endwith %}
+      </fieldset>
+    </div>
+    {% endif %}
+
+
+    {% if data_filter.error %}
+    <p class="error filter-error">{{ data_filter.error }}</p>
+    {% endif %}
+
+
+    <div class="field-row-stacked">
+      {{ data_filter.form.filter_btn(type="submit", id="btn-filter", class="standard emoji-btn") }}
+    </div>
+
+
+</form>
+{% endblock %}

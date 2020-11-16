@@ -1,0 +1,5 @@
+{% block checkbox %}
+
+<input type="checkbox" class="tab-checkbox" onClick="toggle_checkall(this, 'tab-checkbox check-{{ data_type }}'); toggle_enabled_by_any('data-buttons-{{ data_type }}', 'tab-checkbox check-{{ data_type }}')" />
+
+{% endblock %}

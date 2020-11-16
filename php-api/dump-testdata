@@ -1,1 +1,1 @@
-mariadb -u zgang -p < data/testdata.sql
+mariadb -u zgang -p < data/tests.sql

@@ -19,7 +19,7 @@ include_once 'config/database.php';
 include_once 'objects/task.php';
 
 // auxilar functions
-include_once 'aux_functions/check_permission.php';
+include_once 'util/check_permission.php';
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -48,7 +48,7 @@ if($jwt){
 
         // set task property values and check if the task author and user requesting matches
         $task->id = $data->id;
-        $task_author = ($task->IdExists()) ? $task->master_username : False;
+        $task_author = ($task->idExists()) ? $task->master_username : False;
         
         // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
         check_master_permissions($requested_by, $task_author);
@@ -62,8 +62,7 @@ if($jwt){
             // response in json format
             echo json_encode(
                     array(
-                        "message" => "User was deleted.",
-                        "jwt" => $jwt
+                        "message" => "User was deleted."
                     )
                 );
         }
