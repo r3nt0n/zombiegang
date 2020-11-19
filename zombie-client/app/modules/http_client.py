@@ -7,7 +7,8 @@
 import json
 from urllib.request import urlopen, Request
 from urllib.parse import urlencode
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
+
 
 # urllib cheatsheet
 #with urlopen("http://localhost:8080") as response:
@@ -16,9 +17,9 @@ from urllib.error import HTTPError
     # response.getheader('Content-type') => 'application/json'
     # response.status => 200
     # response.reason => 'OK'
+
 # url = "http://localhost:8080"
 # query_params = {"jwt": "DEMO_JWT", "date": "2019-04-11"}
-
 # GET
 def get_json(url, query_params=()):
     query_string = urlencode(query_params)
@@ -38,29 +39,39 @@ def get_json(url, query_params=()):
 # url_file = "https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.0.7.tar.xz"
 # filename = 'latest-kernel.tar.xz'
 def download_file(url_file, filename):
-    with urlopen(url_file) as response:
-       with open(filename, 'wb') as f:
-           while True:
-               # chunk references bytes read from response (16384 - 16 Kibibytes)
-               chunk = response.read(16384)
-               if chunk:
-                   f.write(chunk)
-               else:
-                   break
+    try:
+        with urlopen(url_file) as response:
+           with open(filename, 'wb') as f:
+               while True:
+                   # chunk references bytes read from response (16384 - 16 Kibibytes)
+                   chunk = response.read(16384)
+                   if chunk:
+                       f.write(chunk)
+                   else:
+                       break
+        return True
+    except:
+        return False
 
 # POST json data in the request
 def post_json(url, data=()):
+    from app.components import logger
     custom_headers = {"Content-Type": "application/json"}
     try:
-        json_post = Request(url, json.dumps(data).encode('ascii'), custom_headers)
+        logger.log('url: {}'.format(url), 'DEBUG')
+        logger.log('data_snd: {}'.format(data), 'DEBUG')
+        json_post = Request(url, json.dumps(data, ensure_ascii=False).encode('utf-8'), custom_headers)
         with urlopen(json_post) as response:
-            if response.status != 200:
-                return False
+            # if response.status != 200:
+            #     return False
             json_post_response = json.load(response)
+            logger.log('data_rcv: {}'.format(json_post_response), 'DEBUG')
         return json_post_response
-    except HTTPError:
+    #except HTTPError or URLError:
+    except Exception as e:
+        logger.log(url, 'CRITICAL')
+        logger.log(e, 'CRITICAL')
+
         return False
-
-
 
 

@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-from app.modules.main import main
+from app.components.main import Brain
 
 if __name__ == "__main__":
-    main()
-
+    brain = Brain()
+    brain.think_as_a_zombie()

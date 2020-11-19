@@ -21,7 +21,7 @@ class DataFilter:
 
         if data_type == 'ddos_attacks':
             data_type = 'tasks'
-            self.filters['task_type'] = 'ddos'
+            self.filters['task_type'] = 'dos'
         self.data_type = data_type
 
     def merge_values(self, value_a, value_b):

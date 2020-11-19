@@ -17,6 +17,7 @@ use \Firebase\JWT\JWT;
 // files needed to connect to database
 include_once 'config/database.php';
 include_once 'objects/task.php';
+include_once 'objects/mission.php';
 
 // auxilar functions
 include_once 'util/check_permission.php';
@@ -40,15 +41,32 @@ if($jwt){
         // get database connection
         $database = new Database();
         $db = $database->getConnection();
+
+        // instantiate object
+        $task = new Task($db);
         
         // check who request and permissions
         $requested_by = $decoded->data->username;
 
         if (is_zombie($db, $requested_by)){
-            $by_master_username =  $requested_by;
-            $by_submit_at_bef =  "";
-            $by_submit_at_aft = "";
             $zombie_view = True;
+            $by_id = (isset($data->id)) ? $data->id : "";
+            $mission_id = (isset($data->mission_id)) ? $data->mission_id : "";
+            $by_submit_at_bef =  False;
+            $by_submit_at_aft = False;
+            $by_master_username = False;
+            if (!$by_id or !$mission_id) {
+                throw new Exception('Not id provided');
+            }
+            else {
+                $mission = new Mission($db);
+                $mission->id = $mission_id;
+                $mission->task_id = $by_id;
+                $mission->zombie_username = $requested_by;
+                if (!$mission->idExists()){
+                    throw new Exception('Zombie trying to read a task which isnt assigned to him');
+                }
+            }
         }
         
         else{
@@ -62,16 +80,17 @@ if($jwt){
             $by_task_type = (isset($data->task_type)) ? $data->task_type : "";
         }
         
-        // instantiate user object
-        $task = new Task($db);
+        
         
         // retrieve records
-        $tasks_data = $task->read($by_master_username, $by_submit_at_bef, $by_submit_at_aft, 
-                                  $by_task_type, $zombie_view=$zombie_view);
+        $tasks_data = $task->read($by_id, $by_master_username, $by_submit_at_bef, $by_submit_at_aft, 
+                                  $by_task_type, $zombie_view);
 
         
-        for ($i=0; $i < count($tasks_data); $i++) { 
-            $tasks_data[$i]["task_content"] = json_decode(decrypt($tasks_data[$i]["task_content"], $key));
+        if ($tasks_data) {
+            for ($i=0; $i < count($tasks_data); $i++) { 
+                $tasks_data[$i]["task_content"] = json_decode(decrypt($tasks_data[$i]["task_content"], $key));
+            }
         }
             
 
@@ -87,7 +106,7 @@ if($jwt){
         // message if unable to update user
         else{
             // set response code
-            http_response_code(401);
+            http_response_code(204);
         
             // show error message
             echo json_encode(array("message" => "Any task found."));

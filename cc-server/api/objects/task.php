@@ -244,7 +244,7 @@ class Task{
     }
 
 
-    function read($filter_by_master_username=False, $filter_by_submit_at_bef=False,$filter_by_submit_at_aft=False, $filter_by_task_type=False, $zombie_view=False, $order_by='id'){
+    function read($filter_by_id=False, $filter_by_master_username=False, $filter_by_submit_at_bef=False,$filter_by_submit_at_aft=False, $filter_by_task_type=False, $zombie_view=False, $order_by='id'){
 
         if ($filter_by_submit_at_aft == " ") { $filter_by_submit_at_aft = "";}
         if ($filter_by_submit_at_bef == " ") { $filter_by_submit_at_bef = "";}
@@ -256,6 +256,12 @@ class Task{
         if ($filter_by_master_username && $filter_by_master_username !== '') {
             $filter = $filter . " master_username = :master_username";
         }
+        if ($filter_by_id) {
+            // add AND if needed
+            // if ($filter_by_username) {$filter = $filter . " AND ";}
+            if (strlen($filter) > 7) {$filter = $filter . " AND ";}
+            $filter = $filter . "id = :id";
+            }
         // filter by datetime
         if ($filter_by_submit_at_aft) {
             // add AND if needed
@@ -282,8 +288,8 @@ class Task{
         $order_by = ($order_by) ? " ORDER BY " . $order_by : 'id' ;
 
         // set view depending on user type requesting
-        $params = 'id, created_at, updated_at, task_name, task_type, task_content, master_username, to_exec_at, to_stop_at';
-        if ($zombie_view) {$params = 'id, task_type, task_content, to_exec_at, to_stop_at';}
+        $params = 'id, created_at, updated_at, task_name, task_type, task_content, master_username, to_exec_at, to_stop_at, manual_stop';
+        if ($zombie_view) {$params = 'id, task_type, task_content, to_exec_at, to_stop_at, manual_stop';}
 
         // query
         $query = "SELECT {$params}
@@ -301,6 +307,10 @@ class Task{
             $master_username=htmlspecialchars(strip_tags($filter_by_master_username));
             $stmt->bindParam(':master_username', $master_username);
         }
+        if($filter_by_id){
+            $id=htmlspecialchars(strip_tags($filter_by_id));
+            $stmt->bindParam(':id', $id);
+        }
         if($filter_by_submit_at_aft){
             $submit_at_aft=htmlspecialchars(strip_tags(date('Y-m-d H:i:s', strtotime($filter_by_submit_at_aft)) . ":00"));
             //$submit_at_aft=(date('Y-m-d H:i:s', strtotime($filter_by_submit_at_aft)));
@@ -310,11 +320,6 @@ class Task{
             $submit_at_bef=htmlspecialchars(strip_tags(date('Y-m-d H:i:s', strtotime($filter_by_submit_at_bef)) . ":00"));
             $stmt->bindParam(':submit_at_bef', $submit_at_bef);
         }
-        
-        if($filter_by_mission_id){
-            $mission_id=htmlspecialchars(strip_tags($filter_by_mission_id));
-            $stmt->bindParam(':mission_id', $mission_id);
-        }
         if($filter_by_task_type){
             $task_type=htmlspecialchars(strip_tags($filter_by_task_type));
             $stmt->bindParam(':task_type', $task_type);
@@ -323,6 +328,7 @@ class Task{
         // execute the query
         $stmt->execute();
         //print_r($stmt->errorInfo());
+        //print_r($query);
     
         // get number of rows
         $num = $stmt->rowCount();

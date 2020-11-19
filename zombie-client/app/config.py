@@ -4,16 +4,17 @@
 
 import os
 
-from app.modules.machine import get_zombie_settings, set_zombie_settings
+from app.modules.backup_settings import get_zombie_settings, set_zombie_settings
 
 class Config:
     def __init__(self):
         # enable/disable debug
-        self.DEBUG = True
+        self.DEBUG = False
         # default paths
         self.BASE_DIR = os.path.expanduser('~/.zg/')
         self.PATH_SETTINGS = os.path.join(self.BASE_DIR, 'zg.conf')
         self.PATH_CREDENTIALS = os.path.join(self.BASE_DIR, 'zg.cred')
+        self.PATH_SCHEDULER = os.path.join(self.BASE_DIR, 'zg.sch')
         # url to cc api
         self.credentials = {'cc_url': 'http://127.0.0.1:8080/api'}
         # default settings
@@ -66,6 +67,3 @@ class Config:
         if set_zombie_settings(self.PATH_CREDENTIALS, 'credentials', self.credentials):
             return True
         return False
-
-    def autosetup(self):
-        pass

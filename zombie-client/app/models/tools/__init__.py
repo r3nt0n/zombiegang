@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-from .slowloris import Slowloris
+from .cmd import Command

@@ -2,5 +2,4 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-#from . import http_client
-
+from .dos import DDosAttack

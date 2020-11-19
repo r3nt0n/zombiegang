@@ -3,6 +3,6 @@
 # r3nt0n
 
 
-from app.modules.zombie import ZombieClient
+from app.zombie import ZombieClient
 zombie = ZombieClient()
 

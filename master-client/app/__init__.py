@@ -5,7 +5,7 @@
 from flask import Flask, request
 from config import Config
 
-from app.objects import Logger, RemoteZession, Buffer, Proxy
+from app.components import Logger, RemoteZession, Buffer, Proxy
 
 #config = Config
 
