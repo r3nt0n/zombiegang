@@ -2,10 +2,16 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-import json
-
 from app import zession
 from app.modules import http_client
+
+
+def login(user, pswd, url="http://localhost:8080/api/login.php"):
+    data = {"username": user, "pswd": pswd}
+    data_rcv = http_client.json_post(url, data)
+    if data_rcv and ("jwt" in data_rcv):
+        return data_rcv["jwt"]
+    return False
 
 
 def read_data(data_type, filters=None):
@@ -14,9 +20,13 @@ def read_data(data_type, filters=None):
     url = "http://{}/api/get_{}.php".format(zession.remote_host, data_type)
     data = filters
     data['jwt'] = zession.token.jwt
-    data = json.dumps(data)
-    # print(data)
-    return http_client.json_post(url, data=data)
+    response = http_client.json_post(url, data=data)
+    if response and (not 'message' in response):
+        return response
+    elif response and ('message' in response):
+        return None
+    else:
+        return False
 
 
 def update_data(data_type, new_data):
@@ -29,7 +39,6 @@ def update_data(data_type, new_data):
         data['username'] = new_data['username']
         data['pswd'] = new_data['pswd']
 
-    data = json.dumps(data)
     return http_client.json_post(url, data=data)
 
 
@@ -38,7 +47,6 @@ def create_data(data_type, data=None):
         data = {}
     url = "http://{}/api/create_{}.php".format(zession.remote_host, data_type)
     data['jwt'] = zession.token.jwt
-    data = json.dumps(data)
     return http_client.json_post(url, data=data)
 
 
@@ -51,5 +59,4 @@ def delete_data(data_type, data_id):
         data['username'] = data_id
     else:
         data['id'] = data_id
-    data = json.dumps(data)
     return http_client.json_post(url, data=data)

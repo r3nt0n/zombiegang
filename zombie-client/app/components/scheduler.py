@@ -25,8 +25,8 @@ class Scheduler:
                 response = crud.read_data('missions', {"id": load_task_data["mission_id"]})
                 if (response and ("read_confirm" in response[0]) and (response[0]["read_confirm"] == "true")
                         and not (response[0]["result"])):
-                    for t in list(self.tasks.queue):
-                        if t.mission_id == load_task_data["mission_id"]:
+                    for sch_task in list(self.tasks.queue):
+                        if sch_task.mission_id == load_task_data["mission_id"]:
                             continue
                     self.tasks.put(Task(load_task_data))
             return True
@@ -53,6 +53,6 @@ class Scheduler:
 
     def add_task(self, task_object):
         #self.tasks.put(task_object)
-        if task_object.mission_id not in [t.mission_id for t in (list(self.tasks.queue))]:
+        if task_object.mission_id not in [sch_task.mission_id for sch_task in (list(self.tasks.queue))]:
             self.tasks.put(task_object)
         self.write_scheduled_tasks()

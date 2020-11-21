@@ -36,9 +36,10 @@ class Logger:
         # colors by msg type
         self.color = {
             "DEBUG": color.PURPLE,
-            "INFO": color.BLUE,
             "QUESTION": color.DARKCYAN,
             "INPUT": color.CYAN,
+            "INFO": color.BLUE,
+            "OPTION": color.CYAN,
             "SUCCESS": color.GREEN,
             "OTHER": color.YELLOW,
             "WARNING": color.ORANGE,
@@ -49,9 +50,10 @@ class Logger:
         # reference char by msg type
         self.ref_char = {
             "DEBUG": '-',
-            "INFO": '+',
             "QUESTION": '?',
             "INPUT": 'i',
+            "INFO": '+',
+            "OPTION": '-',
             "SUCCESS": '+',
             "OTHER": '*',
             "WARNING": '!',
@@ -63,8 +65,6 @@ class Logger:
         self.console_format = logging.Formatter('%(message)s')
         #self.file_format = logging.Formatter('%(asctime)s | %(levelname)s | %(message)s')
         self.file_format = logging.Formatter('%(asctime)s | %(message)s')
-        if debug:
-            self.console_format = self.file_format
 
         # default levels depending on debug == True/False
         self.default_console_level = logging.INFO
@@ -97,7 +97,10 @@ class Logger:
         # create console handler and set default level
         self.console_handler = logging.StreamHandler()
         self.console_handler.setLevel(self.default_console_level)
-        self.console_handler.setFormatter(self.console_format)
+        if self.debug:
+            self.console_handler.setFormatter(self.file_format)
+        else:
+            self.console_handler.setFormatter(self.console_format)
         self.logger.addHandler(self.console_handler)
 
     def create_logfile_handler(self):
@@ -112,9 +115,13 @@ class Logger:
             msg += self.input_pointer
         return '{}{}[{}]{} {}'.format(self.indent, self.color[level], self.ref_char[level], color.END, msg)
 
-    def log(self, msg, level='INFO', pretty=True):
+    def log(self, msg, level='INFO', pretty=True, overindent=0):
         if pretty:
             msg = self.pretify(msg, level)
+        ind = ''
+        for i in range(0, overindent):
+            ind += ' '
+        msg = ind+msg
         if level == 'DEBUG' or level == 'USER_INPUT' or level == 'QUESTION':
                 self.logger.debug(msg)
         elif level == 'WARNING':

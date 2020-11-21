@@ -35,6 +35,8 @@ def toggle_proxy():
             proxy.get_socks5_session(input_host, input_port)
             enabled = 'true'
             logger.log('socks5 proxy session {}:{} created'.format(proxy.host, proxy.port), 'SUCCESS')
+        else:
+            logger.log('regexp error in {}:{} while trying to create socks5 proxy session'.format(proxy.host, proxy.port), 'ERROR')
 
     return jsonify({'enabled': enabled})
 

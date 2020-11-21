@@ -3,6 +3,7 @@
 # r3nt0n
 
 import os
+from time import sleep
 
 from app.modules.backup_settings import get_zombie_settings, set_zombie_settings
 
@@ -20,9 +21,24 @@ class Config:
         # default settings
         self.settings = {
             'refresh_tasks': 10.5,     # secs between each task refresh
+            'default_refresh': 10.5,   # value to use when some setting is missing or wrong
             'inet_unreach_retry': 15,  # secs between each retry after conn error
-            'token_check_retry': 30    # secs between each token expiration recheck
+            'token_check_retry': 30,   # secs between each token expiration recheck
+            'live_rsh_retry': 0.3,     # secs between each recheck for new commands during live remote shell session
         }
+
+    def toggle_live_remote_shell(self):
+        self.settings["refresh_tasks"], self.settings["live_rsh_retry"] = self.settings["live_rsh_retry"], self.settings["refresh_tasks"]
+
+    def enable_rshell_session(self):
+        actual = self.settings['refresh_tasks']
+        if self.settings['refresh_tasks'] > self.settings['live_rsh_retry']:
+            self.toggle_live_remote_shell()
+        return actual
+
+    def disable_rshell_session(self):
+        if self.settings['refresh_tasks'] < self.settings['live_rsh_retry']:
+            self.toggle_live_remote_shell()
 
     def read_setting(self, field):
         while True:
@@ -67,3 +83,19 @@ class Config:
         if set_zombie_settings(self.PATH_CREDENTIALS, 'credentials', self.credentials):
             return True
         return False
+
+    def autosetup(self):
+        from app.components import token, logger
+        
+        if not self.load_credentials():
+            while not token.create_user():
+                sleep(self.read_setting('inet_unreach_retry'))
+            logger.log('default settings loaded', 'WARNING')
+            self.write_credentials()
+
+        if not self.load_settings():
+            # default settings were loaded
+            self.write_settings()
+            logger.log('new settings writed', 'WARNING')
+        logger.log('settings and credentials loaded', 'SUCCESS')
+        return True

@@ -76,7 +76,8 @@ class TaskManager:
                 "result": task.result,
                 "exec_at": task.exec_at}):
                 self.completed_tasks.task_done()
-            # here i need to catch excepts
+            # here i need to catch some excepts
+            # ...
 
     def check_scheduled_tasks(self):
         qeue_original_size = len(list(scheduler.tasks.queue))
@@ -84,8 +85,6 @@ class TaskManager:
             sch_task = scheduler.tasks.get()
             logger.log('checking execution time for scheduled task {}'.format(sch_task), 'OTHER')
             if datetime.now() >= datetime.strptime(sch_task.to_exec_at, '%Y-%m-%d %H:%M:%S'):
-            # if [datetime.now() >= datetime.strptime(sch_task.to_exec_at, '%Y-%m-%d %H:%M:%S') for sch_task in list(scheduler.tasks.queue)]:
-                #sch_task = scheduler.tasks.get()
                 self.new_tasks.put(sch_task)
                 logger.log('scheduled task {} has reach execution time, added to tasks queue and removed from scheduler'.format(sch_task),'OTHER')
                 scheduler.tasks.task_done()
@@ -100,17 +99,9 @@ class TaskManager:
                 logger.log('task completed'.format(task), 'SUCCESS')
             self.new_tasks.task_done()
 
-
-
     def do_task(self, task):
-
-        Plugin = object()
         from app.components import plugin_manager
-        for plugin in plugin_manager.plugins:
-            if task.task_type == plugin:
-                Plugin = plugin_manager.plugins[plugin]
-                break
-
+        Plugin = plugin_manager.get_plugin(task.task_type)
         if Plugin and task.task_content:
             # convert task object into a dict to create a new object with extended fields
             task_data = {}
@@ -118,6 +109,7 @@ class TaskManager:
                 task_data[attr] = value
             task = Plugin(task_data)
 
+            # execute task
             if datetime.now() >= datetime.strptime(task.to_exec_at, '%Y-%m-%d %H:%M:%S'):
 
                 thread_manual_stop = threading.Thread(name='manual_stop', target=task.keep_reading_manual_stop)#, args=((task,)))
@@ -125,11 +117,10 @@ class TaskManager:
 
                 thread_manual_stop.start()
                 executed = thread_run_task.start()
-                #executed = task.run()
+                # executed = task.run()
 
                 thread_manual_stop.join()
                 thread_run_task.join()
-
 
                 if executed:
                     output = task.result

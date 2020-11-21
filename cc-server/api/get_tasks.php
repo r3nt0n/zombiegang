@@ -74,6 +74,7 @@ if($jwt){
             // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
             //check_master_permissions($requested_by);
             // set filters by request (only if requested by master)
+            $by_id = (isset($data->id)) ? $data->id : "";
             $by_master_username =  $requested_by;
             $by_submit_at_bef = (isset($data->submit_at_bef)) ? $data->submit_at_bef : "";
             $by_submit_at_aft = (isset($data->submit_at_aft)) ? $data->submit_at_aft : "";

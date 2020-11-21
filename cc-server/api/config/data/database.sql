@@ -79,7 +79,7 @@ manual_stop  ENUM('true','false') DEFAULT 'false',
 CREATE TRIGGER update_ip_cc AFTER INSERT ON AccessLogs 
 FOR EACH ROW
   UPDATE Zombies
-     SET current_public_ip = NEW.public_ip, current_country = NEW.country, last_seen= NEW.created_at
+     SET current_public_ip = NEW.public_ip, current_country = NEW.country, current_hostname =NEW.hostname, last_seen = NEW.created_at
    WHERE username = NEW.username;
 
 CREATE TRIGGER update_manual_stop AFTER UPDATE ON Tasks 

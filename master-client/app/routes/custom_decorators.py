@@ -13,7 +13,6 @@ from app import zession
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        #logger.log(zession, 'DEBUG')
         if zession.token.jwt == '':
             return redirect(url_for('login_bp.not_authorized'))
         else:

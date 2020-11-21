@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-import json, datetime
+import datetime
 
 import requests.exceptions
 
@@ -13,19 +13,17 @@ class Token:
         self.error = None
         self.expiration_time = None
 
-    def jwt_login(self, username, pswd, url="http://localhost:8080/api/login.php"):
-        data = json.dumps( {"username": username, "pswd": pswd} )
+    def jwt_login(self, username, pswd, url):
         try:
-            from app.modules.http_client import json_post
-            data_rcv = json_post(url, data)
-            if data_rcv and ("jwt" in data_rcv):
-                #from app import logger; logger.log(data_rcv, 'ERROR')
-                self.jwt = data_rcv["jwt"]
+            from app.modules.crud import login
+            data_rcv = login(username, pswd, url)
+            if data_rcv:
+                self.jwt = data_rcv
                 self.expiration_time = datetime.datetime.now() + datetime.timedelta(hours=1)
                 return self.jwt
-            else:
-                self.error = "invalid credentials"
-                return False
+
+            self.error = "invalid credentials"
+            return False
 
         except requests.exceptions.InvalidURL:
             self.error = "invalid hostname"

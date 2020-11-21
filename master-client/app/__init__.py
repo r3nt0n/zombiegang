@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-from flask import Flask, request
+
 from config import Config
 
 from app.components import Logger, RemoteZession, Buffer, Proxy
@@ -10,8 +10,8 @@ from app.components import Logger, RemoteZession, Buffer, Proxy
 #config = Config
 
 logger = Logger(debug=Config.DEBUG)
-logger.start()
-logger.set_level(logger.console_handler, 'DEBUG')
+
+#logger.set_level(logger.console_handler, 'DEBUG')
 # logger.set_level(logger.console_handler, 'INFO')
 # logger.set_level(logger.file_handler, 'DEBUG')
 
@@ -25,10 +25,13 @@ def create_app():
     """
     Initialize the core application.
     """
+    from flask import Flask, request
     app = Flask(__name__)
     app.config.from_object(Config)
     #app = Flask(__name__, instance_relative_config=False)
     #app.config.from_object('config.Config')
+
+    logger.start()
     logger.log('starting app', level='DEBUG')
 
     # Initialize Plugins
@@ -39,7 +42,7 @@ def create_app():
     @app.after_request
     def after_request_func(response):
         logger.log('\r\n', 'DEBUG')
-        logger.log('section: {}'.format(zession.current_section), 'INFO')
+        logger.log('section: {}'.format(zession.current_section), 'QUESTION')
         logger.log('request: {}'.format(request), 'DEBUG')
         logger.log('form: {}'.format(request.form), 'DEBUG')
         return response

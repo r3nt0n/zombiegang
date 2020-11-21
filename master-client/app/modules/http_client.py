@@ -10,27 +10,34 @@ def post(url, data):
     r = proxy.session.post(url, data=data)
     logger.log('url: {}'.format(url), level='DEBUG')
     logger.log('data sent: {}'.format(data), level='DEBUG')
-    #logger.log('r.content: {}'.format(r.content), level='DEBUG')
-    #logger.log('r.text: {}'.format(r.text), level='DEBUG')
-    if r.status_code != 200:
-        data_rcv = ''
+    if r.status_code == 202:
+        data_rcv = None
+        logger.log('any content received', level='WARNING')
+    elif r.status_code != 200:
+        data_rcv = False
         logger.log('{} http code received'.format(r.status_code), level='ERROR')
+        logger.log('url: {}'.format(url), level='ERROR')
+        logger.log('data sent: {}'.format(data), level='ERROR')
     else:
         data_rcv = r.content.decode('utf-8-sig')
-        logger.log('{} http code received'.format(r.status_code), level='SUCCESS')
-    #logger.log('response: {}'.format(r.content.decode('utf-8-sig')), level='DEBUG')
+        logger.log('{} http code received'.format(r.status_code), level='DEBUG')
     return data_rcv
 
 
 def json_post(url, data):
     from app import logger
-    data_rcv = post(url, data)
-    if data_rcv:
-        try:
-            data_rcv = json.loads(data_rcv)
-            return data_rcv
-        except TypeError:
-            logger.log('error trying to decode response (not a json).',level='ERROR')
-            logger.log('data received: {}'.format(data_rcv), level='ERROR')
-            return False
-    return False
+    try:
+        data = json.dumps(data)
+        data_rcv = post(url, data)
+        if data_rcv:
+            try:
+                data_rcv = json.loads(data_rcv)
+                return data_rcv
+            except TypeError:
+                logger.log('error trying to decode response (not a json).',level='ERROR')
+                logger.log('data received: {}'.format(data_rcv), level='ERROR')
+                return False
+    except TypeError:
+        logger.log('error trying to decode data provided (not json serializable).', level='ERROR')
+        logger.log('data received: {}'.format(data), level='ERROR')
+        return False

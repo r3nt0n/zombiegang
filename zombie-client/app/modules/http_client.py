@@ -67,8 +67,9 @@ def post_json(url, data=()):
             json_post_response = json.load(response)
             logger.log('data_rcv: {}'.format(json_post_response), 'DEBUG')
         return json_post_response
-    #except HTTPError or URLError:
-    except Exception as e:
+
+    # except Exception as e:
+    except (HTTPError, URLError) as e:
         logger.log(url, 'CRITICAL')
         logger.log(e, 'CRITICAL')
 

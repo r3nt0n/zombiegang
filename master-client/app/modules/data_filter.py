@@ -52,21 +52,26 @@ class DataFilter:
                 self.filters = self.parse_inputs(request)
 
     def run(self, request=None):
+        logger.log('filtered data \'{}\' requested'.format(self.data_type), 'INFO')
+
         if request:
             self.set_filters(request)
+
         self.data = read_data(self.data_type, self.filters)
+
         if not self.data:
             self.error = '0 {} found'.format(self.data_type)
             return False
+
         if self.data_type == 'zombies':
             data = self.data
             for row in data:
                 if 'last_seen' in row:
-                    #logger.log('prueba', 'ERROR')
                     if datetime.datetime.now() < (datetime.datetime.strptime(row['last_seen'], '%Y-%m-%d %H:%M:%S') + datetime.timedelta(hours=1)):
                         row['on'] = 'true'
                     else:
                         row['on'] = 'false'
             self.data = data
 
+        logger.log('filtered data: {}'.format(self.data), 'DEBUG')
         return self.data

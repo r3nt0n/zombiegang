@@ -40,18 +40,16 @@ class Data:
             value_b = ''
         return ((value_a + ' ' + value_b).rstrip()).lstrip()
 
-    def create(self, data):
+    def create(self, data=None):
         # ... subclasses create methods runs here
         post_data = {}
         for attr, value in self.__dict__.items():
             if value:  # dont post empty values
                 post_data[attr] = value
-        logger.log('post_data: {}'.format(post_data), 'WARNING')
         response = crud.create_data(self.name, post_data)
-        logger.log('response: {}'.format(response), 'WARNING')
         if response and 'id' in response:
             self.id = response['id']
-            return True
+            return self.id
         return False
 
     def update(self, data):
@@ -62,3 +60,6 @@ class Data:
         if crud.update_data(self.name, data):
             return True
         return False
+
+    def __repr__(self):
+        return '<' + type(self).__qualname__ + ' {id: '+self.id + '}>'

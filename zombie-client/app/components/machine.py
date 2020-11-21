@@ -13,12 +13,13 @@ from app.modules import http_client
 
 class Machine:
     def __init__(self):
+        self.output = None
         self.info = {
             'public_ip': '',
             'country': '',
             'private_ip': '',
             'hostname': '',
-            'mac_addr': ''
+            'current_user': ''
         }
 
     def get_private_ip(self):
@@ -33,23 +34,21 @@ class Machine:
         finally:
             temp_socket.close()
 
-
     def get_public_ip_cc(self):
         try:
             data = http_client.post_json('https://api.myip.com/')
             if data:
                 self.info['public_ip'] = data['ip']
                 self.info['country'] = data['cc']
-
-                return (self.info['public_ip'], self.info['country'])
+                return self.info['public_ip'], self.info['country']
             return False
         except:
             return False
 
-
     def get_hostname(self):
         # return os.uname()[1]
         # test which works on windows
+        # ...
         #return socket.gethostname()
         try:
             self.info['hostname'] = platform.node()
@@ -57,7 +56,6 @@ class Machine:
                 return self.info['hostname']
         except:
             return False
-
 
     def get_current_user(self):
         try:
@@ -71,20 +69,17 @@ class Machine:
         except:
             return False
 
-
     def refresh_public_net_info(self):
         self.get_public_ip_cc()
 
-
-    # read saved conf from config file
     def refresh_local_net_info(self):
         self.get_hostname()
         self.get_private_ip()
         self.get_current_user()
 
-    def execute_comand(self, command, timeout):
+    def execute_comand(self, command, timeout=50):
         try:
-            output = check_output(command, stderr=STDOUT, timeout=timeout, shell=True)
-            return output
+            self.output = check_output(command, stderr=STDOUT, timeout=timeout, shell=True)
+            return self.output
         except CalledProcessError:
             return False
