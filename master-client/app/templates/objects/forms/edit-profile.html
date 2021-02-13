@@ -9,7 +9,7 @@
         {% for error in edit_profile_form.password.errors %}
           <span class="error">{{ error }}</span>
         {% endfor %}
-        {{ edit_profile_form.password(id="update_pswd_field") }}
+        {{ edit_profile_form.password(id="update_pswd_field", style="background-color: #796084") }}
         {{ edit_profile_form.pswd_btn(id="pswd_btn", class="emoji-btn") }}
         {% if update_error and 'password' in update_error %}
           <p class="{% if 'updated' in update_error %}success{% else %}error{% endif %}">{{ update_error }}</p>
@@ -22,7 +22,7 @@
         {% for error in edit_profile_form.public_key.errors %}
           <span class="error">{{ error }}</span>
         {% endfor %}
-        {{ edit_profile_form.public_key(id="update_public_key_field", rows="4", cols="40", form="edit-profile-form", style="display: block;") }}
+        {{ edit_profile_form.public_key(id="update_public_key_field", rows="4", cols="40", form="edit-profile-form", style="display: block; background-color: #796084") }}
         {{ edit_profile_form.public_key_btn(id="public_key_btn", class="emoji-btn") }}
         
 <!--        <textarea id="public_key" name="public_key" rows="4" cols="40" form="edit-profile-form" style="display: block;">{{ request.form.public_key }}</textarea>-->

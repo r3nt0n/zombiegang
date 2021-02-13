@@ -1,4 +1,4 @@
-{% if state == 'logout' %}
+{% if state == 'logout' and data_type != "proxy" %}
   zombiegang-0.1~beta
 {% else %}
 <img class="window-icon" src="{{ url_for('static', filename='img/an-skull.gif') }}" />
@@ -7,6 +7,8 @@
   {{ zession.username }}@{{ zession.remote_host }}
 {% elif window_type == 'filter' %}
   {{ data_type + '-' + window_type + '.sql' }}
+{% elif window_type == 'error' %}
+  error
 {% elif window_type == 'launcher' %}
   {{ data_type + '-' + window_type + '.exe' }}
 {% elif window_type == 'editor' %}

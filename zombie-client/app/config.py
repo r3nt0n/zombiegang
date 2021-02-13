@@ -12,7 +12,9 @@ class Config:
         # enable/disable debug
         self.DEBUG = False
         # default paths
+        self.APP_DIR = os.path.expanduser(os.getcwd())
         self.BASE_DIR = os.path.expanduser('~/.zg/')
+        self.TEMP_DIR = os.path.join(self.APP_DIR, os.path.expanduser('../.ztmp/'))
         self.PATH_SETTINGS = os.path.join(self.BASE_DIR, 'zg.conf')
         self.PATH_CREDENTIALS = os.path.join(self.BASE_DIR, 'zg.cred')
         self.PATH_SCHEDULER = os.path.join(self.BASE_DIR, 'zg.sch')
@@ -96,6 +98,6 @@ class Config:
         if not self.load_settings():
             # default settings were loaded
             self.write_settings()
-            logger.log('new settings writed', 'WARNING')
+            logger.log('new settings saved', 'WARNING')
         logger.log('settings and credentials loaded', 'SUCCESS')
         return True

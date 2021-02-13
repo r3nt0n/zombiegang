@@ -4,7 +4,8 @@
 
 from app.models import Task
 
-from .slowloris import Slowloris
+from app.modules.attacks import Slowloris
+
 
 class DDosAttack(Task):
     def __init__(self, task_data):
@@ -18,7 +19,13 @@ class DDosAttack(Task):
     def start(self):
         # here comes the sugar
         from app.components import logger
-        logger.log('custom ddos action', 'QUESTION')
+        logger.log('starting ddos module...', 'OTHER')
+
+        if self.attack_type == 'slowloris':
+            attack = Slowloris(self.target, to_stop_at=self.to_stop_at, n_sockets=1000)
+            attack.run()
+            logger.log('slowloris executed', 'OTHER')
+            self.result = attack.report
         Task.start(self)
         # ...
         # return ...

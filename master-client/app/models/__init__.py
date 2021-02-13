@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-
-from .task import Task, DDosAttack, BruteForceAttack
+from .tasks import Task
 from .mission import Mission
+from .attacks import DDosAttack, BruteForceAttack
+

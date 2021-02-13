@@ -20,6 +20,7 @@ include_once 'objects/zombie.php';
 
 // auxilar functions
 include_once 'util/check_permission.php';
+include_once 'util/crypt.php';
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -38,23 +39,32 @@ if($jwt){
         // Check who request and permission
         $requested_by = $decoded->data->username;
         $to_update = $data->username;
-        // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
-        check_master_permissions($requested_by, $to_update);
 
         // get database connection
         $database = new Database();
         $db = $database->getConnection();
-        
+
         // instantiate user object
         $zombie = new Zombie($db);
 
-        // set zombie to update property values
-        $zombie->username = $data->username;
-        $zombie->os = $data->os;
-        $zombie->current_public_ip = $data->current_public_ip;
-        $zombie->current_country = $data->current_country;
-        $zombie->current_hostname = $data->current_hostname;
-        $zombie->refresh_secs = $data->refresh_secs;
+        if (is_zombie($db, $requested_by)){
+            $zombie->username = $requested_by;
+            //$zombie->sysinfo = $data->sysinfo;
+            $zombie->sysinfo = (isset($data->sysinfo)) ? encrypt(json_encode($data->sysinfo), $key) : "";
+        }
+
+        else {
+            // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
+            check_master_permissions($requested_by, $to_update);
+            // set zombie to update property values
+            $zombie->username = $data->username;
+            $zombie->sysinfo = (isset($data->sysinfo)) ? encrypt(json_encode($data->sysinfo), $key) : "";
+            $zombie->current_public_ip = $data->current_public_ip;
+            $zombie->current_country = $data->current_country;
+            $zombie->current_hostname = $data->current_hostname;
+            $zombie->refresh_secs = $data->refresh_secs;
+        }
+
         // update the zombie record
         if($zombie->update()){
             
@@ -64,7 +74,7 @@ if($jwt){
             // response in json format
             echo json_encode(
                     array(
-                        "message" => "User was updated.",
+                        "message" => "Zombie was updated.",
                         "jwt" => $jwt
                     )
                 );

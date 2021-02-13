@@ -3,13 +3,13 @@
 # r3nt0n
 
 
-from flask import Blueprint, current_app, render_template, request
+from flask import Blueprint, render_template, request
 
 from datetime import datetime, timedelta
 
-from app import logger, zession
+from app import zession
 from .custom_decorators import login_required
-from app.modules.data_filter import DataFilter
+from app.controllers import DataFilter
 
 
 logs_bp = Blueprint('logs_bp', __name__)

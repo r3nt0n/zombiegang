@@ -45,7 +45,9 @@
     {{ login_form.password }}
   </div>
 
-  <div class="field-row-stacked">
+  <div style="display:flex;">
+    {{ login_form.create_btn(type="submit", class="standard") }}
+
     {{ login_form.login_btn(type="submit", class="standard") }}
   </div>
 

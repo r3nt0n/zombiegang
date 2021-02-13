@@ -14,6 +14,12 @@
 
 {% block central_panel %}
 
+{% if detailed_zombie %}
+  {% with window_type = 'popup', data = detailed_zombie, data_type='zombies', close_button_action = 'link', close_link = url_for('members_bp.zombies'), img='img/mewtwo2-pokemon-rojo-azul-amarillo.png' %}
+    {% include 'objects/windows/popups/datasheet.html' %}
+  {% endwith %}
+{% endif %}
+
 
 {% if zombies_created %}
   {% with window_type = 'popup', data_type='zombies', operation='created', data=zombies_created, close_button_action = 'link', close_link = url_for('members_bp.zombies'), img='img/digimon-world1.png' %}

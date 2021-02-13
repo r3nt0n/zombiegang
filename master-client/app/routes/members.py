@@ -3,13 +3,13 @@
 # r3nt0n
 
 
-from flask import Blueprint, current_app, render_template, request
+from flask import Blueprint, render_template, request
 
-from app import logger, zession
+from app import zession
 
 from app.forms import EditProfileForm
 
-from app.modules.data_filter import DataFilter
+from app.controllers import DataFilter
 from app.modules.crud import create_data, read_data, update_data, delete_data
 
 from .custom_decorators import login_required
@@ -18,19 +18,26 @@ members_bp = Blueprint('members_bp', __name__)
 
 
 @members_bp.route('/zombies/', methods=['GET', 'POST'])
+@members_bp.route('/zombies/<zid>/', methods=['GET', 'POST'])
 @login_required
-def zombies():
+def zombies(zid=None):
     zession.current_section = 'members'
     data_type = 'zombies'
 
     zombies_created = []
     zombies_deleted = []
     users_deleted = []
+    detailed_zombie = False
 
-    # filter data
+    # prepare filters
     data_filter = DataFilter(data_type)
     # filter data
     data_filter.run(request)
+
+    if zid is not None:
+        for row in data_filter.data:
+            if row["id"] == zid:
+                detailed_zombie = row
 
     # get join requests
     zombie_requests = read_data('users', {"not_in": "zombies,masters"})
@@ -65,10 +72,10 @@ def zombies():
             if delete_data('user', username):
                 users_deleted.append(username)
 
-    return render_template("pages/dashboard/members/zombies.html",
-                           zession=zession, data_filter=data_filter,
+
+    return render_template("pages/dashboard/members/zombies.html", zession=zession, data_filter=data_filter,
                            zombie_requests=zombie_requests, zombies_created=zombies_created,
-                           zombies_deleted=zombies_deleted, users_deleted=users_deleted)
+                           zombies_deleted=zombies_deleted, users_deleted=users_deleted, detailed_zombie=detailed_zombie)
 
 
 @members_bp.route('/masters/', methods=['GET', 'POST'])

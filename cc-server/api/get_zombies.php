@@ -20,6 +20,7 @@ include_once 'objects/zombie.php';
 
 // auxilar functions
 include_once 'util/check_permission.php';
+include_once 'util/crypt.php';
  
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -49,13 +50,21 @@ if($jwt){
         $zombie = new Zombie($db);
 
         // set filters
+        $by_id = (isset($data->id)) ? $data->id : "";
         $by_username =  (isset($data->username)) ? $data->username : "";
-        $by_os =  (isset($data->os)) ? $data->os : "";
+        $by_os =  (isset($data->sysinfo)) ? $data->sysinfo : "";
         $by_datetime_bef =  (isset($data->datetime_bef)) ? $data->datetime_bef : "";
         $by_datetime_aft =  (isset($data->datetime_aft)) ? $data->datetime_aft : "";
         
         // retrieve records
-        $zombies_data = $zombie->read($by_username, $by_datetime_bef, $by_datetime_aft, $by_os);
+        $zombies_data = $zombie->read($by_id, $by_username, $by_datetime_bef, $by_datetime_aft, $by_os);
+
+        if ($zombies_data) {
+            for ($i=0; $i < count($zombies_data); $i++) { 
+                $zombies_data[$i]["sysinfo"] = json_decode(decrypt($zombies_data[$i]["sysinfo"], $key));
+            }
+        }
+
         if($zombies_data){
             
             // set response code

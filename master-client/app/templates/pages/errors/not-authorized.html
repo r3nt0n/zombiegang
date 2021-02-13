@@ -10,6 +10,10 @@
 }
 </style>
 
-{"error" : "Not authorized"}
+<div id="login-wrapper" class="float-center-window logged-out-wrapper">
+{% with window_type = 'error',state='logout', data_type = '', error_msg="Not authorized" %}
+    {% include 'objects/windows/error.html' %}
+{% endwith %}
+</div>
 
 {% endblock %}

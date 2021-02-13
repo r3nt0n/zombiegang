@@ -50,6 +50,7 @@ function get_actual_ip(destElemIP, destElemCC, destElemFlag) {
 }
 
 function json_export(data_type, data) {
+    console.log('entro');
     console.log(data);
     var checkboxes = $('input[name="'+ data_type + '_checked"]');
     var $checked = checkboxes.filter(":checked"),

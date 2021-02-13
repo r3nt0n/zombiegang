@@ -5,7 +5,13 @@
 
   <!-- CSRF protection -->
   {{ create_attack.form.hidden_tag() }}
-  
+
+  <div class="field-row-stacked">
+  {% if create_attack.error %}
+    <span class="error">{{ create_attack.error }}</span>
+  {% endif %}
+  </div>
+
   <div class="field-row-stacked">
     <!-- validation error -->
       {% for error in create_attack.form.task_name.errors %}
@@ -78,11 +84,7 @@
   </fieldset>
   <br>
 
-  {% if (create_attack.error) %}
-  <div style="width: 100%; margin 0 auto;"><p class="error">{{ create_attack.error }}</p></div>
-  {% endif %}
-
-  {% with data=create_attack.zombies_data, data_type = 'zombies', brief=True, scrollable_table=True, max_height="30rem" %}
+  {% with data=create_attack.zombies_data, data_type = 'zombies', brief=True, scrollable_table=True, max_height="25rem" %}
     {% include 'objects/tables/data/zombies.html' %}
   {% endwith %}
 

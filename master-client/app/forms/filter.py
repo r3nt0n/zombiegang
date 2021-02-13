@@ -14,8 +14,7 @@ from app.data.errors import ErrorMessages
 
 class FilterForm(FlaskForm):
     OS_CHOICES = [
-        ('', ''), ('linux', 'linux'), ('windows', 'windows'), ('mac', 'mac'), ('android', 'android'),
-        ('iphone', 'iphone')
+        ('', ''), ('linux', 'linux'), ('windows', 'windows'), ('ios', 'ios'), ('android', 'android')
     ]
 
     by_username = StringField(u'by username', validators=[Optional()])

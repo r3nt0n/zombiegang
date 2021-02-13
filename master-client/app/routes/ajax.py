@@ -58,6 +58,8 @@ def json_export():
     data = json.loads(request.form.get('data'))
     selected_data_ids = request.form.get('data_checked')
 
+    logger.log(data, 'ERROR')
+
     column_id = 'id'
     if (data_type == 'users') or (data_type == 'zombies') or (data_type == 'masters'):
         column_id = 'username'

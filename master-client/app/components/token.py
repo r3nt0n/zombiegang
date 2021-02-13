@@ -19,7 +19,7 @@ class Token:
             data_rcv = login(username, pswd, url)
             if data_rcv:
                 self.jwt = data_rcv
-                self.expiration_time = datetime.datetime.now() + datetime.timedelta(hours=1)
+                self.expiration_time = datetime.datetime.now() + datetime.timedelta(minutes=10)
                 return self.jwt
 
             self.error = "invalid credentials"

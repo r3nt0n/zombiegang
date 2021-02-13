@@ -13,6 +13,7 @@ class LoginForm(FlaskForm):
     remote_host = StringField('remote host', validators=[InputRequired(message=ErrorMessages.REQUIRED_FIELD)])
     username = StringField('username', validators=[InputRequired(message=ErrorMessages.REQUIRED_FIELD)])
     password = PasswordField('password', validators=[InputRequired(message=ErrorMessages.REQUIRED_FIELD)])
+    create_btn = SubmitField('Create user')
     login_btn = SubmitField('Login')
 
     def validate_remote_host(self, field):

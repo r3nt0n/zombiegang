@@ -2,12 +2,13 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-import datetime
+import datetime, json
 
 from app import logger
 
 from app.modules.crud import read_data
 from app.forms import FilterForm
+
 
 class DataFilter:
     def __init__(self, data_type, default_filters=None):
@@ -58,6 +59,9 @@ class DataFilter:
             self.set_filters(request)
 
         self.data = read_data(self.data_type, self.filters)
+        logger.log('data: {}'.format(self.data), 'CRITICAL')
+        logger.log('data_type: {}'.format(self.data_type), 'CRITICAL')
+        logger.log('filters: {}'.format(self.filters), 'CRITICAL')
 
         if not self.data:
             self.error = '0 {} found'.format(self.data_type)
@@ -67,10 +71,23 @@ class DataFilter:
             data = self.data
             for row in data:
                 if 'last_seen' in row:
-                    if datetime.datetime.now() < (datetime.datetime.strptime(row['last_seen'], '%Y-%m-%d %H:%M:%S') + datetime.timedelta(hours=1)):
+                    if ((datetime.datetime.now() < (datetime.datetime.strptime(row['last_seen'], '%Y-%m-%d %H:%M:%S') + datetime.timedelta(minutes=10)))
+                            and (row["last_seen"] != row["created_at"])):
                         row['on'] = 'true'
                     else:
                         row['on'] = 'false'
+                if ('sysinfo' in row):
+                    if row['sysinfo'] is None:
+                        row['sysinfo'] = ''
+                    else:
+                        row['sysinfo'] = json.loads(row['sysinfo'])
+
+            # post-filters (client side)
+            if ("os" in self.filters):
+                data = [row for row in data if
+                        (("os" in row['sysinfo']) and (row['sysinfo']['os'] is not None)
+                         and (row['sysinfo']['os'] == self.filters['os']))]
+
             self.data = data
 
         logger.log('filtered data: {}'.format(self.data), 'DEBUG')

@@ -9,7 +9,7 @@ date_default_timezone_set('Asia/Manila');
 // variables used for jwt
 $key = "example_ultra_secret_key";
 $issued_at = time();
-$expiration_time = $issued_at + (60 * 60); // valid for 1 hour
+$expiration_time = $issued_at + (60 * 10); // valid for 10 minutes
 $issuer = "http://localhost/zgang/RestApiAuthLevel1/";
 
 

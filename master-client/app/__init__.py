@@ -10,7 +10,6 @@ from app.components import Logger, RemoteZession, Buffer, Proxy
 #config = Config
 
 logger = Logger(debug=Config.DEBUG)
-
 #logger.set_level(logger.console_handler, 'DEBUG')
 # logger.set_level(logger.console_handler, 'INFO')
 # logger.set_level(logger.file_handler, 'DEBUG')

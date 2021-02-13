@@ -19,11 +19,11 @@ html,body {
   margin:0;
 }
 
-h4 {
+h4, h5 {
  margin: 0 auto 0.2rem;
 }
 
-h4, th {
+h4, h5, th {
   font-family: "GothicPixels", Arial;
   -webkit-font-smoothing: none;
   text-align: center;
@@ -72,7 +72,7 @@ hr {
 }
 
 /* CURSOR styles */
-span, div, h4, p, td, th, li  {
+span, div, h4, h5, p, td, th, li  {
   cursor: default;
 }
 
@@ -246,6 +246,9 @@ div.launcher {
 div#master-edit-profile-launcher-body {
   text-align: center;
 }
+img#img-launcher-edit-data {
+  width: 18.5rem;
+}
 
 div.launcher a, div.launcher a:active {
   color: transparent;
@@ -264,6 +267,10 @@ div.launcher a:active img {
 
 div.launcher h4{
   font-size: 17px;
+}
+
+h5 {
+ font-size: 14px;
 }
 
 div.attack-creator {
@@ -419,7 +426,7 @@ button#creator, input[type="submit"]#creator {
 }
 
 button.standard, input[type="submit"].standard {
-    width: 50%;
+    width: 48%;
     margin-right: auto;
     margin-left: auto;
     margin-top: 1rem;
@@ -537,9 +544,63 @@ a.tooltip {
 a.tooltip:hover span.tooltip {
   display: block;
   text-align: center;
+  z-index: 1000;
+}
+
+a.link-undecorated, a.link-undecorated:visited, a.link-undecorated:hover, a.link-undecorated:link, a.link-undecorated:active  {
+  text-decoration: none;
+  color: inherit;
 }
 
 
+/* DATASHEET styles */
+/*dl.datasheet-dl dd {
+  display: inline;
+}
+dl.datasheet-dl dt {
+  font-weight: bold;
+}*/
+
+img#img-datasheet {
+  margin-top: 0.5rem;
+}
+
+.console-output {
+  max-height: 10rem;
+}
+
+dl.datasheet-dl{
+    width:100%;
+    overflow:hidden;
+}
+
+dl.datasheet-dl dt {
+    font-weight:600;
+    float:left;
+    width:26%;
+    clear:both;
+    padding:0;
+    padding-bottom:3px;
+    position:relative;
+}
+
+dl.datasheet-dl dd {
+    float:right;
+    width:74%;
+    padding:0;
+    padding-bottom:3px;
+    margin-left:0;
+}
+
+dl.datasheet-dl dd {
+    *float:none;
+    *width:auto;
+    *margin-left:49%;
+}
+
+div#zombies-popup {
+  width: 100%;
+}
 
 /* DESKTOP-SHORTCUTS styles */
 div.desktop {
@@ -628,28 +689,32 @@ span.shortcut-text {
 
 /* PROXY POPUP styles */
 div#proxy-js-popup {
-  width: 12.5rem;
+  /*width: 12.5rem;*/
+  width: 14rem;
+}
+img#img-proxy-popup {
+  /*width: 177rem;*/
+  width: 95%;
 }
 
 dl.inline {
-  width: 100%;
+  width: 80%;
   overflow: hidden;
+  margin: 0 auto;
   padding: 0;
-  margin: 0;
 }
 dl.inline dt, dl.inline dd {
   float: left;
-  width: 50%;
-  padding: 0;
+  width: 49.3%;
+  padding: 0.25rem 0;
   margin: 0;
-  margin-top: 0.1rem;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  text-align: center;
 }
 
 div#proxy-launcher dl.inline {
   margin-top: 0.3rem;
-}
-div#proxy-launcher dl.inline dt, div#proxy-launcher dl.inline dd {
-  text-align: left;
 }
 
 .darkTable dl.inline dt, .darkTable dl.inline dd {

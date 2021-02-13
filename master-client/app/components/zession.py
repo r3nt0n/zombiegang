@@ -15,6 +15,12 @@ class RemoteZession:
         self.current_section = None
         self.token = Token()
 
+    def create_user(self, user, pswd, host):
+        from app.modules import crud
+        url = 'http://' + host + '/api/create_user.php'
+        crud.create_data("user", data={"username": user, "pswd": pswd})
+
+
     def login(self, user, pswd, host):
         url = 'http://' + host + '/api/login.php'
         if self.token.jwt_login(user, pswd, url):

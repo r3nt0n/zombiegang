@@ -5,7 +5,6 @@
 import json
 from base64 import b64encode, b64decode
 
-from app import logger
 from app.modules import crud
 
 class Data:
@@ -61,5 +60,13 @@ class Data:
             return True
         return False
 
+    def attributes_as_dict(self):
+        data = {}
+        for attr, value in self.__dict__.items():
+            data[attr] = value
+        return data
+
     def __repr__(self):
         return '<' + type(self).__qualname__ + ' {id: '+self.id + '}>'
+
+

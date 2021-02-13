@@ -39,6 +39,10 @@ if($jwt){
         $requested_by = $decoded->data->username;
         $to_update = $data->master_username;
 
+        // get database connection
+        $database = new Database();
+        $db = $database->getConnection();
+
         if (is_zombie($db, $requested_by)){
             $task->read_confirm = $data->read_confirm;
             $task->running = $data->running;
@@ -65,11 +69,8 @@ if($jwt){
 
 
         // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
-        check_master_permissions($requested_by, $to_update);
+        //check_master_permissions($requested_by, $to_update);
 
-        // get database connection
-        $database = new Database();
-        $db = $database->getConnection();
         
         // instantiate user object
         $task = new Task($db);

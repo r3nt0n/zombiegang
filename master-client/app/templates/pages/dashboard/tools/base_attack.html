@@ -2,8 +2,8 @@
 {% block attack %}
 
 
-{% if create_attack.created %}
-  {% with window_type = 'popup', data_type='tasks', operation='created', data=create_attack.created, close_button_action = 'link', close_link = url_for('attacks_bp.'+task_type), img='img/digimon-world3.jpg' %}
+{% if not create_attack.error and create_attack.created %}
+  {% with window_type = 'popup', data_type='tasks', operation='created', data=create_attack.created, close_button_action = 'link', close_link = url_for('attacks_bp.attacks', task_type='dos'), img='img/digimon-world3.jpg' %}
     {% include 'objects/windows/popups/updated-data.html' %}
   {% endwith %}
 {% endif %}
@@ -18,7 +18,7 @@
 
   <div id="{{ data_type + '-launcher' }}" class="launcher-m">
     {% with window_type = 'launcher', task_type=task_type, img_class = 'launcher-img-m' %}
-      {% include 'objects/windows/launcher.html' %}
+      {% include 'objects/windows/attacks-launcher.html' %}
     {% endwith %}
   </div>
 

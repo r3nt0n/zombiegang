@@ -30,7 +30,7 @@ class Token:
         response = http_client.post_json(login_url, data)
         if response and 'jwt' in response:
             self.jwt = response['jwt']
-            self.expiration_time = datetime.datetime.now() + datetime.timedelta(hours=1)
+            self.expiration_time = datetime.datetime.now() + datetime.timedelta(minutes=10)
             logger.log('succesful login'.format(self.jwt), 'SUCCESS')
             logger.log('jwt: {}'.format(self.jwt), 'DEBUG')
             return self.jwt
@@ -39,9 +39,10 @@ class Token:
             return False
 
     def keep_logged_in(self):
+        # refresh jwt token when is expired
         while True:
             if (not self.jwt) or (self.expiration_time <= datetime.datetime.now()):
-                print('entro')
+                logger.log('refreshing token...', 'DEBUG')
                 machine.refresh_local_net_info()
                 try:
                     machine.refresh_public_net_info()

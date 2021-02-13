@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 # r3nt0n
 
-from app import zession
-
 from app.models.data import Data
 
 
@@ -22,6 +20,7 @@ class Task(Data):
         # subclasses method runs here...
 
         # base task fields
+        from app import zession
         self.master_username = zession.username
 
         if data:
@@ -48,34 +47,17 @@ class Task(Data):
         return Data.create(self, data)
 
 
-class BaseAttack(Task):
-    def __init__(self, task_type):
-        super().__init__()
-        self.task_type = task_type
-
+class Command(Task):
+    def __init__(self):
+        super().__init__('cmd')
     def create(self, data=None):
         # subclasses method runs here...
-        if 'target' in data:
-            self.task_content['target'] = data['target']
-        if 'attack_type' in data:
-            self.task_content['attack_type'] = data['attack_type']
-
         return Task.create(self, data)
 
 
-class DDosAttack(BaseAttack):
+class RemoteShellSession(Task):
     def __init__(self):
-        super().__init__('dos')
-
-
-class BruteForceAttack(BaseAttack):
-    def __init__(self):
-        super().__init__('brt')
-
+        super().__init__('rsh')
     def create(self, data=None):
-        # task content
-        if 'wordlist'in data:
-            self.task_content['wordlist'] = data['wordlist']
-
-        return BaseAttack.create(self, data)
-
+        # subclasses method runs here...
+        return Task.create(self, data)

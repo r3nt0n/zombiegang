@@ -10,8 +10,8 @@ class PluginManager:
         self.plugins = {
             'cmd': tools.Command,
             'rsh': tools.RemoteShellSession,
-            'dos': attacks.DDosAttack  #,
-            #'brt': attacks.BruteForceAttack,
+            'dos': attacks.DDosAttack,
+            'brt': attacks.BruteForceAttack
 
             #'klg': tools.Keylogger
         }

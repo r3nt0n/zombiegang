@@ -36,9 +36,10 @@ class Logger:
         # colors by msg type
         self.color = {
             "DEBUG": color.PURPLE,
-            "INFO": color.BLUE,
             "QUESTION": color.DARKCYAN,
             "INPUT": color.CYAN,
+            "INFO": color.BLUE,
+            "OPTION": color.CYAN,
             "SUCCESS": color.GREEN,
             "OTHER": color.YELLOW,
             "WARNING": color.ORANGE,
@@ -49,9 +50,10 @@ class Logger:
         # reference char by msg type
         self.ref_char = {
             "DEBUG": '-',
-            "INFO": '+',
             "QUESTION": '?',
             "INPUT": 'i',
+            "INFO": '+',
+            "OPTION": '-',
             "SUCCESS": '+',
             "OTHER": '*',
             "WARNING": '!',
@@ -119,7 +121,7 @@ class Logger:
         ind = ''
         for i in range(0, overindent):
             ind += ' '
-        msg = ind + msg
+        msg = ind+msg
         if level == 'DEBUG' or level == 'USER_INPUT' or level == 'QUESTION':
                 self.logger.debug(msg)
         elif level == 'WARNING':

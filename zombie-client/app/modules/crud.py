@@ -23,7 +23,7 @@ def read_data(data_type, filters=None):
 
 def update_data(data_type, new_data):
     url = "{}/update_{}.php".format(config.credentials['cc_url'], data_type)
-    new_data['jwt'] = token.jwt
+    new_data["jwt"] = token.jwt
     response = http_client.post_json(url, data=new_data)
     if not (response and 'updated' in response['message']):
         logger.log('error trying to update {} with new_data: {}'.format(data_type, new_data), 'ERROR')
