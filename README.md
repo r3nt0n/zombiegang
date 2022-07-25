@@ -6,11 +6,12 @@
 
 # zombiegang
 
-<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/intro.gif" /></div>
+<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/intro.gif" /></div>   
 
-zombiegang is a botnet written mostly in Python and PHP. It supports **asynchronous communication between cc and zombies**, **remote-shell** live sessions and **task scheduler**. It also has a **plugin manager**, which comes with some modules pre-included to perform most typical attacks (**DDoS, bruteforce** and **keylogger**). This modular approach allows anyone to **extend features by writing his own modules** (I will appreciate any contribution).    
-
-
+Zombiegang is a botnet written mostly in Python and PHP. It supports **asynchronous communication between cc and zombies**, **remote-shell** live sessions and **task scheduler**. It also has a **plugin manager**, which comes with some modules pre-included to perform most typical attacks (**DDoS, bruteforce** and **keylogger**). This modular approach allows anyone to **extend features by writing his own modules** (I will appreciate any contribution).    
+   
+<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/intro2.gif" /></div>  
+  
 The **Command and Control server** is a semi-CRUD API written in php, which manages database read/write operations and authentication. This schema also allows to separate the front-end, which resides entirely in the client used by masters. 
 
 Several kind of clients could be used to admin the botnet, and several kind of "zombie-clients" could co-exists too.
@@ -22,12 +23,17 @@ Having a centralized db makes it easier for masters and zombies to exchange info
 
 You can schedule tasks and the zombies will receive this info as soon as they go online and refresh his "assignments". If the task was scheduled to be executed in future, the zombie will save this homework and run the task when the start time comes. You also can schedule stop datetimes.
 
-There are special fields in DB which are designed to be nested values, so you can create new fields inside without touching any config (e.g.: `Tasks.task_content`,`Zombies.sysinfo`)
+<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/attack_example.png" /></div>
+  
+There are special fields in DB which are designed to be nested values, so you can create new fields inside without touching any config (e.g.: `Tasks.task_content`,`Zombies.sysinfo`)  
+  
+<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/zombies_info.gif" /><p style="font-decoration: italic;">zombie reports</p></div>  
 
-**IMPORTANT NOTE:** zombiegang is still on development phase, some features wasn't tested under all possible scenarios yet. Any bug  reported could help.
 
 ## Get started
-**Note:** This is just a simple way to kickstart all the initial stuff. Obviously, in production environments you can use separate servers for DB and CC, and replace the http server for something like Apache or Nginx. 
+**Note:** This is just a simple way to kickstart all the initial stuff. Obviously, in production environments you can use separate servers for DB and CC, and replace the http server for something like Apache or Nginx.
+
+**IMPORTANT NOTE:** zombiegang is still on development phase, some features wasn't tested under all possible scenarios yet. Any bug  reported could help.
 
 ### Create database
  
@@ -70,9 +76,23 @@ Now you should have the cc-server listening on port 8080 and connected to the da
 ***Note:** You can disable masters access logging in `core.php`*
 
 
-### Master clients
+### Zombie clients
 
-<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/intro2.gif" /></div>
+*On the victim machine:*
+```
+# install zombieclient dependencies 
+cd zombie-client
+pip install -r requirements.txt 
+
+# to run the zombieclient
+python3 run.py
+```
+
+Zombies will send info about themselves on every boot and check regularly for new tasks, they just keep asking and serving to the cc-server forever (in fact, until you kill this process).
+
+In real scenarios, you will also need persistence, obfuscation and probably compilation (since Python is not available by default on most systems). 
+
+### Master clients
 
 *On the attacker machine:*
 
@@ -92,6 +112,8 @@ Once inside, you will see something like a desktop. You can **enable/disable pro
 
 On this stage you are going to create your master password: with `zgang.exe`, create a user with the same name used in your master profile. Now you are logged in as master and can start to admin the botnet.
 
+<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/menu.png" /></div>
+
 **Note**: Mozilla Firefox is the recommended browser, any other could work but won't be officially supported. Some visual features (e.g.: emojis, form elements...) could vary across different browsers.
 
 If you want to cover your trace, use the built-in proxy tool to connect to cc-server through the socks5 proxy of your choice:
@@ -107,10 +129,10 @@ python3 cli.py
 
 <div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/master-client_cli_live_session_example.png" /><p style="font-decoration: italic;">simple cli live session example</p></div>
 
-
 ### WHAT TO-DO NEXT
 + Task schedulers stop points (manual and auto) not working yet.
 + Tasks details (master-client) not showing yet.
+
 
 
 ### Legal disclaimer
@@ -118,8 +140,9 @@ This is a personal project, and is created for the sole purpose of security awar
 
 
 ### References
-+ Age of Empires icons found here https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/campaigns
++ CSS sheet is based on the work of <a href="https://github.com/jdan/">Jordan Scales</a> (<a href="https://github.com/jdan/98.css/blob/master/LICENSE">css win98 repo</a>)
++ Age of Empires icons found <a href="https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/campaigns">here</a>
 + mIRC icon designed by <a href="https://www.flaticon.es/autores/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.es/" title="Flaticon"> www.flaticon.es  </a>
-+ All pictures were found in Internet
++ All pictures were found on the Internet
 
 
