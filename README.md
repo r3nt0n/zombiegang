@@ -135,7 +135,7 @@ If you want to cover your trace, use the built-in proxy tool to connect to cc-se
 <br>
 
 #### cli-client
-Additionally, you have a cli client to run remote-shell live sessions:
+Additionally, you have a cli client (keeping msfconsole style) to login to cc-server and run remote-shell live sessions with online zombies:
 ```
 # to run the masterclient (cli)
 python3 cli.py
