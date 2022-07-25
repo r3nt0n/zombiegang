@@ -1,17 +1,20 @@
 ![[Version 0.5~beta](https://github.com/r3nt0n)](http://img.shields.io/badge/version-0.5~beta-orange.svg)
 ![[Python 3](https://github.com/r3nt0n)](http://img.shields.io/badge/python-3-blue.svg)
 ![[GPL-3.0 License](https://github.com/r3nt0n)](https://img.shields.io/badge/license-GPL%203.0-brightgreen.svg)
-![[Date](https://github.com/r3nt0n)](http://img.shields.io/badge/date-2020-yellow.svg)
+![[Date](https://github.com/r3nt0n)](http://img.shields.io/badge/date-2022-yellow.svg)
 
 
 # zombiegang
 
-<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/intro.gif" /></div>   
+<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/intro.gif" /></div>
+<br>  
 
-Zombiegang is a botnet written mostly in Python and PHP. It supports **asynchronous communication between cc and zombies**, **remote-shell** live sessions and **task scheduler**. It also has a **plugin manager**, which comes with some modules pre-included to perform most typical attacks (**DDoS, bruteforce** and **keylogger**). This modular approach allows anyone to **extend features by writing his own modules** (I will appreciate any contribution).    
-   
+Zombiegang is a botnet written mostly in Python and PHP. It supports **asynchronous communication between cc and zombies**, **remote-shell** live sessions and **task scheduler**. It also has a **plugin manager**, which comes with some modules pre-included to perform most typical attacks (**DDoS, bruteforce** and **keylogger**). This modular approach allows anyone to **extend features by writing his own modules** (I will appreciate any contribution).  
+
+<br>
 <div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/intro2.gif" /></div>  
-  
+<br>
+
 The **Command and Control server** is a semi-CRUD API written in php, which manages database read/write operations and authentication. This schema also allows to separate the front-end, which resides entirely in the client used by masters. 
 
 Several kind of clients could be used to admin the botnet, and several kind of "zombie-clients" could co-exists too.
@@ -23,18 +26,23 @@ Having a centralized db makes it easier for masters and zombies to exchange info
 
 You can schedule tasks and the zombies will receive this info as soon as they go online and refresh his "assignments". If the task was scheduled to be executed in future, the zombie will save this homework and run the task when the start time comes. You also can schedule stop datetimes.
 
+<br>
 <div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/attack_example.png" /></div>
+<br>  
   
 There are special fields in DB which are designed to be nested values, so you can create new fields inside without touching any config (e.g.: `Tasks.task_content`,`Zombies.sysinfo`)  
   
+<br>
 <div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/zombies_info.gif" /><p style="font-decoration: italic;">zombie reports</p></div>  
-
+<br>
 
 ## Get started
+
 **Note:** This is just a simple way to kickstart all the initial stuff. Obviously, in production environments you can use separate servers for DB and CC, and replace the http server for something like Apache or Nginx.
 
 **IMPORTANT NOTE:** zombiegang is still on development phase, some features wasn't tested under all possible scenarios yet. Any bug  reported could help.
 
+  
 ### Create database
  
 ```
@@ -96,6 +104,8 @@ In real scenarios, you will also need persistence, obfuscation and probably comp
 
 *On the attacker machine:*
 
+  
+  
 #### web-client
 ```
 # install masterclient (web-client) dependencies 
@@ -112,13 +122,17 @@ Once inside, you will see something like a desktop. You can **enable/disable pro
 
 On this stage you are going to create your master password: with `zgang.exe`, create a user with the same name used in your master profile. Now you are logged in as master and can start to admin the botnet.
 
-<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/menu.png" /></div>
-
 **Note**: Mozilla Firefox is the recommended browser, any other could work but won't be officially supported. Some visual features (e.g.: emojis, form elements...) could vary across different browsers.
+
+<br>
+<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/menu.png" /></div>
+<br>
 
 If you want to cover your trace, use the built-in proxy tool to connect to cc-server through the socks5 proxy of your choice:
 
+<br>
 <div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/proxy_example.png" /><p style="font-decoration: italic;">proxy configuration example</p></div>
+<br>
 
 #### cli-client
 Additionally, you have a cli client to run remote-shell live sessions:
@@ -128,6 +142,7 @@ python3 cli.py
 ```
 
 <div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/master-client_cli_live_session_example.png" /><p style="font-decoration: italic;">simple cli live session example</p></div>
+<br>
 
 ### WHAT TO-DO NEXT
 + Task schedulers stop points (manual and auto) not working yet.
