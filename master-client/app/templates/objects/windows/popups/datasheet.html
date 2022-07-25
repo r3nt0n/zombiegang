@@ -21,6 +21,10 @@
               {% with country_code=data[column].upper() %}
                 {% include 'objects/dynamic/cc_flag.html' %}
               {% endwith %}
+            {% elif column == 'on' %}
+              {% with switch=data[column] %}
+                {% include 'objects/dynamic/on_off.html' %}
+              {% endwith %}
             {% endif %}
           </dd>
         {% endif %}
@@ -36,7 +40,7 @@
         {% for field in data[column] %}
           <dt>{{ field }}:</dt>
           <dd>
-          {% if field == 'drives_usage' or field == 'all_users' or field == 'detailed_hw' or field == 'detailed_net' or field == 'chipset_pci_bus' or field == 'memory' or data[column][field]|length > 200 %}
+          {% if field == 'drives_usage' or field == 'detailed_net' or field == 'chipset_pci_bus' or field == 'memory' or (data[column][field]|length > 100) %}
             <pre class="console-output" style="color: white; background-color: #312a33;overflow-x: auto; font-size: 0.55rem;">
               {{ data[column][field].strip('\n').strip('  ') }}
             </pre>

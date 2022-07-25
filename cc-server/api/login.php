@@ -40,6 +40,10 @@ use \Firebase\JWT\JWT;
  
 $successful = 0;
 // check if username exists and if password is correct
+// var_dump($username_exists);
+// var_dump(password_verify($data->pswd, $user->pswd));
+// var_dump($data->pswd);
+// var_dump($user->pswd);
 if($username_exists && password_verify($data->pswd, $user->pswd)){
 
     $successful = 1;
@@ -57,7 +61,7 @@ if($username_exists && password_verify($data->pswd, $user->pswd)){
     http_response_code(200);
  
     // generate jwt
-    $jwt = JWT::encode($token, $key);
+    $jwt = JWT::encode($token, $key, 'HS256');
     echo json_encode(
             array(
                 "message" => "Successful login.",

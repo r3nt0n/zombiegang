@@ -4,7 +4,7 @@
 
 {% block lateral_panel %}
 
-{% with window_type = 'filter', data_type = 'access-logs', filters=('username', 'datetime') %}
+{% with window_type = 'filter', data_type = 'access-logs', filters=('username', 'created_at') %}
   {% include 'objects/windows/filter.html' %}
 {% endwith %}
 

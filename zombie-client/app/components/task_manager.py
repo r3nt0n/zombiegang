@@ -84,9 +84,11 @@ class TaskManager:
         for x in range(0, qeue_original_size):
             sch_task = scheduler.tasks.get()
             logger.log('checking execution time for scheduled task {}'.format(sch_task), 'OTHER')
-            if datetime.now() >= datetime.strptime(sch_task.to_exec_at, '%Y-%m-%d %H:%M:%S'):
+            # logger.log('execution_time {}'.format(sch_task.to_exec_at), 'OTHER')
+            # logger.log('execution_time {}'.format(datetime.now() <= datetime.strptime(sch_task.to_exec_at, '%Y-%m-%d %H:%M:%S')), 'OTHER')
+            if datetime.now() <= datetime.strptime(sch_task.to_exec_at, '%Y-%m-%d %H:%M:%S'):
                 self.new_tasks.put(sch_task)
-                logger.log('scheduled task {} has reach execution time, added to tasks queue and removed from scheduler'.format(sch_task),'OTHER')
+                logger.log('scheduled task {} has reach execution time, added to tasks queue and removed from scheduler'.format(sch_task),'SUCCESS')
                 scheduler.tasks.task_done()
             else:
                 scheduler.tasks.put(sch_task)
@@ -110,7 +112,7 @@ class TaskManager:
             task = Plugin(task_data)
 
             # execute task
-            if datetime.now() >= datetime.strptime(task.to_exec_at, '%Y-%m-%d %H:%M:%S'):
+            if datetime.now() <= datetime.strptime(task.to_exec_at, '%Y-%m-%d %H:%M:%S'):
 
                 thread_manual_stop = threading.Thread(name='manual_stop', target=task.keep_reading_manual_stop)#, args=((task,)))
                 thread_run_task = threading.Thread(name='run_task', target=task.run)

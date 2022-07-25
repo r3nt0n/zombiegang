@@ -33,11 +33,18 @@ def update_data(data_type, new_data):
     url = "http://{}/api/update_{}.php".format(zession.remote_host, data_type)
     data = {'jwt': zession.token.jwt}
 
+    if 'id' in new_data:
+        data['id'] = new_data['id']
+
     if data_type == 'user':
         if not ('username' in new_data and 'pswd' in new_data):
             return False
         data['username'] = new_data['username']
         data['pswd'] = new_data['pswd']
+
+    elif data_type == 'task':
+        if 'manual_stop' in new_data:
+            data['manual_stop'] = new_data['manual_stop']
 
     return http_client.json_post(url, data=data)
 

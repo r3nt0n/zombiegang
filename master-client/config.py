@@ -5,7 +5,7 @@
 import os
 
 class Config(object):
-    DEBUG = True
+    DEBUG = False
     #BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     BASE_DIR = os.getcwd()
     APP_DIR = os.path.join(BASE_DIR, 'app/')

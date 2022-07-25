@@ -10,3 +10,4 @@ class ErrorMessages:
     INVALID_PASSWORD = "invalid password"
     INVALID_TASK_TYPE = "invalid task type"
     INVALID_TARGET = "invalid target"
+    INVALID_PORT = "invalid port"

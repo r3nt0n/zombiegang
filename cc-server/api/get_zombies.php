@@ -53,11 +53,11 @@ if($jwt){
         $by_id = (isset($data->id)) ? $data->id : "";
         $by_username =  (isset($data->username)) ? $data->username : "";
         $by_os =  (isset($data->sysinfo)) ? $data->sysinfo : "";
-        $by_datetime_bef =  (isset($data->datetime_bef)) ? $data->datetime_bef : "";
-        $by_datetime_aft =  (isset($data->datetime_aft)) ? $data->datetime_aft : "";
+        $by_created_bef =  (isset($data->created_bef)) ? $data->created_bef : "";
+        $by_created_aft =  (isset($data->created_aft)) ? $data->created_aft : "";
         
         // retrieve records
-        $zombies_data = $zombie->read($by_id, $by_username, $by_datetime_bef, $by_datetime_aft, $by_os);
+        $zombies_data = $zombie->read($by_id, $by_username, $by_created_bef, $by_created_aft, $by_os);
 
         if ($zombies_data) {
             for ($i=0; $i < count($zombies_data); $i++) { 

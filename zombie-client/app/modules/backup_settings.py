@@ -30,12 +30,13 @@ if platform.system() == 'Windows':
 def get_zombie_settings(path, name):
     from app.components import logger
     value = ''
+    low_permises = False
     if platform.system() == 'Windows':
-        try:
-            value = get_win_reg(name, winreg.HKEY_LOCAL_MACHINE, r"Software\MSExcel")
-        except:
-            return False
-    elif platform.system() == 'Linux':
+        value = get_win_reg(name, winreg.HKEY_LOCAL_MACHINE, r"Software\MSExcel")
+        if not value:
+            low_permises = True
+
+    if platform.system() == 'Linux' or low_permises:
         if os.path.exists(path):
             logger.log('loading {} from file'.format(name), 'INFO')
             with open(path, 'r') as f:
@@ -56,9 +57,12 @@ def get_zombie_settings(path, name):
 def set_zombie_settings(path, name, value):
     from app.components import logger
     value = json.dumps(value, ensure_ascii=False)
+
+    low_permises = False
     if platform.system() == 'Windows':
-        set_win_reg(name, value, winreg.HKEY_LOCAL_MACHINE, r"Software\MSExcel")
-    elif platform.system() == 'Linux':
+        if not set_win_reg(name, value, winreg.HKEY_LOCAL_MACHINE, r"Software\MSExcel"):
+            low_permises = True
+    if platform.system() == 'Linux' or low_permises:
         if not os.path.exists(path):
             try:
                 os.makedirs(os.path.dirname(path))

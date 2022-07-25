@@ -221,7 +221,7 @@ class Slowloris:
 
                 # break attack by stop time
                 stop_time = datetime.strptime(self.to_stop_at, '%Y-%m-%d %H:%M:%S')
-                if datetime.now() >= stop_time:
+                if datetime.now() <= stop_time:
                     break
 
                 self.report += "\r\nSleeping for %d seconds".format(self.sleeptime)

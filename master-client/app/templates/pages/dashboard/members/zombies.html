@@ -4,7 +4,7 @@
 
 {% block lateral_panel %}
 
-{% with window_type = 'filter', data_type = 'zombies', filters=('username', 'datetime', 'os') %}
+{% with window_type = 'filter', data_type = 'zombies', filters=('username', 'created_at', 'os') %}
     {% include 'objects/windows/filter.html' %}
 {% endwith %}
 
@@ -13,7 +13,6 @@
 
 
 {% block central_panel %}
-
 {% if detailed_zombie %}
   {% with window_type = 'popup', data = detailed_zombie, data_type='zombies', close_button_action = 'link', close_link = url_for('members_bp.zombies'), img='img/mewtwo2-pokemon-rojo-azul-amarillo.png' %}
     {% include 'objects/windows/popups/datasheet.html' %}

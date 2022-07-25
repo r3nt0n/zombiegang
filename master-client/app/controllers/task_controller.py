@@ -11,6 +11,7 @@ from app.models import *
 
 class TaskController:
     def __init__(self, task_type):
+        self.task_type = task_type
         self.error = None
         self.created = []
         self.task_data = {}
@@ -27,7 +28,18 @@ class TaskController:
         if zombies_filter.data:
             self.zombies_data = zombies_filter.data
 
+    def generate_slices(self, selected_zombies):
+        slices = {}
+        n_zombie = 0
+        total = len(selected_zombies)
+        for zombie in selected_zombies:
+            n_zombie += 1
+            slices[zombie] = "{}/{}".format(str(n_zombie), str(total))
+        return slices
+
     def run(self, task_data=None, selected_zombies=None):
+        if self.task_type == 'brt':
+            task_data["slices_wl"] = self.generate_slices(selected_zombies)
         task = self.TaskModel()
         mission = Mission()
         if task.create(task_data):

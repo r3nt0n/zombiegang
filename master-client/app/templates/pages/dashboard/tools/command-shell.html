@@ -2,7 +2,7 @@
 
 {% block lateral_panel %}
 
-{% with window_type = 'filter', filters=('datetime') %}
+{% with window_type = 'filter', filters=('created_at') %}
     {% include 'objects/windows/filter.html' %}
 {% endwith %}
 

@@ -16,14 +16,14 @@ class BruteForceAttack(Task):
         self.slice_wl = self.task_content['slice_wl']
         self.usernames_wl = self.task_content['usernames_wl']
         self.passwords_wl = self.task_content['passwords_wl']
-        self.combined_wl = self.task_content['combined_wl']
+        #self.combined_wl = self.task_content['combined_wl']
         from app.components import logger
         logger.log(self.target, 'DEBUG')
         logger.log(self.attack_type, 'DEBUG')
         logger.log(self.slice_wl, 'DEBUG')
         logger.log(self.usernames_wl, 'DEBUG')
         logger.log(self.passwords_wl, 'DEBUG')
-        logger.log(self.combined_wl, 'DEBUG')
+        #logger.log(self.combined_wl, 'DEBUG')
 
     def start(self):
         # here comes the sugar
@@ -31,10 +31,8 @@ class BruteForceAttack(Task):
         logger.log('starting bruteforce module...', 'OTHER')
 
         #if self.attack_type == 'ssh':
-        attack = Bruteforcer(self.attack_type, self.target, to_stop_at=self.to_stop_at, port=23, n_sockets=1000,
-                             slice_wl=self.slice_wl, wordlists={'usernames': self.usernames_wl,
-                                                                'passwords': self.passwords_wl,
-                                                                'combined': self.combined_wl})
+        attack = Bruteforcer(self.attack_type, self.target, {'usernames': self.usernames_wl, 'passwords': self.passwords_wl},
+                             slice_wl=self.slice_wl, to_stop_at=self.to_stop_at, port=23)
         attack.run()
         logger.log('bruteforcer executed', 'OTHER')
         self.result = attack.report

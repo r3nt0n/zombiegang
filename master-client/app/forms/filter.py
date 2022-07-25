@@ -21,10 +21,10 @@ class FilterForm(FlaskForm):
     by_os = SelectField(u'by system', validators=[Optional()], choices=OS_CHOICES)
     by_task_type = StringField('by task type', validators=[Optional(), Length(3)])
 
-    by_date_bef = DateField(u'before', validators=[Optional()])
-    by_date_aft = DateField(u'after', validators=[Optional()])
-    by_time_bef = TimeField(u'', validators=[Optional()], format='%H:%M:%S')
-    by_time_aft = TimeField(u'', validators=[Optional()], format='%H:%M:%S')
+    by_created_date_bef = DateField(u'before', validators=[Optional()])
+    by_created_date_aft = DateField(u'after', validators=[Optional()])
+    by_created_time_bef = TimeField(u'', validators=[Optional()], format='%H:%M:%S')
+    by_created_time_aft = TimeField(u'', validators=[Optional()], format='%H:%M:%S')
 
     filter_btn = SubmitField('🚬  Filter')
 

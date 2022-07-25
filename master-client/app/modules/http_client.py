@@ -16,8 +16,8 @@ def post(url, data):
     elif r.status_code != 200:
         data_rcv = False
         logger.log('{} http code received'.format(r.status_code), level='ERROR')
-        logger.log('url: {}'.format(url), level='DEBUG')
-        logger.log('data sent: {}'.format(data), level='DEBUG')
+        # logger.log('url: {}'.format(url), level='ERROR')
+        # logger.log('data sent: {}'.format(data), level='ERROR')
     else:
         data_rcv = r.content.decode('utf-8-sig')
         logger.log('{} http code received'.format(r.status_code), level='DEBUG')

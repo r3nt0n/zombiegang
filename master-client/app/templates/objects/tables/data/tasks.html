@@ -30,6 +30,7 @@
 <!--    {% include 'objects/tables/headers/username.html' %}-->
 <!--  {% endwith %}-->
 
+  {% include 'objects/tables/headers/manual_stop.html' %}
 <!--  {% include 'objects/tables/headers/read_confirm.html' %}-->
 
 <!--  {% include 'objects/tables/headers/result.html' %}-->
@@ -53,13 +54,19 @@
       {% if row['task_content'] %}
 
         {% if row['task_content'] is mapping %}
-          <dl class="inline">
-
-          {% for field in row['task_content'] %}
-            <dt>{{ field }}</dt>
-            <dd>{{ row['task_content'][field] }}</dd>
-          {% endfor %}
-          </dl>
+        <ul class="tree-view">
+          <li>
+            <details>
+            <summary>🗒️  view task details</summary>
+              <dl class="inline">
+              {% for field in row['task_content'] %}
+                <dt>{{ field }}</dt>
+                <dd>{{ row['task_content'][field] }}</dd>
+              {% endfor %}
+              </dl>
+            </details>
+          </li>
+        </ul>
         {% else %}
           {{ row['task_content'] }}
         {% endif %}
@@ -70,6 +77,22 @@
     <td>{{ row['created_at'] }}</td>
     <td>{% if row['to_exec_at'] != "0000-00-00 00:00:00" %}{{ row['to_exec_at'] }}{% endif %}</td>
     <td>{% if row['to_stop_at'] != "0000-00-00 00:00:00" %}{{ row['to_stop_at'] }}{% endif %}</td>
+
+    <td>
+      {% if row['manual_stop'] == 'true' %}
+        <button disabled>Stopped</button>
+      {% else %}
+        <button name="btn-manual-stop" value="{{ row['id'] }}" >Stop</button>
+      {% endif %}
+    </td>
+
+    {% if not brief %}
+    <td>
+      <a class="link-undecorated" href="{{ url_for('attacks_bp.attacks', tid=row['id']) }}">
+        <span class="icon">📜  </span>
+      </a>
+    </td>
+    {% endif %}
 <!--    <td>{{ row['zombie_username'] }}</td>-->
 <!--    <td>{{ row['read_confirm'] }}</td>-->
 <!--    <td>{% if row['result'] %}{{ row['result'] }}{% endif %}</td>-->

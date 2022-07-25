@@ -65,7 +65,7 @@ if($jwt){
             //         "public_key" => $master->public_key
             //     )
             // );
-            // $jwt = JWT::encode($token, $key);
+            // $jwt = JWT::encode($token, $key, 'HS256');
             
             // set response code
             http_response_code(200);

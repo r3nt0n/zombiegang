@@ -12,7 +12,7 @@ from app.forms import FilterForm
 
 class DataFilter:
     def __init__(self, data_type, default_filters=None):
-
+        logger.log("Initializing Datafilter controller...", 'DEBUG')
         self.form = FilterForm()
         self.error = None
         self.data = None
@@ -20,9 +20,10 @@ class DataFilter:
         if default_filters:
             self.filters.update(default_filters)
 
-        if data_type == 'ddos_attacks':
-            data_type = 'tasks'
-            self.filters['task_type'] = 'dos'
+        # if data_type == 'dos' or data_type == 'brt':
+        #     self.filters['task_type'] = data_type
+        #     data_type = 'tasks'
+
         self.data_type = data_type
 
     def merge_values(self, value_a, value_b):
@@ -39,12 +40,15 @@ class DataFilter:
                 filters['username'] = request.form.get('by_username')
             if request.form.get('by_os'):
                 filters['os'] = request.form.get('by_os')
-            if request.form.get('by_date_bef') or request.form.get('by_time_bef'):
-                filters['datetime_bef'] = self.merge_values(request.form.get('by_date_bef'),
-                                                       request.form.get('by_time_bef'))
-            if request.form.get('by_date_aft') or request.form.get('by_time_aft'):
-                filters['datetime_aft'] = self.merge_values(request.form.get('by_date_aft'),
-                                                       request.form.get('by_time_aft'))
+            if request.form.get('by_task_type'):
+                filters['task_type'] = request.form.get('by_task_type')
+                
+            if request.form.get('by_created_date_bef') or request.form.get('by_created_time_bef'):
+                filters['created_bef'] = self.merge_values(request.form.get('by_created_date_bef'),
+                                                       request.form.get('by_created_time_bef'))
+            if request.form.get('by_created_date_aft') or request.form.get('by_created_time_aft'):
+                filters['created_aft'] = self.merge_values(request.form.get('by_created_date_aft'),
+                                                       request.form.get('by_created_time_aft'))
         return filters
 
     def set_filters(self, request):
@@ -53,15 +57,15 @@ class DataFilter:
                 self.filters = self.parse_inputs(request)
 
     def run(self, request=None):
-        logger.log('filtered data \'{}\' requested'.format(self.data_type), 'INFO')
+        #logger.log('filtered data \'{}\' requested'.format(self.data_type), 'INFO')
 
         if request:
             self.set_filters(request)
 
         self.data = read_data(self.data_type, self.filters)
-        logger.log('data: {}'.format(self.data), 'CRITICAL')
-        logger.log('data_type: {}'.format(self.data_type), 'CRITICAL')
-        logger.log('filters: {}'.format(self.filters), 'CRITICAL')
+        logger.log('data: {}'.format(self.data), 'DEBUG')
+        logger.log('data_type: {}'.format(self.data_type), 'DEBUG')
+        logger.log('filters: {}'.format(self.filters), 'DEBUG')
 
         if not self.data:
             self.error = '0 {} found'.format(self.data_type)
@@ -88,7 +92,11 @@ class DataFilter:
                         (("os" in row['sysinfo']) and (row['sysinfo']['os'] is not None)
                          and (row['sysinfo']['os'] == self.filters['os']))]
 
+            # if ("task_type" in self.filters):
+            #     data = [row for row in data if
+            #             ("task_type" in row and (row['task_type'] == self.filters['task_type']))]
+
             self.data = data
 
-        logger.log('filtered data: {}'.format(self.data), 'DEBUG')
+        #logger.log('filtered data: {}'.format(self.data), 'DEBUG')
         return self.data

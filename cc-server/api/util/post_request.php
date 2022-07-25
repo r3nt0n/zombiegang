@@ -30,8 +30,8 @@ function post_request($url, $data, $content_type='json'){
         // about the stream
         //var_dump(stream_get_meta_data($stream));
         // actual data at $url
-        $data_recv = stream_get_contents($stream);
-        fclose($stream);
+        $data_recv = stream_get_contents($fp);
+        fclose($fp);
 
         return $data_recv;
     }

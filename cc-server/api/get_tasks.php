@@ -52,8 +52,8 @@ if($jwt){
             $zombie_view = True;
             $by_id = (isset($data->id)) ? $data->id : "";
             $mission_id = (isset($data->mission_id)) ? $data->mission_id : "";
-            $by_submit_at_bef =  False;
-            $by_submit_at_aft = False;
+            $by_created_bef =  False;
+            $by_created_aft = False;
             $by_master_username = False;
             if (!$by_id or !$mission_id) {
                 throw new Exception('Not id provided');
@@ -76,15 +76,15 @@ if($jwt){
             // set filters by request (only if requested by master)
             $by_id = (isset($data->id)) ? $data->id : "";
             $by_master_username =  $requested_by;
-            $by_submit_at_bef = (isset($data->submit_at_bef)) ? $data->submit_at_bef : "";
-            $by_submit_at_aft = (isset($data->submit_at_aft)) ? $data->submit_at_aft : "";
+            $by_created_bef = (isset($data->created_bef)) ? $data->created_bef : "";
+            $by_created_aft = (isset($data->created_aft)) ? $data->created_aft : "";
             $by_task_type = (isset($data->task_type)) ? $data->task_type : "";
         }
         
         
         
         // retrieve records
-        $tasks_data = $task->read($by_id, $by_master_username, $by_submit_at_bef, $by_submit_at_aft, 
+        $tasks_data = $task->read($by_id, $by_master_username, $by_created_bef, $by_created_aft, 
                                   $by_task_type, $zombie_view);
 
         

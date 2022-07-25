@@ -50,8 +50,8 @@ if($jwt){
             $by_task_id = (isset($data->task_id)) ? $data->task_id : "";
             $by_read_confirm = (isset($data->read_confirm)) ? $data->read_confirm : "";
             $by_zombie_username =  $requested_by;
-            $by_created_at_bef =  "";
-            $by_created_at_aft = "";
+            $by_created_bef =  "";
+            $by_created_aft = "";
         }
         
         else{
@@ -63,8 +63,8 @@ if($jwt){
             $by_task_id = (isset($data->task_id)) ? $data->task_id : "";
             $by_read_confirm = (isset($data->read_confirm)) ? $data->read_confirm : "";
             $by_zombie_username = (isset($data->zombie_username)) ? $data->zombie_username : "";
-            $by_created_at_bef = (isset($data->created_at_bef)) ? $data->created_at_bef : "";
-            $by_created_at_aft = (isset($data->created_at_aft)) ? $data->created_at_aft : "";
+            $by_created_bef = (isset($data->created_bef)) ? $data->created_bef : "";
+            $by_created_aft = (isset($data->created_aft)) ? $data->created_aft : "";
             
         }
         
@@ -72,7 +72,7 @@ if($jwt){
         $mission = new Mission($db);
         
         // retrieve records
-        $missions_data = $mission->read($by_id, $by_task_id, $by_read_confirm, $by_zombie_username, $by_created_at_bef, $by_created_at_aft, 
+        $missions_data = $mission->read($by_id, $by_task_id, $by_read_confirm, $by_zombie_username, $by_created_bef, $by_created_aft, 
                                         $zombie_view=$zombie_view);
 
         

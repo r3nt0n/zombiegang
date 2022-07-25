@@ -34,9 +34,10 @@ def zombies(zid=None):
     # filter data
     data_filter.run(request)
 
+    # get zombie details if requested (mewtwo table)
     if zid is not None:
         for row in data_filter.data:
-            if row["id"] == zid:
+            if str(row["id"]) == zid:
                 detailed_zombie = row
 
     # get join requests
@@ -71,7 +72,6 @@ def zombies(zid=None):
         for username in selected_users:
             if delete_data('user', username):
                 users_deleted.append(username)
-
 
     return render_template("pages/dashboard/members/zombies.html", zession=zession, data_filter=data_filter,
                            zombie_requests=zombie_requests, zombies_created=zombies_created,

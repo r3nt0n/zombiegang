@@ -57,10 +57,13 @@ class Task{
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
         
                 // assign values to object properties
-                $this->id = $row['id'];
+                //$this->id = $row['id'];
                 $this->created_at = $row['created_at'];
                 $this->updated_at = $row['updated_at'];
 
+                if (empty($this->id)) {
+                    $this->id = $row["id"];
+                }
                 if (empty($this->task_name)) {
                     $this->task_name = $row["task_name"];
                 }
@@ -78,6 +81,9 @@ class Task{
                 }
                 if (empty($this->to_stop_at)) {
                     $this->to_stop_at = $row["to_stop_at"];
+                }
+                if (empty($this->manual_stop)) {
+                    $this->manual_stop = $row["manual_stop"];
                 }
         
                 // return true because task exists in the database
@@ -158,7 +164,8 @@ class Task{
                 $this->task_content => "task_content",
                 $this->master_username => "master_username",
                 $this->to_exec_at => "to_exec_at",
-                $this->to_stop_at => "to_stop_at"
+                $this->to_stop_at => "to_stop_at",
+                $this->manual_stop => "manual_stop"
             );
 
             // craft the query
@@ -201,6 +208,10 @@ class Task{
                 $this->to_stop_at=htmlspecialchars(strip_tags($this->to_stop_at));
                 $stmt->bindParam(':to_stop_at', $this->to_stop_at);
             }
+            if(!empty($this->manual_stop)){
+                $this->manual_stop=htmlspecialchars(strip_tags($this->manual_stop));
+                $stmt->bindParam(':manual_stop', $this->manual_stop);
+            }
         
             // unique ID of record to be edited
             $stmt->bindParam(':id', $this->id);
@@ -209,7 +220,7 @@ class Task{
             if($stmt->execute()){
                 return true;
             }
-            // print_r($stmt->errorInfo());
+            //print_r($stmt->errorInfo());
             // print_r($query);
             
             return false;

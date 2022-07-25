@@ -56,7 +56,8 @@ class Task:
                 self.mission_manual_stop = data["manual_stop"]
                 logger.log('manual_stop updated: {}'.format(self.mission_manual_stop), 'WARNING')
 
-            if (self.mission_manual_stop != 'false') or (self.running == 'false') or self.result:
+            #if (self.mission_manual_stop != 'false') or (self.running == 'false') or self.result:
+            if (self.mission_manual_stop != 'false') or (self.running == 'false' and self.result):
                 logger.log('finishing manual stop thread, {} is completed'.format(self), 'OTHER')
                 break
 
@@ -100,5 +101,5 @@ class Task:
         return True
 
     def __repr__(self):
-        return '<' + type(self).__qualname__ + ' {id: '+self.id+', mission_id: '+self.mission_id+ '}>'
+        return '<' + type(self).__qualname__ + ' {id: '+str(self.id)+', mission_id: '+str(self.mission_id)+ '}>'
 

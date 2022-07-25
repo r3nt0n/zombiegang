@@ -50,11 +50,11 @@ if($jwt){
 
         // set filters
         $by_username =  (isset($data->username)) ? $data->username : "";
-        // $by_datetime_bef =  (isset($data->datetime_bef)) ? $data->datetime_bef : "";
-        // $by_datetime_aft =  (isset($data->datetime_aft)) ? $data->datetime_aft : "";
+        // $by_created_bef =  (isset($data->created_bef)) ? $data->created_bef : "";
+        // $by_created_aft =  (isset($data->created_aft)) ? $data->created_aft : "";
         
         // retrieve records
-        $masters_data = $master->read($by_username); // $by_datetime_bef, $by_datetime_aft);
+        $masters_data = $master->read($by_username); // $by_created_bef, $by_created_aft);
         if($masters_data){
             
             // set response code

@@ -1,5 +1,11 @@
+{% if window_type == 'error' %}
+  ⚠️
+{% endif %}
 {% if state == 'logout' and data_type != "proxy" %}
-  zombiegang-0.1~beta
+  {% if window_type != 'error' %}
+    <img class="window-icon" src="{{ url_for('static', filename='img/skull.png') }}" />
+  {% endif %}
+  zombiegang-0.5~beta
 {% else %}
 <img class="window-icon" src="{{ url_for('static', filename='img/an-skull.gif') }}" />
 {% endif %}
@@ -16,7 +22,11 @@
 {% elif window_type == 'profile-editor' %}
   {{ data_type + '-' + 'editor.SAM' }}
 {% elif window_type == 'table-results' %}
-  {{ data_type + '-' + window_type + '.xlsx' }}
+  {% if data_type == 'users' %}
+    new-zombies-join-requests.xlsx
+  {% else %}
+    {{ data_type + '-' + window_type + '.xlsx' }}
+  {% endif %}
 {% elif window_type == 'creator' %}
   {{ data_type + '-' + window_type + '.ps1' }}
 {% elif data_type == 'proxy' %}

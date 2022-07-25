@@ -95,11 +95,16 @@
 
     <td>{{ row['last_seen'] }}</td>
 
-    {% if (row['on'] == 'true') %}
-      <td><span class="emoji">🟢  </span></td>
-    {% else %}
-      <td><span class="emoji">🔴  </span></td>
-    {% endif %}
+<!--    {% if (row['on'] == 'true') %}-->
+<!--      <td><span class="emoji">🟢  </span></td>-->
+<!--    {% else %}-->
+<!--      <td><span class="emoji">🔴  </span></td>-->
+<!--    {% endif %}-->
+    <td>
+      {% with switch=row['on'] %}
+        {% include 'objects/dynamic/on_off.html' %}
+      {% endwith %}
+    </td>
 
     {% if not brief %}
     <td>

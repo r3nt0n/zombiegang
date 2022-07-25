@@ -340,6 +340,11 @@ overflow-x: unset;
   max-height: 40rem;
 }
 
+.table-xl-short {
+  min-width: 66rem;
+  max-height: 20rem;
+}
+
 table {
     background-color: white;
 }
@@ -394,6 +399,11 @@ table.darkTable td.with-icon {
  text-align: left;
 }
 
+
+table.darkTable ul.tree-view, table.darkTable ul.tree-view * {
+  background-color: transparent;
+  border: none;
+}
 
 
 /* FORMS styles */
@@ -745,6 +755,29 @@ footer div {
 
 footer .blue {
   background-repeat: round !important;
+}
+
+/* os label */
+footer .os-label {
+  font-size: 0.7rem;
+  margin-top: 0.2rem;
+  height: 100%;
+  display: inline-block;
+  margin-left: 0.2rem;
+}
+
+footer .blue .os-label {
+  color: #14bfbf;  /* between cyan and darkcyan */
+}
+footer .blue .os-label:hover {
+  color: white;
+}
+
+footer .silver .os-label {
+  color: grey;
+}
+footer .silver .os-label:hover {
+  color: darkviolet;
 }
 
 .foot-link {

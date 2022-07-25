@@ -68,7 +68,7 @@ if($jwt){
                         "pswd" => $user->pswd
                     )
                 );
-                $jwt = JWT::encode($token, $key);
+                $jwt = JWT::encode($token, $key, 'HS256');
             }
             
             // set response code
