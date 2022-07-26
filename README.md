@@ -40,7 +40,7 @@ There are special fields in DB which are designed to be nested values, so you ca
 
 **Note:** This is just a simple way to kickstart all the initial stuff. Obviously, in production environments you can use separate servers for DB and CC, and replace the http server for something like Apache or Nginx.
 
-**IMPORTANT NOTE:** zombiegang is still on development phase, some features wasn't tested under all possible scenarios yet. Any bug  reported could help.
+**IMPORTANT NOTE:** zombiegang is still on development phase, some features wasn't tested under all possible scenarios yet. Any bug reported could be helpful.
 
   
 ### Create database
@@ -58,6 +58,7 @@ sudo ./initdb
 mariadb -u zgang -p
 use zgang;
 insert into Masters SET username = '<username>', public_key = '<public-key>';
+exit
 ```
 ***Note:** By now, you shouldn't specify any `password`, we will create it later. As another note, the `public_key` can be an empty string, since PKI logic isn't implemented yet.*
   
@@ -135,7 +136,7 @@ If you want to cover your trace, use the built-in proxy tool to connect to cc-se
 <br>
 
 #### cli-client
-Additionally, you have a cli client (keeping msfconsole style) to login to cc-server and run remote-shell live sessions with online zombies:
+Additionally, you have a cli client (keeping msfconsole style) to login to cc-server and run remote-shell live sessions with online zombies, you could also connect through a socks5 proxy (like in web-based client) setting `PXHOST` and `PXPORT` before `login`.
 ```
 # to run the masterclient (cli)
 python3 cli.py
@@ -143,6 +144,7 @@ python3 cli.py
 
 <div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/master-client_cli_live_session_example.png" /><p style="font-decoration: italic;">simple cli live session example</p></div>
 <br>
+
 
 ### WHAT TO-DO NEXT
 + Task schedulers stop points (manual and auto) not working yet.
