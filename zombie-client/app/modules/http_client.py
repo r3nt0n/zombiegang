@@ -75,14 +75,14 @@ def download_file(url_file, filename):
     from app.components import logger
     try:
         with urlopen(url_file) as response:
-           with open(filename, 'wb') as f:
-               while True:
-                   # chunk references bytes read from response (16384 - 16 Kibibytes)
-                   chunk = response.read(16384)
-                   if chunk:
-                       f.write(chunk)
-                   else:
-                       break
+            with open(filename, 'wb') as f:
+                while True:
+                    # chunk references bytes read from response (16384 - 16 Kibibytes)
+                    chunk = response.read(16384)
+                    if chunk:
+                        f.write(chunk)
+                    else:
+                        break
         logger.log('file {} successful downloaded'.format(url_file), 'SUCCESS')
         return True
     except Exception as e:

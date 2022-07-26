@@ -146,17 +146,32 @@ python3 cli.py
 <br>
 
 
-### WHAT TO-DO NEXT
+## Modules and custom attacks
+
++ `dos`: ddos attacks, implemented and working, by now just one type (`dos/slowloris`)
++ `brt`: brute force attacks, to be implemented (by now, just an example template)
+
+By his nature, `keylogger module` is an special task and doesn't inherit from the base class `Task`. By now, logic to log keypresses and create logs into `cc-server` is implemented in `zombie-client` (windows and linux systems).  To be implemented:
+
+  + logic to start/stop keylogger remotely
+  + logic to show logs created by zombies on the master-client side
+
+[Working on a comprehensive explanation about how to build custom attacks and contribute to app with new modules]
+
+
+## TO-DO (NEXT)
++ Write docs about how to create custom modules/attacks.
 + Task schedulers stop points (manual and auto) not working yet.
 + Tasks details (master-client) not showing yet.
++ Keylogger on/off not working yet.
++ Keylogger logs not showing yet.
 
 
-
-### Legal disclaimer
+## Legal disclaimer
 This is a personal project, and is created for the sole purpose of security awareness and education, it should not be used against systems that you do not have permission to test/attack. The author is not responsible for misuse or for any damage that you may cause. You agree that you use this software at your own risk. I don't own the rights of any image included, is just a funny tribute to some iconic legends (if you are the owner of any picture and want it to be removed, please contact me and I will do as soon as posible). You can't distribute this app with commercial purposes.
 
 
-### References
+## References
 + CSS sheet is based on the work of <a href="https://github.com/jdan/">Jordan Scales</a> (<a href="https://github.com/jdan/98.css/blob/master/LICENSE">css win98 repo</a>)
 + Age of Empires icons found <a href="https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/campaigns">here</a>
 + mIRC icon designed by <a href="https://www.flaticon.es/autores/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.es/" title="Flaticon"> www.flaticon.es  </a>
