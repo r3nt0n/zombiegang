@@ -40,7 +40,7 @@ class ZgangConsole(cmd.Cmd):
         self.COLOR_PROMPT_TAG_PREFIX = color.GREY
 
         self.prompt = '{}zgang{} {}>{} '.format(self.COLOR_PROMPT_TAG, color.END, self.COLOR_PROMPT,color.END)
-        self.intro = "{}zombiegang 0.5~beta 2022 console{}".format(self.COLOR_WELCOME_BANNER, color.END)
+        self.intro = "{}zombiegang 0.5.1~beta 2022 console{}".format(self.COLOR_WELCOME_BANNER, color.END)
         self.ruler = '-'
 
         self.doc_header = 'commands'

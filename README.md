@@ -1,4 +1,4 @@
-![[Version 0.5~beta](https://github.com/r3nt0n)](http://img.shields.io/badge/version-0.5~beta-orange.svg)
+![[Version 0.5.1~beta](https://github.com/r3nt0n)](http://img.shields.io/badge/version-0.5.1~beta-orange.svg)
 ![[Python 3](https://github.com/r3nt0n)](http://img.shields.io/badge/python-3-blue.svg)
 ![[GPL-3.0 License](https://github.com/r3nt0n)](https://img.shields.io/badge/license-GPL%203.0-brightgreen.svg)
 ![[Date](https://github.com/r3nt0n)](http://img.shields.io/badge/date-2022-yellow.svg)
@@ -37,11 +37,14 @@ There are special fields in DB which are designed to be nested values, so you ca
 <br>
 
 ## Get started
-
 **Note:** This is just a simple way to kickstart all the initial stuff. Obviously, in production environments you can use separate servers for DB and CC, and replace the http server for something like Apache or Nginx.
 
 **IMPORTANT NOTE:** zombiegang is still on development phase, some features wasn't tested under all possible scenarios yet. Any bug reported could be helpful.
 
+### Download zombiegang framework
+```
+git clone https://github.com/r3nt0n/zombiegang
+```
   
 ### Create database
  
@@ -150,6 +153,7 @@ python3 cli.py
 
 + `dos`: ddos attacks, implemented and working, by now just one type (`dos/slowloris`)
 + `brt`: brute force attacks, to be implemented (by now, just an example template)
++ `rsh`: execute remote commands
 
 By his nature, `keylogger module` is an special task and doesn't inherit from the base class `Task`. By now, logic to log keypresses and create logs into `cc-server` is implemented in `zombie-client` (windows and linux systems).  To be implemented:
 
@@ -160,6 +164,7 @@ By his nature, `keylogger module` is an special task and doesn't inherit from th
 
 
 ## TO-DO (NEXT)
++ PKI authentication not implemented.
 + Write docs about how to create custom modules/attacks.
 + Task schedulers stop points (manual and auto) not working yet.
 + Tasks details (master-client) not showing yet.
