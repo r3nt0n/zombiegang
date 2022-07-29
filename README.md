@@ -10,7 +10,6 @@
 <br>  
 
 ## Table of Contents
-<hr>
 
 1. [📖 Introduction](#-introduction)
 2. [✨ Get started](#-get-started)
@@ -20,7 +19,6 @@
 6. [🔗 References](#-references)
 
 ## 📖 Introduction
-<hr>
 
 Zombiegang is a botnet framework written mostly in Python and PHP. It supports **asynchronous communication between cc and zombies**, **remote-shell** live sessions and **task scheduler**. It also has a **plugin manager**, which comes with some modules pre-included to perform most typical attacks (**DDoS, bruteforce** and **keylogger**). This modular approach allows anyone to **extend features by writing his own modules** (I will appreciate any contribution).  
 
@@ -50,7 +48,6 @@ There are special fields in DB which are designed to be nested values, so you ca
 <br>
 
 ## ✨ Get started
-<hr>
 
 **Note:** This is just a simple way to kickstart all the initial stuff. Obviously, in production environments you can use separate servers for DB and CC, and replace the http server for something like Apache or Nginx.
 
@@ -166,7 +163,6 @@ python3 cli.py
 
 
 ## 🎨 Tools and attacks: customized tasks
-<hr>
 
 These are the actual customized tasks and subtypes included in the framework:
 
@@ -189,7 +185,6 @@ By his nature, `keylogger module` is an special task and doesn't inherit from th
   + logic to show logs created by zombies on the master-client side
 
 ## 🔥 TO-DO (NEXT)
-<hr>
 
 + Refactor `master-client` to fix bug when creating new bruteforce attacks, adopting new `routes.py` format implemented
 + PKI authentication not implemented
@@ -201,13 +196,11 @@ By his nature, `keylogger module` is an special task and doesn't inherit from th
 
 
 ## ⚖ Legal disclaimer
-<hr>
 
 This is a personal project, and is created for the sole purpose of security awareness and education, it should not be used against systems that you do not have permission to test/attack. The author is not responsible for misuse or for any damage that you may cause. You agree that you use this software at your own risk. I don't own the rights of any image included, is just a funny tribute to some iconic legends (if you are the owner of any picture and want it to be removed, please contact me and I will do as soon as posible). You can't distribute this app with commercial purposes.
 
 
 ## 🔗 References
-<hr>
 
 + CSS sheet is based on the work of <a href="https://github.com/jdan/">Jordan Scales</a> (<a href="https://github.com/jdan/98.css/blob/master/LICENSE">css win98 repo</a>)
 + Age of Empires icons found <a href="https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/campaigns">here</a>
