@@ -13,7 +13,7 @@
 
 1. [📖 Introduction](#-introduction)
 2. [✨ Get started](#-get-started)
-3. [🎨 Custom modules and attacks](#-tools-and-attacks-customized-tasks)
+3. [🎨 Tools and attacks: customized tasks](#-tools-and-attacks-customized-tasks)
 4. [🔥 TO-DO next](#-to-do-next)
 5. [⚖️ Legal disclaimer](#-legal-disclaimer)
 6. [🔗 References](#-references)
