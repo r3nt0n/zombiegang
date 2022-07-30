@@ -14,7 +14,7 @@
 1. [📖 Introduction](#-introduction)
 2. [✨ Get started](#-get-started)
 3. [🎨 Tools and attacks](#-tools-and-attacks)
-4. [🖊️️ Contribution guidelines](#-contribution-guidelines)
+4. [🖊️️ Contribution guidelines](#%EF%B8%8F%EF%B8%8F-contribution-guidelines)
 5. [🔥 TO-DO](#-to-do)
 6. [📋 Changelist](#-changelist)
 7. [⚖️ Legal disclaimer](#-legal-disclaimer)
@@ -260,7 +260,7 @@ In this example we are using the module [`🔗app/modules/attacks/slowloris.py`]
 
 Once we have created our new model or custom task we need to reference it on two files:
 
-[`🔗app/models/attacks/__init__.py`](https://github.com/r3nt0n/zombiegang/blob/master/zombie-client/app/components/plugin_manager.py)
+[`🔗app/models/attacks/__init__.py`](https://github.com/r3nt0n/zombiegang/blob/master/zombie-client/app/models/attacks/__init__.py)
 ```python
 from .dos import DDosAttack
 ``` 
