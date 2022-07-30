@@ -12,6 +12,7 @@ class PluginManager:
             'rsh': tools.RemoteShellSession,
             'dos': attacks.DDosAttack,
             'brt': attacks.BruteForceAttack
+            # include new customized tasks here
 
             #'klg': tools.Keylogger
         }

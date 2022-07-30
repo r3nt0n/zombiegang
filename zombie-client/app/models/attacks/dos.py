@@ -26,10 +26,11 @@ class DDosAttack(Task):
         logger.log('starting ddos module...', 'OTHER')
 
         if self.attack_type == 'slowloris':
+            logger.log('starting ddos/slowloris module...', 'OTHER')
             attack = Slowloris(self.target, port=self.port, to_stop_at=self.to_stop_at, enable_https=self.https,
                                n_sockets=1000)
             attack.run()
-            logger.log('slowloris executed', 'OTHER')
+            logger.log('slowloris executed', 'SUCCESS')
             self.result = attack.report
         Task.start(self)
         # ...

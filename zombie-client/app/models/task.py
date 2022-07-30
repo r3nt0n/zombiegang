@@ -45,11 +45,11 @@ class Task:
         return updated
     
     def start(self):
-        # this is the method to extend with custom actions
+        # this is the method to extend with custom code
         pass
 
     def keep_reading_manual_stop(self):
-        logger.log('starting manual_stop thread for {}'.format(self), 'OTHER')
+        logger.log('starting thread to keep reading manual_stop for {}'.format(self), 'OTHER')
         while True:
             data = crud.read_data('missions', {"id": self.mission_id})
             if data and ("manual_stop" in data) and (data["manual_stop"] != self.mission_manual_stop):
@@ -70,34 +70,41 @@ class Task:
             'running': self.running,
             'exec_at': self.exec_at
         })
-        logger.log('result task updated: {}'.format(self.mission_manual_stop), 'SUCCESS')
         if not updated:
+            logger.log('error while trying to update result: {}'.format(self.result), 'ERROR')
             return False
+        logger.log('result task updated: {}'.format(self.result), 'SUCCESS')
         return updated
 
     def run(self):
         # update running field
         self.report_is_starting()
-        logger.log('task {} is starting...'.format(self), 'INFO')
+        logger.log('task {} has REPORT is about to start...'.format(self), 'INFO')
         while True:
             # manual stop controller
             if self.manual_stop != 'false':
                 break
             # execute task
             self.start()
-            logger.log('task {} is running...'.format(self), 'INFO')
+            logger.log('task {} is starting...'.format(self), 'INFO')
             try:
                 # stop by to_stop_at field
                 stop_time = datetime.strptime(self.to_stop_at, '%Y-%m-%d %H:%M:%S')
+                #logger.log('Task.to_stop_at: {}'.format(self.to_stop_at), 'DEBUG')
+                #logger.log('stop_time: {}'.format(stop_time), 'ERROR')
+                #logger.log('datetime.now() >= stop_time: {}'.format((datetime.now() >= stop_time)), 'ERROR')
                 if datetime.now() >= stop_time:
+                    logger.log('stop_time reached: {}'.format(stop_time), 'ERROR')
                     break
-            except (ValueError, TypeError):
+            except (ValueError, TypeError) as e:
+                logger.log('error while trying to read task.to_stop_at: {}'.format(e), 'ERROR')
+                logger.log('task.to_stop_at: {}'.format(self.to_stop_at), 'ERROR')
                 break
         # update result and exec_at fields
         logger.log('task {} is finished'.format(self, 'INFO'))
         self.running = 'false'
         self.exec_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.report_result()
+        #self.report_result()
         return True
 
     def __repr__(self):

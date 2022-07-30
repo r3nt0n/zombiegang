@@ -33,7 +33,7 @@ class TaskManager:
         # load scheduled tasks (it only loads those which exists in cc, marked as read and wasnt executed yet)
         scheduler.load_scheduled_tasks()
         # add scheduled tasks to new_tasks queue (this is done only one time) it forces to remove executed tasks
-        # from file, because the file is rewrited again in do_task with loaded sch_tasks one by one
+        # from file, because the file is rewritten again in do_task with loaded sch_tasks one by one
         [self.new_tasks.put(loaded_task) for loaded_task in (list(scheduler.tasks.queue)) if
          loaded_task.mission_id not in [t.mission_id for t in (list(self.new_tasks.queue))]]
 
@@ -70,14 +70,17 @@ class TaskManager:
     def post_completed_tasks(self):
         while True:
             task = self.completed_tasks.get()
-            logger.log('posting task exec result: {}'.format(task, 'SUCCESS'))
-            if crud.update_data('mission',{
-                "id": task.mission_id,
-                "result": task.result,
-                "exec_at": task.exec_at}):
+            logger.log('trying to post task exec result: {}'.format(task, 'OTHER'))
+            # if crud.update_data('mission',{
+            #     "id": task.mission_id,
+            #     "result": task.result,
+            #     "exec_at": task.exec_at}):
+            #     self.completed_tasks.task_done()
+            #     logger.log('{} task exec result successfully posted'.format(task, 'SUCCESS'))
+            if task.report_result():
                 self.completed_tasks.task_done()
-            # here i need to catch some excepts
-            # ...
+                logger.log('{} task exec result successfully posted'.format(task, 'SUCCESS'))
+
 
     def check_scheduled_tasks(self):
         qeue_original_size = len(list(scheduler.tasks.queue))
@@ -86,7 +89,7 @@ class TaskManager:
             logger.log('checking execution time for scheduled task {}'.format(sch_task), 'OTHER')
             # logger.log('execution_time {}'.format(sch_task.to_exec_at), 'OTHER')
             # logger.log('execution_time {}'.format(datetime.now() <= datetime.strptime(sch_task.to_exec_at, '%Y-%m-%d %H:%M:%S')), 'OTHER')
-            if datetime.now() <= datetime.strptime(sch_task.to_exec_at, '%Y-%m-%d %H:%M:%S'):
+            if datetime.now() >= datetime.strptime(sch_task.to_exec_at, '%Y-%m-%d %H:%M:%S'):
                 self.new_tasks.put(sch_task)
                 logger.log('scheduled task {} has reach execution time, added to tasks queue and removed from scheduler'.format(sch_task),'SUCCESS')
                 scheduler.tasks.task_done()
@@ -98,7 +101,7 @@ class TaskManager:
             task = self.new_tasks.get()
             if self.do_task(task):
                 self.completed_tasks.put(task)
-                logger.log('task completed'.format(task), 'SUCCESS')
+                logger.log('task {} completed'.format(task), 'SUCCESS')
             self.new_tasks.task_done()
 
     def do_task(self, task):
@@ -112,7 +115,7 @@ class TaskManager:
             task = Plugin(task_data)
 
             # execute task
-            if datetime.now() <= datetime.strptime(task.to_exec_at, '%Y-%m-%d %H:%M:%S'):
+            if datetime.now() >= datetime.strptime(task.to_exec_at, '%Y-%m-%d %H:%M:%S'):
 
                 thread_manual_stop = threading.Thread(name='manual_stop', target=task.keep_reading_manual_stop)#, args=((task,)))
                 thread_run_task = threading.Thread(name='run_task', target=task.run)
@@ -131,7 +134,7 @@ class TaskManager:
             # schedule task for future execution
             elif task not in list(scheduler.tasks.queue):
                 scheduler.add_task(task)
-                logger.log('task {} added to scheduler'.format(task), 'OTHER')
+                logger.log('task {} added to scheduler'.format(task), 'INFO')
                 logger.log('scheduler.tasks: {}'.format(list(scheduler.tasks.queue)), 'OTHER')
                 return False
 
