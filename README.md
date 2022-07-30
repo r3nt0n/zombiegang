@@ -187,6 +187,11 @@ By his nature, `keylogger module` is an special task and doesn't inherit from th
   + logic to show logs created by zombies on the master-client side
 
 
+## 🌍 Contributing guidelines
+
+To contribute, please check the [contribution guidelines page](https://github.com/r3nt0n/zombiegang/blob/master/CONTRIBUTING.md).
+
+
 ## 🔥 TO-DO
 
 + Refactor `master-client` to fix bug when creating new bruteforce attacks, adopting new `routes.py` format implemented
