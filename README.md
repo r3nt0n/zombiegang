@@ -6,15 +6,15 @@
 
 # Zombiegang framework
 
-<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/intro.gif" /></div>
-<br>  
+<!-- <div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/intro.gif" /></div>
+<br>  -->
 
 ## Table of Contents
 
 1. [📖 Introduction](#-introduction)
 2. [✨ Get started](#-get-started)
 3. [🎨 Tools and attacks](#-tools-and-attacks)
-4. [🖊️️ Contribution guidelines](https://github.com/r3nt0n/zombiegang/blob/master/CONTRIBUTING.md)
+4. [🌍 Contributing guidelines](https://github.com/r3nt0n/zombiegang/blob/master/CONTRIBUTING.md)
 5. [🔥 TO-DO](#-to-do)
 6. [📋 Changelist](#-changelist)
 7. [⚖️ Legal disclaimer](#-legal-disclaimer)
