@@ -204,7 +204,7 @@ To contribute, please check the [contribution guidelines page](https://github.co
 
 ## 📋 Changelist
 
-+ `zombiegang_ (30/07/2022)`
++ `last development version (available on Github)`
   + CONTRIBUTING.md created
   + Refactoring zombie-client to more efficient task result reporting
   + Task stop point scheduling implemented and working
@@ -245,14 +245,19 @@ To contribute, please check the [contribution guidelines page](https://github.co
 
 ## ⚖ Legal disclaimer
 
-This is a personal project, and is created for the sole purpose of security awareness and education, it should not be used against systems that you do not have permission to test/attack. The author is not responsible for misuse or for any damage that you may cause. You agree that you use this software at your own risk. I don't own the rights of any image included, is just a funny tribute to some iconic legends (if you are the owner of any picture and want it to be removed, please contact me and I will do as soon as posible). You can't distribute this app with commercial purposes.
+This is a personal project, and is created for the sole purpose of security awareness and education, it should not be used against systems that you do not have permission to test/attack. The author is not responsible for misuse or for any damage that you may cause. You agree that you use this software at your own risk. I don't own the rights of any image included, is just a funny tribute to some iconic legends (if you are the owner of any resource and want it to be removed, please contact me and I will do as soon as posible). You can't distribute this app with commercial purposes.
 
 
 ## 🔗 References
+* [php-jwt](https://github.com/firebase/php-jwt) module
+* Javascript code for resizable table found [here](https://www.brainbell.com/javascript/making-resizable-table-js.html)
+* [Pixel Gothic font](https://dafonttop.com/pixel-gothic-font.font) by [Kajetan Andrzejak](https://dafonttop.com/tags.php?key=Kajetan%20Andrzejak)
+* Verily Serif Mono by Stephen G. Hartke
+* CSS sheet is based on <a href="https://github.com/jdan/98.css/blob/master/LICENSE">css win98</a> by <a href="https://github.com/jdan/">Jordan Scales</a>
+* Age of Empires icons found <a href="https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/campaigns">here</a>
 
-+ CSS sheet is based on the work of <a href="https://github.com/jdan/">Jordan Scales</a> (<a href="https://github.com/jdan/98.css/blob/master/LICENSE">css win98 repo</a>)
-+ Age of Empires icons found <a href="https://www.forgottenempires.net/age-of-empires-ii-definitive-edition/campaigns">here</a>
-+ mIRC icon designed by <a href="https://www.flaticon.es/autores/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.es/" title="Flaticon"> www.flaticon.es  </a>
-+ All pictures were found on the Internet
+* mIRC icon designed by [Pixel perfect](https://www.flaticon.es/autores/pixel-perfect)
+* All pictures were found on the Internet
+
 
 
