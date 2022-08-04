@@ -97,7 +97,7 @@ Thanks dude :)
 Zombiegang is a botnet framework written mostly in Python and PHP. It supports **asynchronous communication between cc and zombies**, **remote-shell** live sessions and **task scheduler**. It also has a **plugin manager**, which comes with some modules pre-included to perform most typical attacks (**DDoS, bruteforce** and **keylogger**). This modular approach allows anyone to **extend features by writing his own modules** (I will appreciate any contribution).  
 
 <br>
-<p align="center"><img src="https://github.com/r3nt0n/bopscrk/blob/master/img/bopscrk-2.4.5.gif" /></p>  
+<p align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/intro2.gif" /></p>  
 
 <br>
 
@@ -119,7 +119,7 @@ You can schedule tasks and the zombies will receive this info as soon as they go
 There are special fields in DB which are designed to be nested values, so you can create new fields inside without touching any config (e.g.: `Tasks.task_content`,`Zombies.sysinfo`)  
   
 <br>
-<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/zombie_report_example.png" /><p style="font-decoration: italic;">zombie report example</p></div>  
+<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/zombies_info.gif" /><p style="font-decoration: italic;">zombie report example</p></div>  
 <br>
 
 ### Built with
