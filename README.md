@@ -82,7 +82,7 @@ Thanks dude :)
       -->
     </li>
     <li><a href="#-changelist">📋 Changelist</a></li>
-    <li><a href="#-contact">🪪 Contact</a></li>
+    <li><a href="#-contact">📇 Contact</a></li>
     <li><a href="#-acknowledgments">💎 Acknowledgments</a></li>
     <li><a href="#-legal-disclaimer">⚖️ Legal disclaimer</a></li>
     <li><a href="#-license">📙 License</a></li>
@@ -395,7 +395,7 @@ Don't forget to give the project a star! Thanks again!
 
 
 <!-- CONTACT -->
-## 🪪 Contact
+## 📇 Contact
 
 r3nt0n: [Github](https://github.com/r3nt0n) - [email](r3nt0n@protonmail.com)  
 zombiegang: [Github](https://github.com/r3nt0n/zombiegang)
