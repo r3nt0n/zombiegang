@@ -10,7 +10,7 @@
 
 {% if data_filter.data %}
 
-  {% with data_type='dos', window_type = 'launcher', task_type=task_type, img_class = 'launcher-img-l', banner = 'img/genkidama.webp', icon = '🚦', panel_title = 'ddos attacK' %}
+  {% with data_type='dos', window_type = 'launcher', task_type=task_type, img_class = 'launcher-img-l', banner = 'img/genkidama.webp', panel_title = 'ddos attacK' %}<!--icon = '🚦'-->
     <div id="{{ data_type + '-launcher' }}" class="launcher-m">
       {% include 'objects/windows/attacks-launcher.html' %}
     </div>
@@ -40,7 +40,7 @@
 
 {% else %}
 
-{% with data_type = 'ddos_attacks', banner = 'img/genkidama.webp', icon = '🚦', panel_title = 'ddos attacK' %}
+{% with data_type = 'ddos_attacks', banner = 'img/genkidama.webp', panel_title = 'ddos attacK' %} <!--icon = '🚦'-->
   {% include 'pages/dashboard/tools/base_attack.html' %}
 {% endwith %}
 

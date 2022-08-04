@@ -8,7 +8,8 @@ def get_plugin(task_type):
     plugins = {
         "cmd": tasks.Command,
         "rsh": tasks.RemoteShellSession,
-        "dos": attacks.DDosAttack
+        "dos": attacks.DDosAttack,
+        "brt": attacks.BruteForceAttack
     }
     Plugin = None
     from app import logger
@@ -17,5 +18,8 @@ def get_plugin(task_type):
         if task_type == plugin:
             Plugin = plugins[plugin]
             break
-    logger.log('plugin retrieved: {}'.format(Plugin), 'DEBUG')
+    if Plugin is not None:
+        logger.log('plugin retrieved: {}'.format(Plugin), 'DEBUG')
+    else:
+        logger.log('error trying to retrive plugin for task_type <{}>'.format(Plugin), 'ERROR')
     return Plugin

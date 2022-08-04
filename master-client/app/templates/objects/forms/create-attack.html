@@ -45,40 +45,28 @@
 
           {{ create_attack.form.port.label }}
           {{ create_attack.form.port(style="width: 5rem;") }}
+
           {% if task_type == 'dos' %}
             {{ create_attack.form.https }}
             {{ create_attack.form.https.label }}
           {% endif %}
+
         </div>
       {% endif %}
 
   </div>
 
-  {% if task_type == 'dos' %}
+
     <div class="field-row-stacked">
       <!-- validation error -->
       {% for error in create_attack.form.attack_type.errors %}
         <span class="error">{{ error }}</span>
       {% endfor %}
-      <div class="label"><span class="margin-right-icon">💣 </span>
+      <div class="label"><span class="margin-right-icon">{% if task_type == 'dos' %}💣{% elif task_type == 'brt' %}🚪{% endif %} </span>
         {{ create_attack.form.attack_type.label }}
       </div>
       {{ create_attack.form.attack_type }}
     </div>
-
-  {% elif task_type == 'brt' %}
-    <div class="field-row-stacked">
-      <!-- validation error -->
-      {% for error in create_attack.form.attack_type.errors %}
-        <span class="error">{{ error }}</span>
-      {% endfor %}
-      <div class="label"><span class="margin-right-icon">🚪 </span>
-        {{ create_attack.form.attack_type.label }}
-      </div>
-      {{ create_attack.form.attack_type }}
-    </div>
-  {% endif %}
-
   <br>
 
 

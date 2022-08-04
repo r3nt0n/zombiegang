@@ -16,6 +16,8 @@ class Bruteforcer:
         self.target = target
         self.wordlists = wordlists
         self.slice_wl = slice_wl
+        # slice_wl should be zombie position / total slices
+        # e.g.: task for 5 zombies, an specific slice correspond to each zombie. second zombie have 2/5 value
         self.to_stop_at = to_stop_at
         self.port = port
         self.n_threads = n_threads
@@ -173,6 +175,6 @@ class Bruteforcer:
 
 if __name__ == "__main__":
     # usage example
-    attack = Bruteforcer('ssh', '127.0.0.1', {"usernames": "http://127.0.0.1:8080/users.txt", "passwords": "http://127.0.0.1:8080/1000.txt"},
+    attack = Bruteforcer('ssh', '127.0.0.1', {"usernames": "http://127.0.0.1:8080/users-test.txt", "passwords": "http://127.0.0.1:8080/1000-pswds-test.txt"},
                          slice_wl="1/1", port=23)#, to_stop_at='2021-07-02 20:58:00')
     attack.run()
