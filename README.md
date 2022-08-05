@@ -195,11 +195,22 @@ Now you should have the cc-server listening on port 8080 and connected to the da
 cd zombie-client
 pip install -r requirements.txt 
 
+# edit config to set cc-server url
+nano app/config.py
+
 # to run the zombieclient
 python3 run.py
 ```
 
-You should have an output similar to this:
+When editing `config.py`, you need to set `self.credentials['cc_url']` to the URL and path that point to api dir located in your cc-server:
+
+```
+self.credentials = {'cc_url': '<your-url>'}
+# example:
+self.credentials = {'cc_url': 'http://192.168.1.131/api'}
+```
+
+After run the zombie you should have an output similar to this:
 
 <div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/zombie_first_wakeup_example.png" /><p style="font-decoration: italic;">zombie first wake up</p></div>
 
