@@ -28,7 +28,7 @@ Thanks dude :)
   <p align="center">
     The extensible botnet framework
     <br />
-    <a href="#usage"><strong>Explore the docs »</strong></a>
+    <a href="#-getting-started"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="#-getting-started">Kickoff</a>
@@ -107,20 +107,6 @@ Several kind of clients could be used to admin the botnet, and several kind of "
 + **master clients:** cli and web-based. The webclient is a light flask app focused on browse db info and schedule tasks. The cli client is intended to run remote-shell live sessions with one or more zombies simultaneously. Both of them support proxy configuration to reach cc-server anonymously.
 + **zombie clients:** by now, we only have a python client. Take note that you can write a zombie in the programming language of your preference, you just need to write a simple http client to communicate with API and maybe add some "zombie routines" (you can take the python client as an example). Again, any contribution would be welcome.   
 
-
-Having a centralized db makes it easier for masters and zombies to exchange information asynchronously, removing the requirement of both being online at the same time.
-
-<br>
-<p align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/attack_example.png" /></p>
-<br>
-
-You can schedule tasks and the zombies will receive this info as soon as they go online and refresh his "assignments". If the task was scheduled to be executed in future, the zombie will save this homework and run the task when the start time comes. You also can schedule stop datetimes.
-  
-There are special fields in DB which are designed to be nested values, so you can create new fields inside without touching any config (e.g.: `Tasks.task_content`,`Zombies.sysinfo`)  
-  
-<br>
-<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/zombies_info.gif" /><p style="font-decoration: italic;">zombie report example</p></div>  
-<br>
 
 ### Built with
 
@@ -237,9 +223,17 @@ pip install -r requirements.txt
 ./run.sh
 ```
 
-Now you should have a Flask app running and listening on port 5000. Browse to http://localhost:5000 and check it.
+Now you should have a Flask app running and listening on port 5000. Browse to http://localhost:5000 and check it. Once inside, you will see something like a desktop. You can **enable/disable proxy configuration** and **login to the botnet** with the aproppiate software (`proxy.exe` and `zgang.exe`).
 
-Once inside, you will see something like a desktop. You can **enable/disable proxy configuration** and **login to the botnet** with the aproppiate software (`proxy.exe` and `zgang.exe`).
+<br>
+<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/intro.gif" /></div>
+<br>
+
+If you want to cover your trace, use the built-in proxy tool to connect to cc-server through the socks5 proxy of your choice:
+
+<br>
+<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/proxy_example.png" /><p style="font-decoration: italic;">proxy configuration example</p></div>
+<br>
 
 On this stage you are going to create your master password: with `zgang.exe`, create a user with the same name used in your master profile. Now you are logged in as master and can start to admin the botnet.
 
@@ -251,15 +245,23 @@ On this stage you are going to create your master password: with `zgang.exe`, cr
 
 If you go to zombies section, you can see the new zombie requests to join the botnet that are awaiting your reply and the lists of zombies already joined. Here is where we can accept the zombie created before.
 
+
 <br>
 <div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/invocation_example.png" /></div>
 <br>
 
-If you want to cover your trace, use the built-in proxy tool to connect to cc-server through the socks5 proxy of your choice:
+You can schedule tasks and the zombies will receive this info as soon as they go online and refresh his "assignments". If the task was scheduled to be executed in future, the zombie will save this homework and run the task when the start time comes. You also can schedule stop datetimes.
 
 <br>
-<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/proxy_example.png" /><p style="font-decoration: italic;">proxy configuration example</p></div>
+<p align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/attack_example.png" /></p>
 <br>
+  
+There are special fields in DB which are designed to be nested values, so you can create new fields inside without touching any config (e.g.: `Tasks.task_content`,`Zombies.sysinfo`)  
+  
+<br>
+<div align="center"><img src="https://github.com/r3nt0n/zombiegang/blob/master/img/zombies_info.gif" /><p style="font-decoration: italic;">zombie report example</p></div>  
+<br>
+
 
 #### cli client
 Additionally, you have a cli client (keeping msfconsole style) to login to cc-server and run remote-shell live sessions with online zombies, you could also connect through a socks5 proxy (like in web-based client) setting `PXHOST` and `PXPORT` before `login`.
